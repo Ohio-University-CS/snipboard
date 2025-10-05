@@ -1,26 +1,25 @@
-# Prerequisites
-*.d
+# Build artifacts
+build/
+build-*/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+compile_commands.json
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+# IDE and user-specific files
+.vscode/
+*.user
+CMakeUserPresets.json
 
-# Precompiled Headers
-*.gch
-*.pch
+# Keep separate databases
+#*.db
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
+# OS-specific files
+.DS_Store
+Thumbs.db
 
 # Executables
 *.exe
-*.out
+*.dll
 *.app
-
-# VSCode setting folder
-/.vscode
+*.so
