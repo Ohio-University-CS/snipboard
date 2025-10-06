@@ -33,12 +33,13 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Sql)
 # Build Target
 qt_add_executable(SnipBoard
     MANUAL_FINALIZATION
+    MACOSX_BUNDLE
     src/main.cpp
     src/gui/mainwindow.h
     src/gui/mainwindow.cpp
     src/gui/mainwindow.ui
-    # Add files here that get created
 )
+
 
 set_target_properties(SnipBoard PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER com.snipboard.SnipBoard
@@ -68,12 +69,18 @@ if (WIN32)
 elseif(APPLE)
     if (MACDEPLOYQT_EXECUTABLE)
         add_custom_command(TARGET SnipBoard POST_BUILD
-            COMMAND "${MACDEPLOYQT_EXECUTABLE}" "$<TARGET_BUNDLE_DIR:SnipBoard>" -always-overwrite
+            COMMAND "${MACDEPLOYQT_EXECUTABLE}"
+                "$<TARGET_BUNDLE_DIR:SnipBoard>"
+                -always-overwrite
+                -verbose=2
+                -executable="$<TARGET_FILE:SnipBoard>"
+                -libpath=/opt/homebrew/opt/qt6/lib
             COMMENT "Running macdeployqt to bundle Qt frameworks..."
         )
     else()
         message(WARNING "macdeployqt not found. Install Qt with: brew install qt")
     endif()
+
 
 elseif(UNIX)
     if (LINUXDEPLOYQT_EXECUTABLE)
