@@ -6,6 +6,7 @@ CMakeFiles/
 cmake_install.cmake
 compile_commands.json
 Generated/
+sign.sh
 
 # IDE and user-specific files
 .vscode/
