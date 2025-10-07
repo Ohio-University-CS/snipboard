@@ -1,16 +1,20 @@
-/**
- *        @file: main.cpp
- *      @author: SnipBoard
- *        @date: October 05, 2025
- *       @brief: Main file
-*/
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
+#include <iostream>
 
-#include <QApplication>
-#include "gui/mainwindow.h"
+using namespace Qt::StringLiterals;
 
-int main(int argc, char *argv[]) {
-    QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
-    return a.exec();
+int main(int argc, char *argv[])
+{
+    std::cout << "TESTING" << std::endl;
+    QGuiApplication app(argc, argv);
+
+    QQmlApplicationEngine engine;
+    engine.load(QUrl::fromLocalFile("../src/gui/main.qml"));
+
+    if (engine.rootObjects().isEmpty()) {
+        return -1;
+    }
+
+    return app.exec();
 }
