@@ -108,3 +108,30 @@ endif()
 #  Diagnostic Output
 message(STATUS "Qt Version: ${QT_VERSION_MAJOR}")
 message(STATUS "CMAKE_PREFIX_PATH: ${CMAKE_PREFIX_PATH}")
+
+if(APPLE)
+    # === Copy QML files into the app bundle ===
+    set(QML_SOURCE_DIR "${CMAKE_SOURCE_DIR}/src/gui")
+    set(QML_DEST_DIR "${CMAKE_BINARY_DIR}/SnipBoard.app/Contents/Resources")
+
+    # Gather all .qml files from your GUI folder
+    file(GLOB QML_FILES "${QML_SOURCE_DIR}/*.qml")
+
+    # Create the Resources directory if it doesn't exist
+    add_custom_command(
+        TARGET SnipBoard POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${QML_DEST_DIR}"
+    )
+
+    # Copy each QML file after build
+    foreach(QML_FILE ${QML_FILES})
+        add_custom_command(
+            TARGET SnipBoard POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                    "${QML_FILE}"
+                    "${QML_DEST_DIR}/"
+            COMMENT "Copying ${QML_FILE} → Resources"
+        )
+    endforeach()
+
+endif()
