@@ -11,7 +11,7 @@
                    |_|                         
 ```
 
-SnipBoard provides a way to let you store code snippets. SnipBoard has strong search support and sorting features such as tags and folders.
+SnipBoard provides a way to let you store code snippets. SnipBoard has strong search support and sorting featues such as tags and folders. Refer to the Notion.
 
 ##
 
