@@ -1,27 +1,54 @@
+/**
+ *        @file: main.cpp
+ *      @author: Team SnipBoard
+ *        @date: October 13, 2025
+ *       @brief: Main file. Application entrypoint
+ */
+
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <iostream>
 
 using namespace Qt::StringLiterals;
 
+/**
+ * @brief  loads the graphics modules depending on the operating system. 
+ *         need to add any other gui files to this function as they are made
+ *
+ * @param engine  the QQmlApplicationEngine
+ */
+void loadModules(QQmlApplicationEngine& engine);
+
 int main(int argc, char *argv[])
 {
-    std::cout << "TESTING" << std::endl;
+    // Create app and engine
     QGuiApplication app(argc, argv);
-
     QQmlApplicationEngine engine;
 
-    #ifdef _WIN32
-        engine.load(QUrl::fromLocalFile("../src/gui/main.qml"));
-    #elif __APPLE__
-        engine.load(QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + "/../Resources/main.qml"));
-    #else
-        std::cout << "Unkown operating system" << std::endl;
-    #endif
+    /* Update this function with any new .qml paths */
+    loadModules(engine);
 
     if (engine.rootObjects().isEmpty()) {
         return -1;
     }
 
     return app.exec();
+}
+
+void loadModules(QQmlApplicationEngine& engine) {
+    /* WE WILL NEED TO KEEP ADDING THESE PATHS FOR EVERY .qml FILE WE CREATE */
+    // Try to load it using QRC
+    const QUrl qmlUrl(QStringLiteral("qrc:/qt/qml/main.qml"));
+    engine.load(qmlUrl);
+
+    // Fallback to hardcoded resource paths
+    if (engine.rootObjects().isEmpty()) {
+        #ifdef _WIN32
+        engine.load(QUrl::fromLocalFile(QStringLiteral("../src/gui/main.qml")));
+        #elif __APPLE__
+        engine.load(QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + "/../Resources/main.qml"));
+        #else
+        std::cerr << "Unknown operating system and qrc load failed\n";
+        #endif
+    }
 }
