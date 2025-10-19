@@ -38,14 +38,16 @@ set(HEADERS
     src/core/models/Folder.h
     src/core/models/Snippet.h
     src/core/models/Tag.h
+    src/core/objects/SnippetObject.h
 )
 
 # Add c++ to be compiled
 qt_add_executable(SnipBoard
     MANUAL_FINALIZATION
     MACOSX_BUNDLE
-    src/main.cpp
     ${HEADERS}
+    src/main.cpp
+    src/core/objects/SnippetObject.cpp
     # Add other c++ files here
 )
 
