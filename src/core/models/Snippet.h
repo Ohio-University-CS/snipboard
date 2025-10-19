@@ -1,5 +1,5 @@
 /**
- *        @file: snippet.h
+ *        @file: Snippet.h
  *      @author: Kyle Carey
  *        @date: October 19, 2025
  *       @brief: Snippet model
