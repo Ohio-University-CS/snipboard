@@ -1,0 +1,70 @@
+/**
+ *        @file: SnippetObject.h
+ *      @author: Kyle Carey
+ *        @date: October 19, 2025
+ *       @brief: Snippet Object to be exposed to the QML.
+ *               This is a read/write only object with properties accessible using the Q_PROPERTY definitions
+ *               ex. if the name is displayed in QML, then the function name() is called. or, if it is changed in a text box, then setName() is called
+ *               This can be thought of as a simple struct for QML. Nothing significant happens here besides syntactical sugar for QML to understand
+ */
+
+#pragma once
+
+#include <../models/Snippet.h>
+
+#include <QObject>
+#include <QString>
+#include <QVector>
+
+class SnippetObject : public QObject {
+    // Set QML Properties
+    Q_OBJECT
+    Q_PROPERTY(int id READ id WRITE setId NOTIFY idChanged)
+    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+    Q_PROPERTY(QString description READ description WRITE setDescription NOTIFY descriptionChanged)
+    Q_PROPERTY(QString language READ language WRITE setLanguage NOTIFY languageChanged)
+    Q_PROPERTY(int folder READ folder WRITE setFolder NOTIFY folderChanged)
+    Q_PROPERTY(bool favorite READ favorite WRITE setFavorite NOTIFY favoriteChanged)
+    Q_PROPERTY(quint64 timesCopied READ timesCopied WRITE setTimesCopied NOTIFY timesCopiedChanged)
+
+ public:
+    explicit SnippetObject(QObject* parent = nullptr) : QObject(parent) {}
+    explicit SnippetObject(const Snippet& snippetModel, QObject* parent = nullptr);
+
+    // Getters (for QML)
+    int id() const { return m_id; }
+    QString name() const { return m_name; }
+    QString description() const { return m_description; }
+    QString language() const { return m_language; }
+    int folder() const { return m_folder; }
+    bool favorite() const { return m_favorite; }
+    quint64 timesCopied() const { return m_timesCopied; }
+
+    // Setters (for QML)
+    void setId(int id);
+    void setName(QString name);
+    void setDescription(QString description);
+    void setLanguage(QString language);
+    void setFolder(int folder);
+    void setFavorite(bool favorite);
+    void setTimesCopied(int timesCopied);
+
+ signals:
+    // Tells the UI to update specified property whenever one of these are called
+    void idChanged();
+    void nameChanged();
+    void descriptionChanged();
+    void languageChanged();
+    void folderChanged();
+    void favoriteChanged();
+    void timesCopiedChanged();
+
+ private:
+    int m_id = -1;
+    QString m_name;
+    QString m_description;
+    QString m_language;
+    int m_folder = 0;
+    bool m_favorite = false;
+    quint64 m_timesCopied = 0;
+};
