@@ -5,20 +5,17 @@
  *       @brief: Tag model
  */
 
-#ifndef TAG_H
-#define TAG_H
+#pragma once
 
-#include <string>
+#include <QString>
 
 struct Tag {
     int id = -1;
-    std::string name = "";
-    std::string dateCreated = "";
-    std::string dateUpdated = "";
+    QString name;
+    QString dateCreated;
+    QString dateUpdated;
     bool showDate = true;
 
-    Tag(int id, std::string name, std::string dateCreated, std::string dateUpdated)
+    Tag(int id, QString name, QString dateCreated, QString dateUpdated)
         : id(id), name(name), dateCreated(dateCreated), dateUpdated(dateUpdated) {}
 };
-
-#endif
