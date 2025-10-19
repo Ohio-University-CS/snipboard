@@ -14,7 +14,7 @@ set(CMAKE_AUTOUIC ON)
 
 # Qt Path Setup
 if (WIN32)
-    set(QT_ROOT "C:/Qt/6.9.2/mingw_64")
+    set(QT_ROOT "C:/Qt/6.10.0/mingw_64")
     set(CMAKE_PREFIX_PATH "${QT_ROOT}/lib/cmake")
     set(WINDEPLOYQT_EXECUTABLE "${QT_ROOT}/bin/windeployqt.exe")
 elseif(APPLE)
@@ -33,12 +33,23 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Qml Quick Sql)
 qt_policy(SET QTP0001 NEW)
 qt_policy(SET QTP0004 NEW)
 
+# Define header files
+set(HEADERS
+    src/core/models/Folder.h
+    src/core/models/Snippet.h
+    src/core/models/Tag.h
+)
+
+# Add c++ to be compiled
 qt_add_executable(SnipBoard
     MANUAL_FINALIZATION
     MACOSX_BUNDLE
     src/main.cpp
+    ${HEADERS}
     # Add other c++ files here
 )
+
+target_include_directories(SnipBoard PUBLIC src/core/models)
 
 qt_add_qml_module(SnipBoard
     URI SnipBoard
