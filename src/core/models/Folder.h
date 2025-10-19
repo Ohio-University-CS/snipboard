@@ -1,5 +1,5 @@
 /**
- *        @file: folder.h
+ *        @file: Folder.h
  *      @author: Kyle Carey
  *        @date: October 16, 2025
  *       @brief: Folder model
