@@ -4,8 +4,7 @@
  *        @date: October 19, 2025
  *       @brief: Implementations for TagObject constructor and setters
  *               To note: returning instantly if no change happens is for efficiency (so UI does not update)
-*/
-
+ */
 
 #include "TagObject.h"
 

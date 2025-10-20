@@ -2,7 +2,7 @@
  *        @file: SnippetObject.cpp
  *      @author: Kyle Carey
  *        @date: October 19, 2025
- *       @brief: Implementations for SnippObject constructor and setters
+ *       @brief: Implementations for SnippetObject constructor and setters
  *               To note: returning instantly if no change happens is for efficiency (so UI does not update)
  */
 
