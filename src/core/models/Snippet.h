@@ -16,12 +16,13 @@ struct Snippet {
     QString dateCreated;
     QString dateUpdated;
     QString description;
+    QString data;
     QString language;
     QVector<int> tags;
     int folder = 0;  // default to home
     bool favorite = false;
     quint64 timesCopied = 0;
 
-    Snippet(int id, QString name, QString dateCreated, QString dateUpdated, QString description, QString language, QVector<int> tags, int folder, bool favorite, quint64 timesCopied)
-        : id(id), name(name), dateCreated(dateCreated), dateUpdated(dateUpdated), description(description), language(language), tags(tags), folder(folder), favorite(favorite), timesCopied(timesCopied) {}
+    Snippet(int id, QString name, QString dateCreated, QString dateUpdated, QString description, QString data, QString language, QVector<int> tags, int folder, bool favorite, quint64 timesCopied)
+        : id(id), name(name), dateCreated(dateCreated), dateUpdated(dateUpdated), description(description), data(data), language(language), tags(tags), folder(folder), favorite(favorite), timesCopied(timesCopied) {}
 };

@@ -55,6 +55,15 @@ void SnippetObject::setLanguage(QString language) {
     emit languageChanged();
 }
 
+void SnippetObject::setData(QString data) {
+    if (m_data == data) {
+        return;
+    }
+
+    m_data = data;
+    emit dataChanged();
+}
+
 void SnippetObject::setFolder(int folder) {
     if (m_folder == folder) {
         return;

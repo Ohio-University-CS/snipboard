@@ -23,6 +23,7 @@ class SnippetObject : public QObject {
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString description READ description WRITE setDescription NOTIFY descriptionChanged)
     Q_PROPERTY(QString language READ language WRITE setLanguage NOTIFY languageChanged)
+    Q_PROPERTY(QString data READ data WRITE setData NOTIFY dataChanged)
     Q_PROPERTY(int folder READ folder WRITE setFolder NOTIFY folderChanged)
     Q_PROPERTY(bool favorite READ favorite WRITE setFavorite NOTIFY favoriteChanged)
     Q_PROPERTY(quint64 timesCopied READ timesCopied WRITE setTimesCopied NOTIFY timesCopiedChanged)
@@ -36,6 +37,7 @@ class SnippetObject : public QObject {
     QString name() const { return m_name; }
     QString description() const { return m_description; }
     QString language() const { return m_language; }
+    QString data() const { return m_data; }
     int folder() const { return m_folder; }
     bool favorite() const { return m_favorite; }
     quint64 timesCopied() const { return m_timesCopied; }
@@ -45,6 +47,7 @@ class SnippetObject : public QObject {
     void setName(QString name);
     void setDescription(QString description);
     void setLanguage(QString language);
+    void setData(QString data);
     void setFolder(int folder);
     void setFavorite(bool favorite);
     void setTimesCopied(int timesCopied);
@@ -55,6 +58,7 @@ class SnippetObject : public QObject {
     void nameChanged();
     void descriptionChanged();
     void languageChanged();
+    void dataChanged();
     void folderChanged();
     void favoriteChanged();
     void timesCopiedChanged();
@@ -64,6 +68,7 @@ class SnippetObject : public QObject {
     QString m_name;
     QString m_description;
     QString m_language;
+    QString m_data;
     int m_folder = 0;
     bool m_favorite = false;
     quint64 m_timesCopied = 0;
