@@ -46,6 +46,9 @@ qt_add_qml_module(SnipBoard
     RESOURCE_PREFIX "/qt/qml"
     QML_FILES
         src/gui/main.qml
+        src/gui/settings.qml
+        src/gui/home.qml
+        src/gui/colors.qml
 )
 
 # CHANGED: Updated target properties to use the new executable name
