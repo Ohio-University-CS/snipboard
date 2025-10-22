@@ -17,6 +17,8 @@ Window {
 
 
 
+
+
     Text {
         id: text3
         anchors.horizontalCenter: parent.horizontalCenter
@@ -25,9 +27,10 @@ Window {
         text: qsTr("SnipBoard")
         font.pixelSize: 147
         horizontalAlignment: Text.AlignHCenter
-        font.family: montserrat
+        font.styleName: "Thin"
+        font.family: "Montserrat"
     }
-
+    
     Rectangle {
         id: newRectangle
         anchors.horizontalCenter: parent.horizontalCenter
