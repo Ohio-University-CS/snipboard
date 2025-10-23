@@ -1,14 +1,25 @@
 import QtQuick
 import QtQuick.Controls
+import "."
+
+
+
 
 Window {
     id: welcomeScreen
     visible: true
     width: Screen.width
     height: Screen.height
-    color: "#5e5270"
     visibility: Window.FullScreen
+    color: "#5e5270"
     title: qsTr("Hello World")
+
+    onWidthChanged: updateScale
+    onHeightChanged: updateScale
+
+    function updateScale() {
+        Scaling.factor = Math.min(width/Scaling.baseWidth, height/Scaling.baseHeight)
+    }
 
     FontLoader {
         id: montserrat
