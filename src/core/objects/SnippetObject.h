@@ -27,10 +27,11 @@ class SnippetObject : public QObject {
     Q_PROPERTY(int folder READ folder WRITE setFolder NOTIFY folderChanged)
     Q_PROPERTY(bool favorite READ favorite WRITE setFavorite NOTIFY favoriteChanged)
     Q_PROPERTY(quint64 timesCopied READ timesCopied WRITE setTimesCopied NOTIFY timesCopiedChanged)
+    Q_PROPERTY(QVector<QString> tagNames READ tagNames WRITE setTagNames NOTIFY tagNamesChanged)
 
  public:
     explicit SnippetObject(QObject* parent = nullptr) : QObject(parent) {}
-    explicit SnippetObject(const Snippet& snippetModel, QObject* parent = nullptr);
+    explicit SnippetObject(const Snippet& snippetModel, const QVector<QString>& tagNames = {}, QObject* parent = nullptr);
 
     // Getters (for QML)
     int id() const { return m_id; }
@@ -41,6 +42,7 @@ class SnippetObject : public QObject {
     int folder() const { return m_folder; }
     bool favorite() const { return m_favorite; }
     quint64 timesCopied() const { return m_timesCopied; }
+    QVector<QString> tagNames() const { return m_tagNames; }
 
     // Setters (for QML)
     void setId(int id);
@@ -51,6 +53,7 @@ class SnippetObject : public QObject {
     void setFolder(int folder);
     void setFavorite(bool favorite);
     void setTimesCopied(int timesCopied);
+    void setTagNames(const QVector<QString>& tagNames);
 
  signals:
     // Tells the UI to update specified property whenever one of these are called
@@ -62,6 +65,7 @@ class SnippetObject : public QObject {
     void folderChanged();
     void favoriteChanged();
     void timesCopiedChanged();
+    void tagNamesChanged();
 
  private:
     int m_id = -1;
@@ -72,4 +76,5 @@ class SnippetObject : public QObject {
     int m_folder = 0;
     bool m_favorite = false;
     quint64 m_timesCopied = 0;
+    QVector<QString> m_tagNames;
 };

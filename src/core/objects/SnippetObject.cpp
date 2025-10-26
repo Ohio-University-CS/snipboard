@@ -8,7 +8,7 @@
 
 #include "SnippetObject.h"
 
-SnippetObject::SnippetObject(const Snippet& snippetModel, QObject* parent) : QObject(parent) {
+SnippetObject::SnippetObject(const Snippet& snippetModel, const QVector<QString>& tagNames, QObject* parent) : QObject(parent) {
     // Assign snippetModel data
     m_id = snippetModel.id;
     m_name = snippetModel.name;
@@ -17,6 +17,7 @@ SnippetObject::SnippetObject(const Snippet& snippetModel, QObject* parent) : QOb
     m_folder = snippetModel.folder;
     m_favorite = snippetModel.favorite;
     m_timesCopied = snippetModel.timesCopied;
+    m_tagNames = tagNames;
 }
 
 void SnippetObject::setId(int id) {
@@ -89,4 +90,13 @@ void SnippetObject::setTimesCopied(int timesCopied) {
 
     m_timesCopied = timesCopied;
     emit timesCopiedChanged();
+}
+
+void SnippetObject::setTagNames(const QVector<QString>& tagNames) {
+    if (m_tagNames == tagNames) {
+        return;
+    }
+
+    m_tagNames = tagNames;
+    emit tagNamesChanged();
 }
