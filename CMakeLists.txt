@@ -41,6 +41,9 @@ set(HEADERS
     src/core/objects/SnippetObject.h
     src/core/objects/TagObject.h
     src/core/objects/FolderObject.h
+    src/core/objects/SnippetListModel.h
+    src/core/objects/TagListModel.h
+    src/core/objects/FolderTreeModel.h
 )
 
 # Add c++ to be compiled
@@ -52,6 +55,9 @@ qt_add_executable(SnipBoard
     src/core/objects/SnippetObject.cpp
     src/core/objects/TagObject.cpp
     src/core/objects/FolderObject.cpp
+    src/core/objects/SnippetListModel.cpp
+    src/core/objects/TagListModel.cpp
+    src/core/objects/FolderTreeModel.cpp
     # Add other c++ files here
 )
 
