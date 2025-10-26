@@ -14,7 +14,7 @@ set(CMAKE_AUTOUIC ON)
 
 # Qt Path Setup
 if (WIN32)
-    set(QT_ROOT "C:/Qt/6.9.2/mingw_64")
+    set(QT_ROOT "C:/Qt/6.10.0/mingw_64")
     set(CMAKE_PREFIX_PATH "${QT_ROOT}/lib/cmake")
     set(WINDEPLOYQT_EXECUTABLE "${QT_ROOT}/bin/windeployqt.exe")
 elseif(APPLE)
@@ -33,12 +33,35 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Qml Quick Sql)
 qt_policy(SET QTP0001 NEW)
 qt_policy(SET QTP0004 NEW)
 
+# Define header files
+set(HEADERS
+    src/core/models/Folder.h
+    src/core/models/Snippet.h
+    src/core/models/Tag.h
+    src/core/objects/SnippetObject.h
+    src/core/objects/TagObject.h
+    src/core/objects/FolderObject.h
+    src/core/objects/SnippetListModel.h
+    src/core/objects/TagListModel.h
+    src/core/objects/FolderTreeModel.h
+)
+
+# Add c++ to be compiled
 qt_add_executable(SnipBoard
     MANUAL_FINALIZATION
     MACOSX_BUNDLE
+    ${HEADERS}
     src/main.cpp
+    src/core/objects/SnippetObject.cpp
+    src/core/objects/TagObject.cpp
+    src/core/objects/FolderObject.cpp
+    src/core/objects/SnippetListModel.cpp
+    src/core/objects/TagListModel.cpp
+    src/core/objects/FolderTreeModel.cpp
     # Add other c++ files here
 )
+
+target_include_directories(SnipBoard PUBLIC src/core/models)
 
 qt_add_qml_module(SnipBoard
     URI SnipBoard
@@ -46,6 +69,9 @@ qt_add_qml_module(SnipBoard
     RESOURCE_PREFIX "/qt/qml"
     QML_FILES
         src/gui/main.qml
+        src/gui/settings.qml
+        src/gui/home.qml
+        src/gui/colors.qml
 )
 
 # CHANGED: Updated target properties to use the new executable name
