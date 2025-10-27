@@ -12,8 +12,8 @@ Window {
     SplitView { //side by side resizeable panels
         anchors.fill: parent
 
-        ListView{ //fixed panel for setting panels
-            model: ["general", "appearace", "exportImport", "editorPreferences", "snippetManagement"]
+        ListView{ //left side - fixed panel for setting panels
+            model: ["general", "appearance", "exportImport", "editorPreferences", "snippetManagement"]
             width: 250
             Layout.minimumWidth: 200
             Layout.maximumWidth: 300
@@ -24,10 +24,20 @@ Window {
 
                 onClicked{
                     var pageName = modelData
-                    var qmlSource = "qrc:/src/gui/Settings/" + pageName + "Settings.qml"
+                    var qmlSource = "qrc:/Settings/" + pageName + "Settings.qml"
+
+                    settingsStack.clear()
+                    settingsStack.push(qmlSource)
                 }
             }
 
+        }
+
+        StackView{ //right side - changes based on setting tab clicked
+            id: settingsStack
+            Layout.fillWidth: true
+            initialItem: "qrc:/qml/Settings/generalSettings.qml"
+            pushTransition: Transition{}
         }
 
 
