@@ -13,7 +13,7 @@ Window {
         anchors.fill: parent
 
         ListView{ //left side - fixed panel for setting panels
-            model: ["general", "appearance", "exportImport", "editorPreferences", "snippetManagement"]
+            model: ["general", "appearance", "exportImport", "editor", "snippetManagement"]
             width: 250
             Layout.minimumWidth: 200
             Layout.maximumWidth: 300

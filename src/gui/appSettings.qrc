@@ -4,7 +4,7 @@
         <file>Settings/generalSettings.qml</file>
         <file>Settings/appearanceSettings.qml</file>
         <file>Settings/exportImportSettings.qml</file>
-        <file>Settings/editorPreferencesSettings.qml</file>
+        <file>Settings/editorSettings.qml</file>
         <file>Settings/snippetManagementSettings.qml</file>
     </qresource>
 </RCC>
