@@ -8,18 +8,17 @@ Window {
 
     Rectangle {
         id: rectangle
-        x: 220
-        y: 140
-        width: 200
-        height: 200
+        x: 0
+        y: 0
+        width: 190
+        height: 480
         color: '#3ba169'
-        radius: 16
+        radius: 0
 
         Text {
             id: text1
             x: 81
             y: 92
-            text: qsTr("Testing")
             font.pixelSize: 12
         }
     }

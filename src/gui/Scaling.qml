@@ -1,4 +1,3 @@
-pragma Singleton //only one instance of this file
 import QtQuick
 
 /*

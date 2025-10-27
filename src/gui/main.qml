@@ -1,9 +1,6 @@
 import QtQuick
 import QtQuick.Controls
-import "."
-
-
-
+import SnipBoard
 
 Window {
     id: welcomeScreen
@@ -18,7 +15,7 @@ Window {
     onHeightChanged: updateScale
 
     function updateScale() {
-        Scaling.factor = Math.min(width/Scaling.baseWidth, height/Scaling.baseHeight)
+        Scaling.factor = Math.min(width/Scaling.baseWidth, height/Scaling.baseHeight) //IGNORE: qmllint warning
     }
 
     FontLoader {
@@ -55,6 +52,7 @@ Window {
             color: "#5e5270"
             text: qsTr("New")
             font.pixelSize: 50
+            font.family: montserrat
         }
 
         Button {

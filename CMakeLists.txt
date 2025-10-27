@@ -48,7 +48,18 @@ qt_add_qml_module(SnipBoard
         src/gui/main.qml
         src/gui/settings.qml
         src/gui/home.qml
-        src/gui/colors.qml
+        src/gui/Colors.qml
+        src/gui/Font.qml
+        src/gui/Scaling.qml
+)
+
+# ADDED: Set singleton properties
+set_source_files_properties(
+    src/gui/Colors.qml
+    src/gui/Font.qml
+    src/gui/Scaling.qml
+    PROPERTIES
+        QT_QML_SINGLETON_TYPE TRUE
 )
 
 # CHANGED: Updated target properties to use the new executable name
