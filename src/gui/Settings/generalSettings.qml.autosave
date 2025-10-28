@@ -3,15 +3,19 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import SnipBoard
 
-Rectangle{
-    id: rectangle1
-    //TEMPORARY RECTANGLE - for designer
-    height: 900
-    width: 1100
-    visible: true
+ Rectangle{
+     id: rectangle1
+     //TEMPORARY RECTANGLE - for designer
+     height: 900
+     width: 1100
+     visible: true
     //DELETE RECTANGLE WHEN COMPLETE
     Page {
         anchors.fill: parent
+        anchors.leftMargin: 0
+        anchors.rightMargin: 0
+        anchors.topMargin: 0
+        anchors.bottomMargin: 0
         Layout.preferredHeight: 900
         Layout.preferredWidth: 1110
         
@@ -42,70 +46,82 @@ Rectangle{
                     
                     Item {
                         id: setting1
-                        height: 90
+                        height: 100
                         anchors.left: parent.left
                         anchors.right: parent.right
                         
                         Text {
                             id: text2
-                            x: 27
+                            x: 29
                             color: "#e6e0e9"
                             text: qsTr("Auto-Save")
                             anchors.verticalCenter: parent.verticalCenter
                             font.pixelSize: 16
                             font.styleName: "SemiBold"
                             font.family: "Montserrat"
-                            anchors.verticalCenterOffset: 1
+                            anchors.verticalCenterOffset: -13
                         }
                         
                         Switch {
                             id: switch1
-                            x: 167
+                            x: 169
+                            scale: 0.8
                             width: 47
                             height: 32
                             anchors.verticalCenter: parent.verticalCenter
-                            anchors.verticalCenterOffset: 0
+                            checked: true
+                            anchors.verticalCenterOffset: -14
                         }
                         
                         Rectangle {
-                            id: rectangle4
-                            y: 88
+                            id: line
                             height: 2
-                            color: "#ffffff"
+                            color: "#a7201c25"
                             anchors.left: parent.left
                             anchors.right: parent.right
+                            anchors.bottom: parent.bottom
                             anchors.leftMargin: 0
                             anchors.rightMargin: 0
+                            anchors.bottomMargin: 0
+                        }
+                        
+                        Text {
+                            id: text4
+                            x: 29
+                            y: 58
+                            color: "#d6e1d8e4"
+                            text: qsTr("When toggled, snippets will automatically save as you type")
+                            font.pixelSize: 12
                         }
                     }
                     
                     Item {
                         id: setting2
-                        height: 90
+                        height: 100
                         anchors.left: parent.left
                         anchors.right: parent.right
                         Text {
                             id: text3
-                            x: 27
+                            x: 30
                             color: "#e6e0e9"
                             text: qsTr("Default Save Location")
                             anchors.verticalCenter: parent.verticalCenter
                             font.pixelSize: 16
                             font.styleName: "SemiBold"
                             font.family: "Montserrat"
-                            anchors.verticalCenterOffset: 1
+                            anchors.verticalCenterOffset: -13
                         }
                         
                         Rectangle {
                             id: rectangle3
-                            x: 266
+                            x: 269
                             width: 413
                             height: 20
                             color: "#0d0c10"
                             radius: 2
                             anchors.verticalCenter: parent.verticalCenter
                             layer.smooth: true
-                            anchors.verticalCenterOffset: 1
+                            anchors.verticalCenterOffset: -13
                             
                             TextField {
                                 id: textField
@@ -118,6 +134,129 @@ Rectangle{
                             }
                         }
                         
+                        Rectangle {
+                            id: line1
+                            x: 0
+                            height: 2
+                            color: "#a2201c25"
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            anchors.bottom: parent.bottom
+                            anchors.leftMargin: 0
+                            anchors.rightMargin: 0
+                            anchors.bottomMargin: 0
+                        }
+                        
+                        Text {
+                            id: text5
+                            x: 30
+                            y: 59
+                            color: "#d6e1d8e4"
+                            text: qsTr("The location of your saved snippets on your machine")
+                            font.pixelSize: 12
+                        }
+                        
+                    }
+                    
+                    Item {
+                        id: setting3
+                        height: 100
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        Text {
+                            id: text6
+                            x: 30
+                            color: "#e6e0e9"
+                            text: qsTr("Confirm Before Exit")
+                            anchors.verticalCenter: parent.verticalCenter
+                            font.pixelSize: 16
+                            font.styleName: "SemiBold"
+                            font.family: "Montserrat"
+                            anchors.verticalCenterOffset: -13
+                        }
+                        
+                        Rectangle {
+                            id: line2
+                            x: 0
+                            height: 2
+                            color: "#a2201c25"
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            anchors.bottom: parent.bottom
+                            anchors.leftMargin: 0
+                            anchors.rightMargin: 0
+                            anchors.bottomMargin: 0
+                        }
+                        
+                        Text {
+                            id: text7
+                            x: 30
+                            y: 59
+                            color: "#d6e1d8e4"
+                            text: qsTr("When toggled, prompt will appear before closing unsaved snippets")
+                            font.pixelSize: 12
+                        }
+                        
+                        Switch {
+                            id: switch2
+                            x: 243
+                            y: 216
+                            scale: 0.8
+                            width: 47
+                            height: 32
+                            anchors.verticalCenter: parent.verticalCenter
+                            checked: true
+                            anchors.verticalCenterOffset: -13
+                        }
+                    }
+                    
+                    Item {
+                        id: setting4
+                        y: 304
+                        height: 100
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        Text {
+                            id: text8
+                            x: 29
+                            color: "#e6e0e9"
+                            text: qsTr("Launch Behavior")
+                            anchors.verticalCenter: parent.verticalCenter
+                            font.pixelSize: 16
+                            font.styleName: "SemiBold"
+                            font.family: "Montserrat"
+                            anchors.verticalCenterOffset: -13
+                        }
+
+                        Rectangle {
+                            id: line3
+                            height: 2
+                            color: "#a7201c25"
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            anchors.bottom: parent.bottom
+                            anchors.leftMargin: 0
+                            anchors.rightMargin: 0
+                            anchors.bottomMargin: 0
+                        }
+
+                        Text {
+                            id: text9
+                            x: 29
+                            y: 58
+                            color: "#d6e1d8e4"
+                            text: qsTr("Determines if SnipBoard opens on startup as window, minimized, or not at all")
+                            font.pixelSize: 12
+                        }
+                        
+                        ComboBox {
+                            id: comboBox
+                            x: 220
+                            y: 30
+                            width: 169
+                            height: 15
+                            model: ["Open window", "Open minimized", "Do not open"]
+                        }
                     }
                 }
             }
@@ -133,6 +272,8 @@ Rectangle{
             radius: 4
             anchors.right: parent.right
             anchors.rightMargin: 0
+            bottomRightRadius: 0
+            topRightRadius: 0
             
             Text {
                 id: generalText

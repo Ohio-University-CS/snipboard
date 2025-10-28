@@ -258,11 +258,6 @@ Window {
             Layout.fillWidth: true
             
             initialItem: "Settings/generalSettings.qml"
-            
-            ScrollView {
-                id: scrollView
-                anchors.fill: parent
-            }
         }
     }
 }
