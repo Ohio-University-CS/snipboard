@@ -8,7 +8,7 @@ Window {
     width: Screen.width
     height: Screen.height
     color: "#734c91"
-    visibility: Window.FullScreen
+    visibility: Window.Maximized
     title: qsTr("Main.qml - Should load pages")
 
     StackView {
