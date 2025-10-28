@@ -56,83 +56,84 @@ Window {
 
         Text {
             id: text2
-            x: 75
-            y: 237
+            x: 76
+            y: 251
             width: 251
             height: 43
             text: qsTr("Settings")
-            font.pixelSize: 30
+            font.pixelSize: 35
+
+            Rectangle {
+                id: rectangle10
+                x: -45
+                y: 9
+                width: 29
+                height: 25
+                color: "#ffffff"
+                rotation: 0
+            }
         }
 
         Text {
             id: text3
-            x: 75
-            y: 284
+            x: 76
+            y: 299
             width: 251
             height: 43
             text: qsTr("Favorites")
-            font.pixelSize: 30
+            font.pixelSize: 35
+
+            Rectangle {
+                id: rectangle11
+                x: -49
+                y: 10
+                width: 31
+                height: 30
+                color: "#ffffff"
+                rotation: 0
+            }
         }
 
         Text {
             id: text4
-            x: 75
-            y: 192
+            x: 76
+            y: 203
             width: 251
             height: 43
             text: qsTr("Home")
-            font.pixelSize: 30
+            font.pixelSize: 35
+
+            Rectangle {
+                id: rectangle9
+                x: -45
+                y: 9
+                width: 29
+                height: 25
+                color: "#ffffff"
+                rotation: 0
+            }
         }
 
         Text {
             id: text5
-            x: 76
-            y: 333
+            x: 77
+            y: 348
             width: 251
             height: 43
             text: qsTr("Folders")
-            font.pixelSize: 30
+            font.pixelSize: 35
+
+            Rectangle {
+                id: rectangle12
+                x: -48
+                y: 9
+                width: 29
+                height: 30
+                color: "#ffffff"
+                rotation: 0
+            }
         }
 
-        Rectangle {
-            id: rectangle9
-            x: 30
-            y: 201
-            width: 29
-            height: 25
-            color: "#ffffff"
-            rotation: 0
-        }
-
-        Rectangle {
-            id: rectangle10
-            x: 30
-            y: 246
-            width: 29
-            height: 25
-            color: "#ffffff"
-            rotation: 0
-        }
-
-        Rectangle {
-            id: rectangle11
-            x: 30
-            y: 297
-            width: 29
-            height: 17
-            color: "#ffffff"
-            rotation: 0
-        }
-
-        Rectangle {
-            id: rectangle12
-            x: 28
-            y: 342
-            width: 29
-            height: 30
-            color: "#ffffff"
-            rotation: 0
-        }
 
     }
 
@@ -229,3 +230,10 @@ Window {
     }
 }
 
+
+/*##^##
+Designer {
+    D{i:0}D{i:14;locked:true}D{i:15;locked:true}D{i:16;locked:true}D{i:17;locked:true}
+D{i:18;locked:true}
+}
+##^##*/

@@ -1,39 +1,74 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Window
 
 Window {
     id: welcomeScreen
     visible: true
     width: Screen.width
     height: Screen.height
-    color: "#f3f3f3"
+    color: "#734c91"
     visibility: Window.FullScreen
-    title: qsTr("Hello World")
-
-    FontLoader {
-        id: quantico
-        source: "../../fonts/Quantico-Regular.ttf"
-    }
-
-    FontLoader {
-        id:quanticoBold
-        source: "../../fonts/Quantico-Bold.ttf"
-    }
-
-    FontLoader {
-        id: quanticoItalic
-        source: "../../fonts/Quantico-Italic.ttf"
-    }
-
-    FontLoader {
-        id: quanticoBoldItalic
-        source: "../../fonts/Quantico-BoldItalic.ttf"
-    }
+    title: qsTr("Main.qml - Should load pages")
 
     StackView {
         id: stack
         anchors.fill: parent
-        initialItem: Qt.resolvedUrl("pages/home.qml")
+        anchors.leftMargin: 0
+        anchors.topMargin: 0
+        initialItem: "pages/home.qml"
+    }
+
+    Text {
+        id: text1
+        x: -23
+        y: 156
+        width: 1630
+        height: 492
+        color: "#ffffff"
+        text: qsTr("SnipBoard")
+        font.pixelSize: 340
+        font.bold: true
+    }
+
+
+    Rectangle {
+        id: rectangle
+        x: 498
+        y: 744
+        width: 604
+        height: 72
+        color: "#ffffff"
+
+        ProgressBar {
+            id: progressBar
+            x: 3
+            y: 0
+            width: 601
+            height: 72
+            visible: true
+            value: 0.5
+            transformOrigin: Item.Center
+        }
+
+        Text {
+            id: text2
+            x: 16
+            y: 0
+            width: 242
+            height: 72
+            color: "#734c91"
+            text: qsTr("Loading...")
+            font.pixelSize: 50
+            font.bold: true
+            font.italic: true
+        }
     }
 }
 
+
+/*##^##
+Designer {
+    D{i:0}D{i:1;locked:true}D{i:4;locked:true}
+}
+##^##*/
