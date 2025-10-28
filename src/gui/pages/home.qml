@@ -1,5 +1,5 @@
-import QtQuick
-import QtQuick.Controls
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 
 Window {
     width: 1440
@@ -53,6 +53,87 @@ Window {
                 verticalAlignment: Text.AlignVCenter
             }
         }
+
+        Text {
+            id: text2
+            x: 75
+            y: 237
+            width: 251
+            height: 43
+            text: qsTr("Settings")
+            font.pixelSize: 30
+        }
+
+        Text {
+            id: text3
+            x: 75
+            y: 284
+            width: 251
+            height: 43
+            text: qsTr("Favorites")
+            font.pixelSize: 30
+        }
+
+        Text {
+            id: text4
+            x: 75
+            y: 192
+            width: 251
+            height: 43
+            text: qsTr("Home")
+            font.pixelSize: 30
+        }
+
+        Text {
+            id: text5
+            x: 76
+            y: 333
+            width: 251
+            height: 43
+            text: qsTr("Folders")
+            font.pixelSize: 30
+        }
+
+        Rectangle {
+            id: rectangle9
+            x: 30
+            y: 201
+            width: 29
+            height: 25
+            color: "#ffffff"
+            rotation: 0
+        }
+
+        Rectangle {
+            id: rectangle10
+            x: 30
+            y: 246
+            width: 29
+            height: 25
+            color: "#ffffff"
+            rotation: 0
+        }
+
+        Rectangle {
+            id: rectangle11
+            x: 30
+            y: 297
+            width: 29
+            height: 17
+            color: "#ffffff"
+            rotation: 0
+        }
+
+        Rectangle {
+            id: rectangle12
+            x: 28
+            y: 342
+            width: 29
+            height: 30
+            color: "#ffffff"
+            rotation: 0
+        }
+
     }
 
     Rectangle {
@@ -62,8 +143,6 @@ Window {
         width: 913
         height: 706
         color: "#cecece"
-        topRightRadius: 75
-        topLeftRadius: 75
 
         Rectangle {
             id: rectangle4
@@ -103,57 +182,6 @@ Window {
             height: 310
             color: "#8f8f8f"
             radius: 50
-        }
-
-        GridView {
-            id: gridView
-            x: 387
-            y: 246
-            width: 140
-            height: 140
-            model: ListModel {
-                ListElement {
-                    name: "Grey"
-                    colorCode: "grey"
-                }
-
-                ListElement {
-                    name: "Red"
-                    colorCode: "red"
-                }
-
-                ListElement {
-                    name: "Blue"
-                    colorCode: "blue"
-                }
-
-                ListElement {
-                    name: "Green"
-                    colorCode: "green"
-                }
-            }
-            delegate: Item {
-                x: 5
-                height: 50
-                Column {
-                    spacing: 5
-                    Rectangle {
-                        width: 40
-                        height: 40
-                        color: colorCode
-                        anchors.horizontalCenter: parent.horizontalCenter
-                    }
-
-                    Text {
-                        x: 5
-                        text: name
-                        font.bold: true
-                        anchors.horizontalCenter: parent.horizontalCenter
-                    }
-                }
-            }
-            cellWidth: 70
-            cellHeight: 70
         }
     }
 
@@ -199,7 +227,5 @@ Window {
         height: 900
         color: "#cecece"
     }
-
-
 }
 

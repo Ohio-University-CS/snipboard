@@ -45,7 +45,7 @@ Window {
             width: 1333
             height: 187
             font.pointSize: 50
-            placeholderText: qsTr("Description...")
+            placeholderText: qsTr("Description / Tags...")
         }
     }
 
