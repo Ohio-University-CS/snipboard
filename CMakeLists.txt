@@ -74,7 +74,6 @@ qt_add_qml_module(SnipBoard
         src/gui/pages/new_snippet.qml
         src/gui/pages/home.qml
         src/gui/pages/delete_overlay.qml
-        src/gui/pages/loading.qml
 )
 
 # CHANGED: Updated target properties to use the new executable name
