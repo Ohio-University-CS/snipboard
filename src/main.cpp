@@ -38,17 +38,17 @@ int main(int argc, char *argv[])
 void loadModules(QQmlApplicationEngine& engine) {
     /* WE WILL NEED TO KEEP ADDING THESE PATHS FOR EVERY .qml FILE WE CREATE */
     // Try to load it using QRC
-    const QUrl qmlUrl(QStringLiteral("qrc:/qt/qml/main.qml"));
-    engine.load(qmlUrl);
-    
+    // const QUrl qmlUrl(QStringLiteral("qrc:/qt/qml/main.qml"));
+    // engine.load(qmlUrl);
+
+    //Lucas changed the load to this
+    engine.load(QUrl(u"qrc:/qt/qml/SnipBoard/main.qml"_s));
+
     // Fallback to hardcoded resource paths
     if (engine.rootObjects().isEmpty()) {
         #ifdef _WIN32
-        engine.load(QUrl::fromLocalFile(QStringLiteral("../src/gui/main.qml")));
-        engine.load(QUrl::fromLocalFile(QStringLiteral("../src/gui/colors.qml")));
-        engine.load(QUrl::fromLocalFile(QStringLiteral("../src/gui/pages/home.qml")));
-        engine.load(QUrl::fromLocalFile(QStringLiteral("../src/gui/pages/new_snippet.qml")));
-        engine.load(QUrl::fromLocalFile(QStringLiteral("../src/gui/pages/settings.qml")));
+        //Lucas changed the load to this
+        engine.load(QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + "/../../src/gui/main.qml"));
 
         #elif __APPLE__
         engine.load(QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + "/../Resources/main.qml"));
