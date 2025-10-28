@@ -3,9 +3,9 @@ import QtQuick.Controls
 
 Window {
     id: welcomeScreen
+    width: 1440
+    height: 900
     visible: true
-    width: Screen.width
-    height: Screen.height
     color: "#cacaca"
     visibility: Window.FullScreen
     title: qsTr("Hello World")
@@ -14,16 +14,16 @@ Window {
         id: rectangle
         x: 69
         y: 58
-        width: 472
-        height: 133
+        width: 406
+        height: 110
         color: "#ffffff"
 
         TextField {
             id: textField
             x: 16
             y: -8
-            width: 464
-            height: 149
+            width: 386
+            height: 126
             verticalAlignment: Text.AlignVCenter
             font.pointSize: 50
             placeholderText: qsTr("Prefix...")
@@ -33,17 +33,17 @@ Window {
     Rectangle {
         id: rectangle1
         x: 69
-        y: 224
-        width: 1461
-        height: 184
+        y: 192
+        width: 1341
+        height: 187
         color: "#ffffff"
 
         TextArea {
             id: textArea1
             x: 8
             y: 0
-            width: 1453
-            height: 143
+            width: 1333
+            height: 187
             font.pointSize: 50
             placeholderText: qsTr("Description...")
         }
@@ -52,17 +52,17 @@ Window {
     Rectangle {
         id: rectangle2
         x: 69
-        y: 437
-        width: 1461
-        height: 439
+        y: 409
+        width: 1341
+        height: 286
         color: "#ffffff"
 
         TextArea {
             id: textArea
             x: 8
             y: 8
-            width: 1453
-            height: 431
+            width: 1325
+            height: 278
             color: "#000000"
             text: ""
             verticalAlignment: Text.AlignTop
@@ -73,18 +73,18 @@ Window {
 
     Rectangle {
         id: rectangle3
-        x: 577
+        x: 519
         y: 58
-        width: 953
-        height: 133
+        width: 891
+        height: 110
         color: "#ffffff"
 
         TextField {
             id: textField1
             x: 8
-            y: -8
-            width: 464
-            height: 149
+            y: 2
+            width: 863
+            height: 106
             verticalAlignment: Text.AlignVCenter
             placeholderText: qsTr("Name...")
             font.pointSize: 50
@@ -93,8 +93,8 @@ Window {
 
     Rectangle {
         id: rectangle8
-        x: 427
-        y: 911
+        x: 379
+        y: 723
         width: 345
         height: 124
         color: "#8041b0"
@@ -110,6 +110,10 @@ Window {
             icon.color: "#d4d4d4"
             font.pointSize: 60
             display: AbstractButton.TextUnderIcon
+
+            onClicked: StackView.view.push(
+                Qt.resolvedUrl("home.qml")
+            )
         }
 
         Text {
@@ -128,8 +132,8 @@ Window {
 
     Rectangle {
         id: rectangle9
-        x: 838
-        y: 911
+        x: 760
+        y: 723
         width: 345
         height: 124
         color: "#8041b0"
@@ -145,6 +149,10 @@ Window {
             icon.color: "#d4d4d4"
             font.pointSize: 60
             display: AbstractButton.TextUnderIcon
+
+            onClicked: StackView.view.push(
+                Qt.resolvedUrl("home.qml")
+            )
         }
 
         Text {

@@ -40,11 +40,16 @@ void loadModules(QQmlApplicationEngine& engine) {
     // Try to load it using QRC
     const QUrl qmlUrl(QStringLiteral("qrc:/qt/qml/main.qml"));
     engine.load(qmlUrl);
-
+    
     // Fallback to hardcoded resource paths
     if (engine.rootObjects().isEmpty()) {
         #ifdef _WIN32
         engine.load(QUrl::fromLocalFile(QStringLiteral("../src/gui/main.qml")));
+        engine.load(QUrl::fromLocalFile(QStringLiteral("../src/gui/colors.qml")));
+        engine.load(QUrl::fromLocalFile(QStringLiteral("../src/gui/pages/home.qml")));
+        engine.load(QUrl::fromLocalFile(QStringLiteral("../src/gui/pages/new_snippet.qml")));
+        engine.load(QUrl::fromLocalFile(QStringLiteral("../src/gui/pages/settings.qml")));
+
         #elif __APPLE__
         engine.load(QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + "/../Resources/main.qml"));
         #else
