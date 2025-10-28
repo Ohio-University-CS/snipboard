@@ -66,7 +66,7 @@ Window {
 
                     onClicked: {
                         stackView.replace("Settings/generalSettings.qml")
-                        generalRect.color("#2b292f")
+                        generalRect.color = "#453e51"
                     }
 
                     Rectangle {
@@ -99,7 +99,7 @@ Window {
 
                     onClicked: {
                         stackView.replace("Settings/appearanceSettings.qml")
-                        appearanceRect.color("#2b292f")
+                        appearanceRect.color = "#453e51"
                     }
 
                     Rectangle {
@@ -132,7 +132,7 @@ Window {
 
                     onClicked: {
                         stackView.replace("Settings/editorSettings.qml")
-                        editorRect.color("#2b292f")
+                        editorRect.color = "#453e51"
                     }
 
                     Rectangle {
@@ -165,7 +165,7 @@ Window {
 
                     onClicked: {
                         stackView.replace("Settings/exportImportSettings.qml")
-                        exportImportRect.color("#2b292f")
+                        exportImportRect.color = "#453e51"
                     }
 
                     Rectangle {
@@ -198,7 +198,7 @@ Window {
 
                     onClicked: {
                         stackView.replace("Settings/snippetManagementSettings.qml")
-                        snippetManagementRect.color("#2b292f")
+                        snippetManagementRect.color = "#453e51"
                     }
 
                     Rectangle {
