@@ -76,6 +76,12 @@ qt_add_qml_module(SnipBoard
         src/gui/pages/delete_overlay.qml
 )
 
+# Expose the generated QML module directory to the application at compile-time
+# so the running binary can add it to QQmlApplicationEngine import paths.
+target_compile_definitions(SnipBoard PRIVATE
+    SNIPBOARD_QML_MODULE_DIR="${CMAKE_BINARY_DIR}/SnipBoard"
+)
+
 # CHANGED: Updated target properties to use the new executable name
 set_target_properties(SnipBoard PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER com.snipboard.SnipBoard
