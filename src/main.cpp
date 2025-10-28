@@ -9,6 +9,12 @@
 #include <QQmlApplicationEngine>
 #include <iostream>
 #include <QCoreApplication> //needed for mac
+#include <QUrl>
+#include <QDebug>
+#include <QQmlError>
+#include <QQmlContext>
+#include <QQmlEngine>
+#include <QFile>
 
 using namespace Qt::StringLiterals;
 
@@ -23,12 +29,13 @@ void loadModules(QQmlApplicationEngine& engine);
 int main(int argc, char *argv[])
 {
     // Create app and engine
+    std::cout<<"test1";
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
 
     /* Update this function with any new .qml paths */
     loadModules(engine);
-
+    std::cout<<"test2";
     if (engine.rootObjects().isEmpty()) {
         return -1;
     }
@@ -37,24 +44,5 @@ int main(int argc, char *argv[])
 }
 
 void loadModules(QQmlApplicationEngine& engine) {
-    /* WE WILL NEED TO KEEP ADDING THESE PATHS FOR EVERY .qml FILE WE CREATE */
-    // Try to load it using QRC
-    // const QUrl qmlUrl(QStringLiteral("qrc:/qt/qml/main.qml"));
-    // engine.load(qmlUrl);
-
-    //Lucas changed the load to this
-    engine.load(QUrl(u"qrc:/qt/qml/SnipBoard/main.qml"_s));
-
-    // Fallback to hardcoded resource paths
-    if (engine.rootObjects().isEmpty()) {
-        #ifdef _WIN32
-        //Lucas changed the load to this
-        engine.load(QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + "/../../src/gui/main.qml"));
-
-        #elif __APPLE__
-        engine.load(QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + "/../Resources/main.qml"));
-        #else
-        std::cerr << "Unknown operating system and qrc load failed\n";
-        #endif
-    }
+    engine.load(QUrl(QStringLiteral("qrc:/qt/qml/SnipBoard/src/gui/main.qml")));
 }
