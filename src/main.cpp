@@ -8,6 +8,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <iostream>
+#include <QCoreApplication> //needed for mac
 
 using namespace Qt::StringLiterals;
 
