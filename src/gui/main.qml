@@ -1,23 +1,29 @@
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Window
+import SnipBoard
 
 Window {
     id: welcomeScreen
     visible: true
     width: Screen.width
     height: Screen.height
-    color: "#734c91"
-    visibility: Window.Maximized
-    title: qsTr("Main.qml - Should load pages")
+    visibility: Window.FullScreen
+    color: "#5e5270"
+    title: qsTr("Hello World")
 
-    StackView {
-        id: stack
-        anchors.fill: parent
-        anchors.leftMargin: 0
-        anchors.topMargin: 0
-        initialItem: "pages/home.qml"
+    onWidthChanged: updateScale
+    onHeightChanged: updateScale
+
+    function updateScale() {
+        Scaling.factor = Math.min(width/Scaling.baseWidth, height/Scaling.baseHeight) //IGNORE: qmllint warning
     }
+
+    FontLoader {
+        id: montserrat
+        source: "../../fonts/Montserrat-VariableFont_wght.ttf"
+    }
+
+
 
     Text {
         id: text1
@@ -27,8 +33,9 @@ Window {
         height: 492
         color: "#ffffff"
         text: qsTr("SnipBoard")
-        font.pixelSize: 340
-        font.bold: true
+        font.pixelSize: 147
+        horizontalAlignment: Text.AlignHCenter
+        font.family: montserrat
     }
 
 
@@ -39,6 +46,25 @@ Window {
         width: 604
         height: 72
         color: "#ffffff"
+        radius: 16
+
+        Text {
+            id: text1
+            x: 90
+            y: -6
+            color: "#5e5270"
+            text: qsTr("New")
+            font.pixelSize: 50
+            font.family: montserrat
+        }
+
+        Button {
+            id: newButton
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: 278
+            height: 61
+            x: 90
+            y: -6
 
         ProgressBar {
             id: progressBar

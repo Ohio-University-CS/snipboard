@@ -69,17 +69,25 @@ qt_add_qml_module(SnipBoard
     RESOURCE_PREFIX "/qt/qml"
     QML_FILES
         src/gui/main.qml
-        src/gui/colors.qml
-        src/gui/pages/settings.qml
-        src/gui/pages/new_snippet.qml
-        src/gui/pages/home.qml
-        src/gui/pages/delete_overlay.qml
+        src/gui/home.qml
+        src/gui/mainSettings.qml
+        src/gui/Settings/generalSettings.qml
+        src/gui/Settings/appearanceSettings.qml
+        src/gui/Settings/editorSettings.qml
+        src/gui/Settings/snippetManagementSettings.qml
+        src/gui/Settings/exportImportSettings.qml
+        src/gui/Colors.qml
+        src/gui/Font.qml
+        src/gui/Scaling.qml
 )
 
-# Expose the generated QML module directory to the application at compile-time
-# so the running binary can add it to QQmlApplicationEngine import paths.
-target_compile_definitions(SnipBoard PRIVATE
-    SNIPBOARD_QML_MODULE_DIR="${CMAKE_BINARY_DIR}/SnipBoard"
+# ADDED: Set singleton properties
+set_source_files_properties(
+    src/gui/Colors.qml
+    src/gui/Font.qml
+    src/gui/Scaling.qml
+    PROPERTIES
+        QT_QML_SINGLETON_TYPE TRUE
 )
 
 # CHANGED: Updated target properties to use the new executable name
