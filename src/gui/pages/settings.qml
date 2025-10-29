@@ -19,8 +19,8 @@ Window {
             id: text1
             x: 81
             y: 92
-            text: qsTr("Snip Board")
-            font.pixelSize: 40
+            text: qsTr("Testing")
+            font.pixelSize: 12
         }
     }
 }

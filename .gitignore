@@ -14,6 +14,7 @@ build.sh
 *.user
 CMakeUserPresets.json
 **/.qmlls.ini
+*.cache
 
 # Keep separate databases
 #*.db
