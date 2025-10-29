@@ -1,34 +1,28 @@
 import QtQuick
 import QtQuick.Controls
+import SnipBoard
 
 Window {
     id: welcomeScreen
     visible: true
     width: Screen.width
     height: Screen.height
-    color: "#5e5270"
     visibility: Window.FullScreen
+    color: "#5e5270"
     title: qsTr("Hello World")
 
-    FontLoader {
-        id: quantico
-        source: "../../fonts/Quantico-Regular.ttf"
+    onWidthChanged: updateScale
+    onHeightChanged: updateScale
+
+    function updateScale() {
+        Scaling.factor = Math.min(width/Scaling.baseWidth, height/Scaling.baseHeight) //IGNORE: qmllint warning
     }
 
     FontLoader {
-        id:quanticoBold
-        source: "../../fonts/Quantico-Bold.ttf"
+        id: montserrat
+        source: "../../fonts/Montserrat-VariableFont_wght.ttf"
     }
 
-    FontLoader {
-        id: quanticoItalic
-        source: "../../fonts/Quantico-Italic.ttf"
-    }
-
-    FontLoader {
-        id: quanticoBoldItalic
-        source: "../../fonts/Quantico-BoldItalic.ttf"
-    }
 
 
     Text {
@@ -39,7 +33,7 @@ Window {
         text: qsTr("SnipBoard")
         font.pixelSize: 147
         horizontalAlignment: Text.AlignHCenter
-        font.family: quanticoBold
+        font.family: montserrat
     }
 
     Rectangle {
@@ -58,6 +52,7 @@ Window {
             color: "#5e5270"
             text: qsTr("New")
             font.pixelSize: 50
+            font.family: montserrat
         }
 
         Button {
