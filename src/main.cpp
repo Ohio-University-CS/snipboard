@@ -9,6 +9,9 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <iostream>
+// #include "src/core/models"
+#include "src/core/objects/SnippetObject.h"
+#include "src/core/objects/SnippetListModel.h"
 
 using namespace Qt::StringLiterals;
 
@@ -25,9 +28,10 @@ int main(int argc, char* argv[]) {
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
 
+    qmlRegisterType<SnippetObject>("SnipBoard", 1, 0, "SnippetObject");
+    
     // Update this function with any new .qml paths
     loadModules(engine);
-
     if (engine.rootObjects().isEmpty()) {
         return -1;
     }
