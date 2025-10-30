@@ -3,6 +3,8 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import SnipBoard
 
+//default code to prevent errors
+
 Page {
     id: appearancePage
     anchors.fill: parent

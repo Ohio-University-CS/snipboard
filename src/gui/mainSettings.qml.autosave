@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import SnipBoard
+//import SnipBoard
 
 Window {
     id: window
@@ -64,13 +64,12 @@ Window {
                     highlighted: false
                     flat: true
                     background: Rectangle{
-                        id: genBG
                         color: "#2a2631"
                         anchors.fill: parent
                     } 
                     onClicked: {
                         stackView.replace("Settings/generalSettings.qml")
-                        genBG.color = "#453e51"
+                        background.color = "#453e51"
                     }
 
 
@@ -96,11 +95,10 @@ Window {
 
                     onClicked: {
                         stackView.replace("Settings/appearanceSettings.qml")
-                        appBG.color = "#453e51"
+                        background.color = "#453e51"
                     }
                     checkable: false
                     background: Rectangle{
-                        id: appBG
                         color: "#2a2631"
                         anchors.fill: parent
                     } 
@@ -126,11 +124,10 @@ Window {
 
                     onClicked: {
                         stackView.replace("Settings/editorSettings.qml")
-                        ediBG.color = "#453e51"
+                        background.color = "#453e51"
                     }
                     checkable: false
                     background: Rectangle{
-                        id: ediBG
                         color: "#2a2631"
                         anchors.fill: parent
                     } 
@@ -156,12 +153,11 @@ Window {
 
                     onClicked: {
                         stackView.replace("Settings/exportImportSettings.qml")
-                        eximBG.color = "#453e51"
+                        background.color = "#453e51"
                     }
 
                     checkable: false
                     background: Rectangle{
-                        id: eximBG
                         color: "#2a2631"
                         anchors.fill: parent
                     } 
@@ -187,11 +183,10 @@ Window {
 
                     onClicked: {
                         stackView.replace("Settings/snippetManagementSettings.qml")
-                        snmgBG.color = "#453e51"
+                        background.color = "#453e51"
                     }
                     checkable: false
                     background: Rectangle{
-                        id: snmgBG
                         color: "#2a2631"
                         anchors.fill: parent
                     } 
@@ -228,7 +223,6 @@ Window {
                 display: AbstractButton.TextOnly
                 checkable: false
                 background: Rectangle{
-                    id: homeBG
                     color: "#2a2631"
                     anchors.fill: parent
                 } 
