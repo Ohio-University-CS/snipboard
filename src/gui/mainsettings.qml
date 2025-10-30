@@ -220,7 +220,7 @@ Window {
                 anchors.rightMargin: 0
                 highlighted: false
                 font.styleName: "Medium"
-                font.hintingPreference: Font.PreferDefaultHinting
+                font.hintingPreference: Font.PreferFullHinting
                 font.family: "Montserrat"
                 font.bold: false
                 focusPolicy: Qt.ClickFocus

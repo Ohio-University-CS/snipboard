@@ -54,14 +54,14 @@ qt_add_qml_module(SnipBoard
         src/gui/Settings/snippetManagementSettings.qml
         src/gui/Settings/exportImportSettings.qml
         src/gui/Colors.qml
-        src/gui/Font.qml
+        src/gui/Fonts.qml
         src/gui/Scaling.qml
 )
 
 # ADDED: Set singleton properties
 set_source_files_properties(
     src/gui/Colors.qml
-    src/gui/Font.qml
+    src/gui/Fonts.qml
     src/gui/Scaling.qml
     PROPERTIES
         QT_QML_SINGLETON_TYPE TRUE
