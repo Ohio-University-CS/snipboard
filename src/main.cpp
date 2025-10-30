@@ -9,12 +9,7 @@
 #include <QQmlApplicationEngine>
 #include <iostream>
 #include <QCoreApplication> //needed for mac
-#include <QUrl>
-#include <QDebug>
-#include <QQmlError>
-#include <QQmlContext>
-#include <QQmlEngine>
-#include <QFile>
+
 
 using namespace Qt::StringLiterals;
 
