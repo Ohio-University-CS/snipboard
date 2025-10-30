@@ -7,15 +7,18 @@ cmake_install.cmake
 compile_commands.json
 Generated/
 sign.sh
+build.sh
 
 # IDE and user-specific files
 .vscode/
 *.user
 CMakeUserPresets.json
 **/.qmlls.ini
+*.cache
+*.autosave*
 
 # Keep separate databases
-#*.db
+*.db
 
 # OS-specific files
 .DS_Store

@@ -1,103 +1,74 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Window
 
 Window {
     id: welcomeScreen
     visible: true
     width: Screen.width
     height: Screen.height
-    color: "#5e5270"
-    visibility: Window.FullScreen
-    title: qsTr("Hello World")
+    color: "#734c91"
+    visibility: Window.Maximized
+    title: qsTr("Main.qml - Should load pages")
 
-    FontLoader {
-        id: quantico
-        source: "../../fonts/Quantico-Regular.ttf"
+    StackView {
+        id: stack
+        anchors.fill: parent
+        anchors.leftMargin: 0
+        anchors.topMargin: 0
+        initialItem: "pages/home.qml"
     }
-
-    FontLoader {
-        id:quanticoBold
-        source: "../../fonts/Quantico-Bold.ttf"
-    }
-
-    FontLoader {
-        id: quanticoItalic
-        source: "../../fonts/Quantico-Italic.ttf"
-    }
-
-    FontLoader {
-        id: quanticoBoldItalic
-        source: "../../fonts/Quantico-BoldItalic.ttf"
-    }
-
 
     Text {
-        id: text3
-        anchors.horizontalCenter: parent.horizontalCenter
-        y: parent.height * 1/3
-        color: "#f0f0f0"
+        id: text1
+        x: -23
+        y: 156
+        width: 1630
+        height: 492
+        color: "#ffffff"
         text: qsTr("SnipBoard")
-        font.pixelSize: 147
-        horizontalAlignment: Text.AlignHCenter
-        font.family: quanticoBold
+        font.pixelSize: 340
+        font.bold: true
     }
 
-    Rectangle {
-        id: newRectangle
-        anchors.horizontalCenter: parent.horizontalCenter
-        y: parent.height * 11/14
-        width: 278
-        height: 61
-        color: "#ffffff"
-        radius: 16
-
-        Text {
-            id: text1
-            x: 90
-            y: -6
-            color: "#5e5270"
-            text: qsTr("New")
-            font.pixelSize: 50
-        }
-
-        Button {
-            id: newButton
-            anchors.horizontalCenter: parent.horizontalCenter
-            width: 278
-            height: 61
-            x: 90
-            y: -6
-
-        }
-    }
 
     Rectangle {
-        id: homeButton
-        anchors.horizontalCenter: parent.horizontalCenter
-        y: parent.height * 6/7
-        width: 278
-        height: 61
+        id: rectangle
+        x: 498
+        y: 744
+        width: 604
+        height: 72
         color: "#ffffff"
-        radius: 16
+
+        ProgressBar {
+            id: progressBar
+            x: 3
+            y: 0
+            width: 601
+            height: 72
+            visible: true
+            value: 0.5
+            transformOrigin: Item.Center
+        }
 
         Text {
             id: text2
-            x: 44
-            y: -6
-            color: "#5e5270"
-            text: qsTr("Snippets")
+            x: 16
+            y: 0
+            width: 242
+            height: 72
+            color: "#734c91"
+            text: qsTr("Loading...")
             font.pixelSize: 50
-            horizontalAlignment: Text.AlignHCenter
-        }
-
-        Button {
-            id: snippetsButton
-            anchors.horizontalCenter: parent.horizontalCenter
-            width: 278
-            height: 61
-            x: 44
-            y: -6
-
+            font.bold: true
+            font.italic: true
         }
     }
 }
+
+
+/*##^##
+Designer {
+    D{i:0}D{i:1;locked:true}D{i:4;locked:true}
+}
+##^##*/
