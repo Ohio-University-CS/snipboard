@@ -18,6 +18,7 @@ struct Folder {
     QString dateUpdated;
     QVector<int> subFolderIds;
 
+    Folder() {}
     Folder(int id, int parentFolderId, QString name, QString dateCreated, QString dateUpdated, QVector<int> subFolderIds)
         : id(id), parentFolderId(parentFolderId), name(name), dateCreated(dateCreated), dateUpdated(dateUpdated), subFolderIds(subFolderIds) {}
 };

@@ -16,6 +16,7 @@ struct Tag {
     QString dateUpdated;
     bool showDate = true;
 
+    Tag() {}
     Tag(int id, QString name, QString dateCreated, QString dateUpdated, bool showDate)
         : id(id), name(name), dateCreated(dateCreated), dateUpdated(dateUpdated), showDate(showDate) {}
 };
