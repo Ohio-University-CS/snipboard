@@ -120,7 +120,7 @@ bool SnippetRepository::update(Snippet& snippet) {
 bool SnippetRepository::remove(int id) {
     // Create query
     QSqlQuery query(m_db);
-    query.prepare("DELETE FROM snippets WHERE id=?");
+    query.prepare("DELETE FROM Snippet WHERE id=?");
     query.addBindValue(id);
 
     // Execute and get status
