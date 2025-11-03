@@ -44,6 +44,8 @@ set(HEADERS
     src/core/objects/SnippetListModel.h
     src/core/objects/TagListModel.h
     src/core/objects/FolderTreeModel.h
+    src/core/repositories/SnippetRepository.h
+    src/core/services/SnippetService.h
 )
 
 # Add c++ to be compiled
@@ -58,6 +60,8 @@ qt_add_executable(SnipBoard
     src/core/objects/SnippetListModel.cpp
     src/core/objects/TagListModel.cpp
     src/core/objects/FolderTreeModel.cpp
+    src/core/repositories/SnippetRepository.cpp
+    src/core/services/SnippetService.cpp
     # Add other c++ files here
 )
 
@@ -69,11 +73,30 @@ qt_add_qml_module(SnipBoard
     RESOURCE_PREFIX "/qt/qml"
     QML_FILES
         src/gui/main.qml
+        src/gui/mainsettings.qml
+        src/gui/Scaling.qml
+        src/gui/Font.qml
         src/gui/colors.qml
-        src/gui/pages/settings.qml
-        src/gui/pages/new_snippet.qml
-        src/gui/pages/home.qml
         src/gui/pages/delete_overlay.qml
+        src/gui/pages/home.qml
+        src/gui/pages/new_snippet.qml
+        src/gui/pages/settings.qml
+        src/gui/Settings/appearanceSettings.qml
+        src/gui/Settings/editorSettings.qml
+        src/gui/Settings/exportImportSettings.qml
+        src/gui/Settings/generalSettings.qml
+        src/gui/Settings/snippetManagementSettings.qml
+        src/gui/snippetServiceTest.qml
+        # src/gui/appSettings.qrc
+)
+
+# ADDED: Set singleton properties
+set_source_files_properties(
+    src/gui/Colors.qml
+    src/gui/Font.qml
+    src/gui/Scaling.qml
+    PROPERTIES
+        QT_QML_SINGLETON_TYPE TRUE
 )
 
 # CHANGED: Updated target properties to use the new executable name
