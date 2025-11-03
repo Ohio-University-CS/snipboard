@@ -9,20 +9,22 @@
 
 #include <QString>
 #include <QVector>
+#include <QDateTime>
 
 struct Snippet {
     int id = -1;
     QString name;
-    QString dateCreated;
-    QString dateUpdated;
+    QDateTime dateCreated;
+    QDateTime dateModified;
     QString description;
-    QString data;
+    QString contents;
     QString language;
     QVector<int> tags;
     int folder = 0;  // default to home
     bool favorite = false;
     quint64 timesCopied = 0;
 
-    Snippet(int id, QString name, QString dateCreated, QString dateUpdated, QString description, QString data, QString language, QVector<int> tags, int folder, bool favorite, quint64 timesCopied)
-        : id(id), name(name), dateCreated(dateCreated), dateUpdated(dateUpdated), description(description), data(data), language(language), tags(tags), folder(folder), favorite(favorite), timesCopied(timesCopied) {}
+    Snippet() {}
+    Snippet(int id, QString name, QDateTime dateCreated, QDateTime dateModified, QString description, QString contents, QString language, QVector<int> tags, int folder, bool favorite, quint64 timesCopied)
+        : id(id), name(name), dateCreated(dateCreated), dateModified(dateModified), description(description), contents(contents), language(language), tags(tags), folder(folder), favorite(favorite), timesCopied(timesCopied) {}
 };
