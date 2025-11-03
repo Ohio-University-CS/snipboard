@@ -25,6 +25,6 @@ struct Snippet {
     quint64 timesCopied = 0;
 
     Snippet() {}
-    Snippet(int id, QString name, QDateTime dateCreated, QDateTime dateModified, QString description, QString data, QString language, QVector<int> tags, int folder, bool favorite, quint64 timesCopied)
-        : id(id), name(name), dateCreated(dateCreated), dateModified(dateModified), description(description), data(data), language(language), tags(tags), folder(folder), favorite(favorite), timesCopied(timesCopied) {}
+    Snippet(int id, QString name, QDateTime dateCreated, QDateTime dateModified, QString description, QString contents, QString language, QVector<int> tags, int folder, bool favorite, quint64 timesCopied)
+        : id(id), name(name), dateCreated(dateCreated), dateModified(dateModified), description(description), contents(contents), language(language), tags(tags), folder(folder), favorite(favorite), timesCopied(timesCopied) {}
 };
