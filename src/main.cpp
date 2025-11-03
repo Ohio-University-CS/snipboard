@@ -8,10 +8,12 @@
 #include <QCoreApplication>  //needed for mac
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
 #include <iostream>
 // #include "src/core/models"
 #include "src/core/objects/SnippetObject.h"
 #include "src/core/objects/SnippetListModel.h"
+#include "src/core/services/SnippetService.h"
 
 using namespace Qt::StringLiterals;
 
@@ -29,6 +31,9 @@ int main(int argc, char* argv[]) {
     QQmlApplicationEngine engine;
 
     qmlRegisterType<SnippetObject>("SnipBoard", 1, 0, "SnippetObject");
+    
+    SnippetService snippetService;
+    engine.rootContext()->setContextProperty("snippetService", &snippetService);
     
     // Update this function with any new .qml paths
     loadModules(engine);
