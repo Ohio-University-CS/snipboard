@@ -17,7 +17,7 @@ struct Snippet {
     QDateTime dateCreated;
     QDateTime dateModified;
     QString description;
-    QString data;
+    QString contents;
     QString language;
     QVector<int> tags;
     int folder = 0;  // default to home
