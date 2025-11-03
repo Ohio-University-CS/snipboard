@@ -15,6 +15,7 @@
 #include "src/core/objects/SnippetListModel.h"
 #include "src/core/services/SnippetService.h"
 
+
 using namespace Qt::StringLiterals;
 
 /**
@@ -27,6 +28,7 @@ void loadModules(QQmlApplicationEngine& engine);
 
 int main(int argc, char* argv[]) {
     // Create app and engine
+    std::cout<<"test1";
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
 
