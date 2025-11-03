@@ -13,10 +13,10 @@ struct Tag {
     int id = -1;
     QString name;
     QString dateCreated;
-    QString dateUpdated;
+    QString dateModified;
     bool showDate = true;
 
     Tag() {}
-    Tag(int id, QString name, QString dateCreated, QString dateUpdated, bool showDate)
-        : id(id), name(name), dateCreated(dateCreated), dateUpdated(dateUpdated), showDate(showDate) {}
+    Tag(int id, QString name, QString dateCreated, QString dateModified, bool showDate)
+        : id(id), name(name), dateCreated(dateCreated), dateModified(dateModified), showDate(showDate) {}
 };

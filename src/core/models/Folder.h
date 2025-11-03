@@ -15,10 +15,10 @@ struct Folder {
     int parentFolderId;
     QString name;
     QString dateCreated;
-    QString dateUpdated;
+    QString dateModified;
     QVector<int> subFolderIds;
 
     Folder() {}
-    Folder(int id, int parentFolderId, QString name, QString dateCreated, QString dateUpdated, QVector<int> subFolderIds)
-        : id(id), parentFolderId(parentFolderId), name(name), dateCreated(dateCreated), dateUpdated(dateUpdated), subFolderIds(subFolderIds) {}
+    Folder(int id, int parentFolderId, QString name, QString dateCreated, QString dateModified, QVector<int> subFolderIds)
+        : id(id), parentFolderId(parentFolderId), name(name), dateCreated(dateCreated), dateModified(dateModified), subFolderIds(subFolderIds) {}
 };
