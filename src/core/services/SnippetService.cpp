@@ -7,10 +7,13 @@
 SnippetService::SnippetService(QObject* parent) : QObject(parent) {
     // Initialize database
     m_db = QSqlDatabase::addDatabase("QSQLITE");
-    m_db.setDatabaseName("../../db/snipboard.db");
+    m_db.setDatabaseName("snipboard.db");
     if (!m_db.open()) {
         qWarning() << "Failed to open DB:" << m_db.lastError();
     }
+
+    qDebug() << "DB path:" << m_db.databaseName();
+    qDebug() << "DB open:" << m_db.isOpen();
 
     // Create repository and load all snippets
     /* WE PROBABLY WANT TO UPDATE THIS TO JUST LOAD ALL SNIPPETS THAT BELONG TO HOME FOLDER */
@@ -51,6 +54,7 @@ void SnippetService::createSnippet(const QString& name, const QString& descripti
 
 void SnippetService::deleteSnippet(int id) {
     // Remove snippet
+    qDebug() << id;
     if (m_repo->remove(id)) {
         m_snippetModel.onSnippetDeleted(id);
     }
