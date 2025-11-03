@@ -9,12 +9,13 @@
 
 #include <QString>
 #include <QVector>
+#include <QDateTime>
 
 struct Snippet {
     int id = -1;
     QString name;
-    QString dateCreated;
-    QString dateModified;
+    QDateTime dateCreated;
+    QDateTime dateModified;
     QString description;
     QString data;
     QString language;
@@ -24,6 +25,6 @@ struct Snippet {
     quint64 timesCopied = 0;
 
     Snippet() {}
-    Snippet(int id, QString name, QString dateCreated, QString dateModified, QString description, QString data, QString language, QVector<int> tags, int folder, bool favorite, quint64 timesCopied)
+    Snippet(int id, QString name, QDateTime dateCreated, QDateTime dateModified, QString description, QString data, QString language, QVector<int> tags, int folder, bool favorite, quint64 timesCopied)
         : id(id), name(name), dateCreated(dateCreated), dateModified(dateModified), description(description), data(data), language(language), tags(tags), folder(folder), favorite(favorite), timesCopied(timesCopied) {}
 };
