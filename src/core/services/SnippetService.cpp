@@ -1,0 +1,78 @@
+#include "SnippetService.h"
+
+#include <QDateTime>
+#include <QDebug>
+#include <QSqlError>
+
+SnippetService::SnippetService(QObject* parent) : QObject(parent) {
+    // Initialize database
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db.setDatabaseName("../../db/snipboard.db");
+    if (!m_db.open()) {
+        qWarning() << "Failed to open DB:" << m_db.lastError();
+    }
+
+    // Create repository and load all snippets
+    /* WE PROBABLY WANT TO UPDATE THIS TO JUST LOAD ALL SNIPPETS THAT BELONG TO HOME FOLDER */
+    m_repo = new SnippetRepository(m_db);
+    loadSnippetsFromDb();
+}
+
+void SnippetService::loadSnippetsFromDb() {
+    // Get all snippets
+    auto all = m_repo->loadAll();
+    QVector<SnippetObject*> objs;
+    objs.reserve(all.size());
+
+    // Create new SnippetObjects from Snippets returned from repo
+    for (const Snippet& s : all) {
+        objs.append(new SnippetObject(s));
+    }
+
+    m_snippetModel.setSnippets(objs);
+}
+
+void SnippetService::createSnippet(const QString& name, const QString& description, const QString& language, const QString& contents, int folder, bool favorite) {
+    // Create snippet
+    Snippet s;
+    s.name = name;
+    s.description = description;
+    s.language = language;
+    s.contents = contents;
+    s.folder = folder;
+    s.favorite = favorite;
+
+    // Insert into DB. Update ListView
+    if (m_repo->insert(s)) {
+        auto* obj = new SnippetObject(s);
+        m_snippetModel.onSnippetAdded(obj);
+    }
+}
+
+void SnippetService::deleteSnippet(int id) {
+    // Remove snippet
+    if (m_repo->remove(id)) {
+        m_snippetModel.onSnippetDeleted(id);
+    }
+}
+
+void SnippetService::updateSnippet(int id, const QString& name, const QString& description, const QString& language, const QString& contents, int folder, bool favorite) {
+    // Get current snippet
+    Snippet s = m_repo->loadById(id);
+    if (s.id == -1) {
+        return;
+    }
+
+    s.name = name;
+    s.description = description;
+    s.language = language;
+    s.contents = contents;
+    s.folder = folder;
+    s.favorite = favorite;
+    // s.dateModified = QDateTime::currentDateTime(); // shouldnt need this repo takes care of it..
+
+    if (m_repo->update(s)) {
+        auto* obj = new SnippetObject(s);
+        m_snippetModel.onSnippetUpdated(id, obj);
+    }
+}
