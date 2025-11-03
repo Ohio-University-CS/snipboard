@@ -5,7 +5,7 @@
  *       @brief: SQL queries
  */
 
-#include "SnippetsRepository.h"
+#include "SnippetRepository.h"
 
 #include <QSqlError>
 #include <QSqlQuery>
