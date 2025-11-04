@@ -28,6 +28,8 @@ class SnippetService : public QObject {
     Q_INVOKABLE void createSnippet(const QString& name, const QString& description, const QString& language, const QString& contents, int folder, bool favorite);
     Q_INVOKABLE void deleteSnippet(int id);
     Q_INVOKABLE void updateSnippet(int id, const QString& name, const QString& description, const QString& language, const QString& contents, int folder, bool favorite);
+    Q_INVOKABLE void reload();
+
 
  private:
     void loadSnippetsFromDb();

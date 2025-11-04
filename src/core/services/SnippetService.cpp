@@ -80,3 +80,7 @@ void SnippetService::updateSnippet(int id, const QString& name, const QString& d
         m_snippetModel.onSnippetUpdated(id, obj);
     }
 }
+
+void SnippetService::reload() {
+    loadSnippetsFromDb();
+}
