@@ -4,38 +4,29 @@ import QtQuick.Window
 
 Window {
     id: welcomeScreen
+    width: 1440
+    height: 900
     visible: true
-    width: Screen.width
-    height: Screen.height
     color: "#734c91"
-    visibility: Window.Maximized
-    title: qsTr("Main.qml - Should load pages")
+    title: qsTr("Main/loading page")
 
-    StackView {
-        id: stack
-        anchors.fill: parent
-        anchors.leftMargin: 0
-        anchors.topMargin: 0
-        initialItem: "pages/home.qml"
-    }
 
     Text {
         id: text1
-        x: -23
-        y: 156
+        x: -7
+        y: 112
         width: 1630
         height: 492
         color: "#ffffff"
         text: qsTr("SnipBoard")
-        font.pixelSize: 340
+        font.pixelSize: 300
         font.bold: true
     }
 
-
     Rectangle {
         id: rectangle
-        x: 498
-        y: 744
+        x: 418
+        y: 576
         width: 604
         height: 72
         color: "#ffffff"
@@ -46,9 +37,25 @@ Window {
             y: 0
             width: 601
             height: 72
+            from: 0
+            to: 1
+            value: 0
             visible: true
-            value: 0.5
             transformOrigin: Item.Center
+
+            // Animate the bar filling up
+            NumberAnimation on value {
+                id: fillAnim
+                from: 0
+                to: 1
+                duration: 2500 // time to fill up progress bar
+                running: true
+                onFinished: {
+                    stack.clear() 
+                    stack.push("qrc:/qt/qml/SnipBoard/src/gui/pages/home.qml")
+                }
+            }
+
         }
 
         Text {
@@ -64,11 +71,21 @@ Window {
             font.italic: true
         }
     }
+    StackView {
+        id: stack
+        anchors.fill: parent
+        anchors.leftMargin: 0
+        anchors.topMargin: 0
+    }
 }
+
+
+
+
 
 
 /*##^##
 Designer {
-    D{i:0}D{i:1;locked:true}D{i:4;locked:true}
+    D{i:0}D{i:3;locked:true}
 }
 ##^##*/
