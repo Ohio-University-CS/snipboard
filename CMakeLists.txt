@@ -90,6 +90,13 @@ qt_add_qml_module(SnipBoard
         # src/gui/appSettings.qrc
 )
 
+#Resources for UI
+qt_add_resources(${PROJECT_NAME} snipboard_resources
+    PREFIX "/"
+    FILES
+        resources/icons/search.png
+)
+
 # ADDED: Set singleton properties
 set_source_files_properties(
     src/gui/Colors.qml
