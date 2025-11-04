@@ -16,3 +16,13 @@ SnipBoard provides a way to let you store code snippets. SnipBoard has strong se
 ##
 
 This project is a work in progress and is being made as a semester long project for CS 3560: Software Engineering Tools and Practices
+
+### Attributions:
+
+1) Star Icon - <a href="https://www.flaticon.com/free-icons/star" title="star icons">Star icons created by Pixel perfect - Flaticon</a>
+2) Search Icon - <a href="https://www.flaticon.com/free-icons/magnifying-glass" title="magnifying glass icons">Magnifying glass icons created by Royyan Wijaya - Flaticon</a>
+3) Setting Icon - <a href="https://www.flaticon.com/free-icons/settings" title="settings icons">Settings icons created by Ilham Fitrotul Hayat - Flaticon</a>
+4) Folder Icon - <a href="https://www.flaticon.com/free-icons/folder" title="folder icons">Folder icons created by dmitri13 - Flaticon</a>
+
+
+
