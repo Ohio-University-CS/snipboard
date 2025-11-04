@@ -3,30 +3,18 @@ import QtQuick.Controls
 import QtQuick.Window
 
 Window {
-    id: welcomeScreen
-    width: 1440
-    height: 900
+    id: window
     visible: true
+    width: 800
+    height: 600
     color: "#734c91"
-    title: qsTr("Main/loading page")
+    title: qsTr(SnipBoard)
 
-
-    Text {
-        id: text1
-        x: -7
-        y: 112
-        width: 1630
-        height: 492
-        color: "#ffffff"
-        text: qsTr("SnipBoard")
-        font.pixelSize: 300
-        font.bold: true
-    }
 
     Rectangle {
         id: rectangle
-        x: 418
-        y: 576
+        x: 98
+        y: 428
         width: 604
         height: 72
         color: "#ffffff"
@@ -52,7 +40,7 @@ Window {
                 running: true
                 onFinished: {
                     stack.clear() 
-                    stack.push("qrc:/qt/qml/SnipBoard/src/gui/pages/home.qml")
+                    stack.replace("qrc:/qt/qml/SnipBoard/src/gui/pages/home.qml")
                 }
             }
 
@@ -76,6 +64,17 @@ Window {
         anchors.fill: parent
         anchors.leftMargin: 0
         anchors.topMargin: 0
+
+        Text {
+            id: text1
+            x: 3
+            y: 100
+            width: 797
+            height: 256
+            color: "#ffffff"
+            text: qsTr("SnipBoard")
+            font.pixelSize: 175
+        }
     }
 }
 
@@ -86,6 +85,6 @@ Window {
 
 /*##^##
 Designer {
-    D{i:0}D{i:3;locked:true}
+    D{i:0}D{i:2;locked:true}
 }
 ##^##*/
