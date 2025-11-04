@@ -52,9 +52,9 @@ Tag TagRepository::loadById(int id) {
     t.name = query.value(1).toString();
     t.dateCreated = query.value(2).toDateTime();
     t.dateModified = query.value(3).toDateTime();
-    t.showDate = query.value(4).toString();
+    t.showDate = query.value(4).toBool();
 
-    return s;
+    return t;
 }
 
 bool TagRepository::insert(Tag& tag) {

@@ -17,7 +17,7 @@ class TagRepository {
     explicit TagRepository(QSqlDatabase db);
 
     QVector<Tag> loadAll();
-    Snippet loadById(int id);
+    Tag loadById(int id);
     bool insert(Tag& tag);
     bool update(Tag& tag);
     bool remove(int id);
