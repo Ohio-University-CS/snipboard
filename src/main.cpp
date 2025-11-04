@@ -50,6 +50,6 @@ void loadModules(QQmlApplicationEngine& engine) {
     // Will need to add other QML files to this
 
     // commented out the main to add the testing file
-    engine.load(QUrl(QStringLiteral("qrc:/qt/qml/SnipBoard/src/gui/main.qml")));
-    // engine.load(QUrl(QStringLiteral("qrc:/qt/qml/SnipBoard/src/gui/snippetServiceTest.qml")));
+    // engine.load(QUrl(QStringLiteral("qrc:/qt/qml/SnipBoard/src/gui/main.qml")));
+    engine.load(QUrl(QStringLiteral("qrc:/qt/qml/SnipBoard/src/gui/pages/home.qml")));
 }
