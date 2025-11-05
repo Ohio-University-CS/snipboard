@@ -1,12 +1,14 @@
 import QtQuick
 import QtQuick.Controls
+import "." as Colors
 
 Window {
     id: welcomeScreen
     visible: true
     width: Screen.width
     height: Screen.height
-    color: "#5e5270"
+    Colors {id: color}
+    color: color.primary
     visibility: Window.FullScreen
     title: qsTr("Hello World")
 
@@ -35,11 +37,11 @@ Window {
         id: text3
         anchors.horizontalCenter: parent.horizontalCenter
         y: parent.height * 1/3
-        color: "#f0f0f0"
+        color: Colors.primaryText
         text: qsTr("SnipBoard")
         font.pixelSize: 147
         horizontalAlignment: Text.AlignHCenter
-        font.family: quanticoBold
+        font.family: quanticoBold.name
     }
 
     Rectangle {
@@ -48,14 +50,14 @@ Window {
         y: parent.height * 11/14
         width: 278
         height: 61
-        color: "#ffffff"
+        color: color.surfaceText
         radius: 16
 
         Text {
             id: text1
             x: 90
             y: -6
-            color: "#5e5270"
+            color: color.primary
             text: qsTr("New")
             font.pixelSize: 50
         }
@@ -77,14 +79,14 @@ Window {
         y: parent.height * 6/7
         width: 278
         height: 61
-        color: "#ffffff"
+        color: color.surfaceText
         radius: 16
 
         Text {
             id: text2
             x: 44
             y: -6
-            color: "#5e5270"
+            color: color.primary
             text: qsTr("Snippets")
             font.pixelSize: 50
             horizontalAlignment: Text.AlignHCenter

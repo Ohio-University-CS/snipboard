@@ -1,4 +1,5 @@
 import QtQuick
+import "." as Colors
 
 Window {
     width: 640

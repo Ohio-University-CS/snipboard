@@ -8,6 +8,11 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <iostream>
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
+#include <QFontDatabase>
+#include <QFont>
+#include <QDir>
 
 using namespace Qt::StringLiterals;
 
@@ -23,6 +28,21 @@ int main(int argc, char *argv[])
 {
     // Create app and engine
     QGuiApplication app(argc, argv);
+
+    // ---- App default font
+    auto tryAddFont = [](const QString &p) {
+        if (QFile::exists(p)) QFontDatabase::addApplicationFont(p);
+    };
+   
+    tryAddFont(QCoreApplication::applicationDirPath() + "/../fonts/Quantico-Regular.ttf");
+    tryAddFont(QCoreApplication::applicationDirPath() + "/../fonts/Quantico-Bold.ttf");
+    tryAddFont(QCoreApplication::applicationDirPath() + "/../../fonts/Quantico-Regular.ttf");
+    tryAddFont(QCoreApplication::applicationDirPath() + "/../../fonts/Quantico-Bold.ttf");
+    // Project-root relative fallback 
+    tryAddFont(QStringLiteral("../fonts/Quantico-Regular.ttf"));
+    tryAddFont(QStringLiteral("../fonts/Quantico-Bold.ttf"));
+    app.setFont(QFont("Quantico"));
+
     QQmlApplicationEngine engine;
 
     /* Update this function with any new .qml paths */
