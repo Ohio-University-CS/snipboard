@@ -33,6 +33,7 @@ void SnippetService::loadSnippetsFromDb() {
     }
 
     m_snippetModel.setSnippets(objs);
+    m_snippetModelFiltered.setSnippets(objs);
 }
 
 void SnippetService::createSnippet(const QString& name, const QString& description, const QString& language, const QString& contents, int folder, bool favorite) {
@@ -49,6 +50,7 @@ void SnippetService::createSnippet(const QString& name, const QString& descripti
     if (m_repo->insert(s)) {
         auto* obj = new SnippetObject(s);
         m_snippetModel.onSnippetAdded(obj);
+        m_snippetModelFiltered.onSnippetAdded(obj);
     }
 }
 
@@ -57,6 +59,7 @@ void SnippetService::deleteSnippet(int id) {
     qDebug() << id;
     if (m_repo->remove(id)) {
         m_snippetModel.onSnippetDeleted(id);
+        m_snippetModelFiltered.onSnippetDeleted(id);
     }
 }
 
@@ -83,4 +86,17 @@ void SnippetService::updateSnippet(int id, const QString& name, const QString& d
 
 void SnippetService::reload() {
     loadSnippetsFromDb();
+}
+
+void SnippetService::search(const QString& phrase) {
+    const auto snippets = m_snippetModel.viewSnippets();
+
+    QVector<SnippetObject*> results;
+    for (const auto& s : snippets) {
+        if (s->name().contains(phrase, Qt::CaseInsensitive)) {
+            results.push_back(s);
+        }
+    }
+
+    m_snippetModelFiltered.setSnippets(results);
 }

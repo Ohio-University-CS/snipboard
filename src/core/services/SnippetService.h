@@ -24,11 +24,12 @@ class SnippetService : public QObject {
 
     
     // QML methods
-    SnippetListModel* snippets() { return &m_snippetModel; }
+    SnippetListModel* snippets() { return &m_snippetModelFiltered; }
     Q_INVOKABLE void createSnippet(const QString& name, const QString& description, const QString& language, const QString& contents, int folder, bool favorite);
     Q_INVOKABLE void deleteSnippet(int id);
     Q_INVOKABLE void updateSnippet(int id, const QString& name, const QString& description, const QString& language, const QString& contents, int folder, bool favorite);
     Q_INVOKABLE void reload();
+    Q_INVOKABLE void search(const QString& phrase = "");
 
 
  private:
@@ -36,5 +37,6 @@ class SnippetService : public QObject {
     
     QSqlDatabase m_db;
     SnippetRepository* m_repo;
-    SnippetListModel m_snippetModel; // the list model its responsible for
+    SnippetListModel m_snippetModel; // list model that is all snippets in current folder
+    SnippetListModel m_snippetModelFiltered; // the list model its responsible for
 };

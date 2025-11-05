@@ -105,7 +105,7 @@ ApplicationWindow {
 
             Button {
                 text: "Reload"
-                onClicked: snippetService.loadSnippetsFromDb()
+                onClicked: snippetService.reload()
             }
         }
     }

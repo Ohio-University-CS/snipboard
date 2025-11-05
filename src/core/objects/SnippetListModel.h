@@ -41,6 +41,7 @@ class SnippetListModel : public QAbstractListModel {
 
     // Set the snippets
     void setSnippets(const QList<SnippetObject*>& snippets);
+    const QList<SnippetObject*>& viewSnippets() const { return m_snippets; }
 
     // QML read access
     Q_INVOKABLE SnippetObject* get(int index) const;
