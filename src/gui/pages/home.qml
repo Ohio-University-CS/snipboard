@@ -105,7 +105,7 @@ Page {
                 title: "Delete Snippet?"
                 modal: true
                 standardButtons: Dialog.Ok | Dialog.Cancel
-
+                anchors.centerIn: parent
                 Column {
                     anchors.fill: parent
                     anchors.margins: 20
