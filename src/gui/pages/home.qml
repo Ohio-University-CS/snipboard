@@ -6,6 +6,9 @@ import QtQuick.Controls.Basic as Basic   // <-- add this
 
 Page {
     id: window
+    property string snippetDialogName: ""
+    property int snippetDialogId: -1
+
     visible: true
     width: 800
     height: 600
@@ -87,11 +90,38 @@ Page {
                         Button {
                             text: "❌"
                             Layout.alignment: Qt.AlignRight
-                            onClicked: snippetService.deleteSnippet(id)
+                            onClicked: {
+                                window.snippetDialogId = id
+                                window.snippetDialogName = name
+                                deleteDialog.open()
+                            } //snippetService.deleteSnippet(id)
                         }
                     }
                 }
             }
+
+            Dialog {
+                id: deleteDialog
+                title: "Delete Snippet?"
+                modal: true
+                standardButtons: Dialog.Ok | Dialog.Cancel
+
+                Column {
+                    anchors.fill: parent
+                    anchors.margins: 20
+                    spacing: 10
+
+                    Label {
+                        text: "Are you sure you want to delete the snippet: " + window.snippetDialogName
+                        wrapMode: Text.WordWrap
+                    }
+                }
+
+                onAccepted: {
+                    snippetService.deleteSnippet(window.snippetDialogId)
+                }
+            }
+
 
             // --- Control Row ---
             RowLayout {
