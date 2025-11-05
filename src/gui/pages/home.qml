@@ -287,33 +287,9 @@ Page {
                 background: Rectangle {
                     radius: 10
                     color: search_button.down ? '#cdcdcd'
-                        : (search_button.hovered ? "#cfcfcf" : "#cfcfcf")
+                        : (search_button.hovered ? '#d7d7d7' : "#cfcfcf")
                 }
             }
-
-            // Button {
-            //     id: search_button
-            //     x: 8
-            //     y: 15
-            //     width: 51
-            //     height: 49
-            //     text: qsTr("Button")
-            //     display: AbstractButton.IconOnly
-
-            //     Image {
-            //         id: image
-            //         x: 7
-            //         y: 7
-            //         width: 38
-            //         height: 35
-            //         opacity: 0.4
-            //         visible: true
-            //         source: "qrc:/resources/icons/search.png"
-            //         clip: false
-            //         fillMode: Image.PreserveAspectFit
-            //     }
-            // }
-
         }
     }
 }
