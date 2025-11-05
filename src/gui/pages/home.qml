@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import SnipBoard 1.0  // for SnippetObject type if needed
+import QtQuick.Controls.Basic as Basic   // <-- add this
 
 Page {
     id: window
@@ -11,6 +12,7 @@ Page {
     title: "Snippet Testing File"
 
     Rectangle {
+        id: bg_rect
         width: parent.width
         height: parent.height
         color: "#f4f4f4"
@@ -124,16 +126,71 @@ Page {
         }
 
         Rectangle {
-            id: rectangle
+            id: selection_rect
             x: 0
             y: 0
             width: 124
             height: 600
             color: "#cfcfcf"
+
+            Basic.Button {
+                id: home_button
+                x: 36
+                y: 130
+                width: 52; height: 52
+                display: AbstractButton.IconOnly
+                icon.source: "qrc:/resources/icons/home.png"
+                icon.width: 32; icon.height: 32
+                background: Rectangle {
+                    radius: 12
+                    color: home_button.down ? "#5a2f86" : (home_button.hovered ? '#915fc4' : "#734c91")
+                }
+            }
+
+            // Favorites
+            Basic.Button {
+                id: fav_button
+                x: 36
+                y: 200
+                width: 52; height: 52
+                display: AbstractButton.IconOnly
+                icon.source: "qrc:/resources/icons/star.png"
+                icon.width: 30; icon.height: 30
+                background: Rectangle {
+                    radius: 12
+                    color: fav_button.down ? '#958235' : (fav_button.hovered ? '#c7af4b' : '#b19b3b')
+                }
+            }
+
+            // Settings
+            Basic.Button {
+                id: settings_button
+                x: 36
+                y: 525
+                width: 52; height: 52
+                display: AbstractButton.IconOnly
+                icon.source: "qrc:/resources/icons/setting.png"
+                icon.width: 30; icon.height: 30
+                background: Rectangle {
+                    radius: 12
+                    color: settings_button.down ? '#5b5b5b' : (settings_button.hovered ? '#989898' : '#7f7f7f')
+                }
+            }
+
+            Image {
+                id: image1
+                x: 25
+                y: 20
+                width: 75
+                height: 75
+                source: "qrc:/resources/icons/sb_logo.png"
+                fillMode: Image.PreserveAspectFit
+            }
+
         }
 
         Rectangle {
-            id: rectangle1
+            id: search_rect
             x: 136
             y: 15
             width: 652
@@ -201,324 +258,63 @@ Page {
                 }
             }
 
-            Image {
-                id: image
-                x: 22
-                y: 28
-                width: 30
-                height: 30
-                opacity: 0.4
-                visible: true
-                source: "qrc:/resources/icons/search.png"
-                clip: false
-                fillMode: Image.PreserveAspectFit
+            Basic.Button {
+                id: search_button
+                x: 17
+                y: 21
+                width: 42; height: 46
+                display: AbstractButton.IconOnly
+                padding: 0   // so the image centers nicely
+
+                // custom content so we can control opacity
+                contentItem: Item {
+                    anchors.fill: parent
+                    Image {
+                        anchors.centerIn: parent
+                        source: "qrc:/resources/icons/search.png"
+                        anchors.verticalCenterOffset: -1
+                        anchors.horizontalCenterOffset: 1
+                        width: 35; height: 35
+                        opacity: search_button.enabled
+                                ? (search_button.down ? 0.55
+                                    : (search_button.hovered ? 0.25 : .40))
+                                : 0.35
+                        Behavior on opacity { NumberAnimation { duration: 120 } }
+                        fillMode: Image.PreserveAspectFit
+                    }
+                }
+
+                background: Rectangle {
+                    radius: 10
+                    color: search_button.down ? '#cdcdcd'
+                        : (search_button.hovered ? "#cfcfcf" : "#cfcfcf")
+                }
             }
+
+            // Button {
+            //     id: search_button
+            //     x: 8
+            //     y: 15
+            //     width: 51
+            //     height: 49
+            //     text: qsTr("Button")
+            //     display: AbstractButton.IconOnly
+
+            //     Image {
+            //         id: image
+            //         x: 7
+            //         y: 7
+            //         width: 38
+            //         height: 35
+            //         opacity: 0.4
+            //         visible: true
+            //         source: "qrc:/resources/icons/search.png"
+            //         clip: false
+            //         fillMode: Image.PreserveAspectFit
+            //     }
+            // }
 
         }
     }
 }
-
-
-// Page {
-//     // anchors.fill: parent;
-//     title: "HOME";
-
-// Item {
-//     anchors.fill: parent
-//     anchors.leftMargin: 0
-//     anchors.rightMargin: 0
-//     anchors.topMargin: 12
-//     anchors.bottomMargin: -12
-
-//     Rectangle {
-//         id: rectangle13
-//         x: 0
-//         y: -18
-//         width: 1440
-//         height: 900
-//         color: "#ffffff"
-
-//         Rectangle {
-//             id: rectangle
-//             x: 0
-//             y: 0
-//             width: 402
-//             height: 900
-//             color: "#cecece"
-
-//             Text {
-//                 id: settings_button_text
-//                 x: 102
-//                 y: 337
-//                 width: 251
-//                 height: 81
-//                 text: qsTr("Settings")
-//                 font.pixelSize: 50
-
-//                 Image {
-//                     id: image2
-//                     x: -60
-//                     y: 15
-//                     width: 45
-//                     height: 45
-//                     source: "qrc:/resources/icons/settings.png"
-//                     fillMode: Image.PreserveAspectFit
-//                 }
-//             }
-
-//             Text {
-//                 id: fav_button_text
-//                 x: 102
-//                 y: 424
-//                 width: 251
-//                 height: 73
-//                 text: qsTr("Favorites")
-//                 font.pixelSize: 50
-
-//                 Image {
-//                     id: image3
-//                     x: -60
-//                     y: 15
-//                     width: 45
-//                     height: 45
-//                     source: "qrc:/resources/icons/star.png"
-//                     fillMode: Image.PreserveAspectFit
-//                 }
-//             }
-
-//             Text {
-//                 id: home_button_text
-//                 x: 102
-//                 y: 251
-//                 width: 251
-//                 height: 72
-//                 text: qsTr("Home")
-//                 font.pixelSize: 50
-
-//                 Image {
-//                     id: image1
-//                     x: -60
-//                     y: 15
-//                     width: 45
-//                     height: 45
-//                     source: "qrc:/resources/icons/home.png"
-//                     fillMode: Image.PreserveAspectFit
-//                 }
-//             }
-
-//             Text {
-//                 id: folders_button_text
-//                 x: 102
-//                 y: 509
-//                 width: 251
-//                 height: 69
-//                 text: qsTr("Folders")
-//                 font.pixelSize: 50
-
-//                 Image {
-//                     id: image4
-//                     x: -60
-//                     y: 15
-//                     width: 45
-//                     height: 45
-//                     source: "qrc:/resources/icons/folder.png"
-//                     fillMode: Image.PreserveAspectFit
-//                 }
-//             }
-
-//             Rectangle {
-//                 id: rectangle1
-//                 x: 449
-//                 y: 194
-//                 width: 913
-//                 height: 706
-//                 color: "#cecece"
-
-//                 Rectangle {
-//                     id: rectangle4
-//                     x: 49
-//                     y: 42
-//                     width: 390
-//                     height: 310
-//                     color: "#8f8f8f"
-//                     radius: 50
-//                 }
-
-//                 Rectangle {
-//                     id: rectangle5
-//                     x: 474
-//                     y: 42
-//                     width: 390
-//                     height: 310
-//                     color: "#8f8f8f"
-//                     radius: 50
-//                 }
-
-//                 Rectangle {
-//                     id: rectangle6
-//                     x: 49
-//                     y: 388
-//                     width: 390
-//                     height: 310
-//                     color: "#8f8f8f"
-//                     radius: 50
-//                 }
-
-//                 Rectangle {
-//                     id: rectangle7
-//                     x: 474
-//                     y: 388
-//                     width: 390
-//                     height: 310
-//                     color: "#8f8f8f"
-//                     radius: 50
-//                 }
-//             }
-
-
-
-
-//         }
-
-//         Rectangle {
-//             id: rectangle8
-//             x: 42
-//             y: 39
-//             width: 303
-//             height: 113
-//             color: "#734c91"
-//             radius: 75
-
-//             Button {
-//                 id: button
-//                 x: 26
-//                 y: 16
-//                 width: 286
-//                 height: 95
-//                 visible: false
-//                 text: "New +"
-//                 display: AbstractButton.TextUnderIcon
-//                 font.pointSize: 60
-//                 icon.color: "#d4d4d4"
-
-//                 onClicked: StackView.view.push(
-//                                Qt.resolvedUrl("new_snippet.qml")
-//                                )
-//             }
-
-//             Text {
-//                 id: text1
-//                 x: 8
-//                 y: 2
-//                 width: 295
-//                 height: 103
-//                 color: "#dddddd"
-//                 text: qsTr("New +")
-//                 font.pixelSize: 70
-//                 horizontalAlignment: Text.AlignHCenter
-//                 verticalAlignment: Text.AlignVCenter
-//             }
-//         }
-
-//         Rectangle {
-//             id: rectangle2
-//             x: 449
-//             y: 34
-//             width: 913
-//             height: 117
-//             color: "#cecece"
-//             radius: 75
-
-//             // TextInput {
-//             //     id: textInput
-//             //     x: 130
-//             //     y: 1
-//             //     width: 654
-//             //     height: 115
-//             //     color: '#000000'
-//             //     text: ""
-//             //     font.pixelSize: 50
-//             //     verticalAlignment: Text.AlignVCenter
-//             //     font.family: "Segoe UI"
-
-//             //     // Placeholder overlay
-//             //     Text {
-//             //         anchors.fill: parent
-//             //         verticalAlignment: Text.AlignVCenter
-//             //         color: "#767676"
-//             //         text: "Search..."
-//             //         visible: !parent.activeFocus && parent.text.length === 0
-//             //         font.pixelSize: 50
-//             //         MouseArea {
-//             //             anchors.fill: parent
-//             //             onClicked: parent.forceActiveFocus()
-//             //         }
-//             //     }
-//             // }
-
-//             FocusScope {
-//                 x: 130
-//                 y: 0
-//                 width: 654; height: 115
-
-//                 TextInput {
-//                     id: input
-//                     anchors.fill: parent
-//                     font.pixelSize: 50
-//                     verticalAlignment: Text.AlignVCenter
-//                     color: "#000"
-//                     text: ""              // start empty
-//                     focus: false
-//                 }
-
-//                 // Placeholder label (non-interactive so clicks pass through)
-//                 Text {
-//                     id: hint
-//                     anchors.fill: input
-//                     z: 1
-//                     verticalAlignment: Text.AlignVCenter
-//                     color: "#767676"
-//                     text: "Search..."
-//                     font.pixelSize: 50
-//                     visible: !input.activeFocus && input.text.length === 0
-//                     // Important: make sure the overlay doesn't eat events
-//                     enabled: false
-//                 }
-
-//                 // Click helper that focuses the input while not stealing the event
-//                 TapHandler {
-//                     // Attach to the input’s area
-//                     parent: input
-//                     enabled: hint.visible
-//                     onTapped: input.forceActiveFocus()
-//                     // Passive by default; TextInput will still place the caret
-//                 }
-//             }
-
-//             Image {
-//                 id: image
-//                 x: 41
-//                 y: 26
-//                 width: 64
-//                 height: 68
-//                 opacity: 0.388
-//                 source: "qrc:/resources/icons/search.png"
-//                 fillMode: Image.PreserveAspectFit
-//             }
-//         }
-
-//         Rectangle {
-//             id: rectangle3
-//             x: 1414
-//             y: 0
-//             width: 26
-//             height: 900
-//             color: "#cecece"
-//         }
-
-//     }
-// }
-// }
-
-
 
