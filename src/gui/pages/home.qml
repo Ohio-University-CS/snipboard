@@ -1,15 +1,35 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import SnipBoard 1.0  // for SnippetObject type if needed
+// import SnipBoard 1.0  // for SnippetObject type if needed
 import QtQuick.Controls.Basic as Basic   // <-- add this
 
 Page {
-    id: window
+    id: root
     visible: true
     width: 800
     height: 600
     title: "Snippet Testing File"
+
+    // --- Clipboard (Qt 6.5+). Falls back to a hidden TextEdit if needed.
+    function copyToClipboard(text) {
+        if (Qt.application && Qt.application.clipboard && Qt.application.clipboard.setText) {
+            Qt.application.clipboard.setText(text);
+        } else {
+            clipper.text = text;
+            clipper.forceActiveFocus();
+            clipper.selectAll();
+            clipper.copy();
+            root.forceActiveFocus();   // was root.*
+        }
+    }
+
+    // Hidden fallback editor
+    TextEdit {
+        id: clipper
+        visible: false
+        focus: false
+    }
 
     Rectangle {
         id: bg_rect
@@ -56,7 +76,10 @@ Page {
                         onEntered: parent.hovered = true
                         onExited: parent.hovered = false
                         onClicked: {
-                            console.log("Snippet clicked:", id, name);
+                            // Copy the snippet's code to clipboard
+                            root.copyToClipboard("NEED TO PUT CODE HERE");   // or model.code if that’s your role
+                            //Tell user code copied
+                            ToolTip.show("Code copied", 1200, root);
                         }
                     }
 
@@ -207,7 +230,7 @@ Page {
                     onTextChanged: debounceSearch.restart()
 
                     // Enter = search now, Esc = clear
-                    Keys.onPressed: e => {
+                    Keys.onPressed: function (e) {
                         if (e.key === Qt.Key_Return || e.key === Qt.Key_Enter) {
                             snippetService.search(input.text.trim());
                             e.accepted = true;
@@ -338,17 +361,6 @@ Page {
             onClicked: snippetService.loadSnippetsFromDb()
         }
 
-        // Button {
-        //     id: reload_button
-        //     x: 274
-        //     y: 550
-        //     text: "Reload"
-        //     icon.height: 40
-        //     icon.width: 50
-        //     font.pointSize: 15
-        //     onClicked: snippetService.loadSnippetsFromDb()
-        // }
-
         Basic.Button {
             id: addSnippetBtn
             x: 142
@@ -467,6 +479,7 @@ Page {
                                 wrapMode: TextArea.Wrap
                                 placeholderText: "// Paste or type your snippet here"
                                 text: newSnippetDialog.fCode
+                                onTextChanged: newSnippetDialog.fCode = text
                             }
                         }
                     }
