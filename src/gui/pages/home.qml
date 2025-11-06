@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-// import SnipBoard 1.0  // for SnippetObject type if needed
+import SnipBoard 1.0  // for SnippetObject and ClipboardHelper type if needed
 import QtQuick.Controls.Basic as Basic   // <-- add this
 
 Page {
@@ -10,26 +10,6 @@ Page {
     width: 800
     height: 600
     title: "Snippet Testing File"
-
-    // --- Clipboard (Qt 6.5+). Falls back to a hidden TextEdit if needed.
-    function copyToClipboard(text) {
-        if (Qt.application && Qt.application.clipboard && Qt.application.clipboard.setText) {
-            Qt.application.clipboard.setText(text);
-        } else {
-            clipper.text = text;
-            clipper.forceActiveFocus();
-            clipper.selectAll();
-            clipper.copy();
-            root.forceActiveFocus();   // was root.*
-        }
-    }
-
-    // Hidden fallback editor
-    TextEdit {
-        id: clipper
-        visible: false
-        focus: false
-    }
 
     Rectangle {
         id: bg_rect
@@ -77,7 +57,8 @@ Page {
                         onExited: parent.hovered = false
                         onClicked: {
                             // Copy the snippet's code to clipboard
-                            root.copyToClipboard("contents_placeholder");   // or model.code if that’s your role
+                            // root.copyToClipboard(String(contents));   // or model.code if that’s your role
+                            Clipboard.copyText("String(model.contents)");
                             //Tell user code copied
                             ToolTip.show("Code copied", 1200, root);
                         }

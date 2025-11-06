@@ -14,6 +14,7 @@
 #include "src/core/objects/SnippetObject.h"
 #include "src/core/objects/SnippetListModel.h"
 #include "src/core/services/SnippetService.h"
+#include "src/core/utils/ClipboardHelper.h"
 
 
 using namespace Qt::StringLiterals;
@@ -33,6 +34,11 @@ int main(int argc, char* argv[]) {
     QQmlApplicationEngine engine;
 
     qmlRegisterType<SnippetObject>("SnipBoard", 1, 0, "SnippetObject");
+
+    // Register the singleton (Qt 6+)
+    static ClipboardHelper clipboardSingleton; // must outlive the engine
+    qmlRegisterSingletonInstance<ClipboardHelper>(
+        "SnipBoard", 1, 0, "Clipboard", &clipboardSingleton);
     
     SnippetService snippetService;
     engine.rootContext()->setContextProperty("snippetService", &snippetService);
