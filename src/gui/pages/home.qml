@@ -182,6 +182,14 @@ Page {
                 width: 594
                 height: 82
 
+                // Debounce timer so we don't call search on every keystroke immediately
+                Timer {
+                    id: debounceSearch
+                    interval: 200
+                    repeat: false
+                    onTriggered: snippetService.search(input.text.trim())
+                }
+
                 TextEdit {
                     id: input
                     x: 20
@@ -195,11 +203,29 @@ Page {
                     cursorVisible: activeFocus   // shows only when focused
                     // Optional styling to look like a field
                     padding: 8
+                    // ... your existing props ...
+                    onTextChanged: debounceSearch.restart()
+
+                    // Enter = search now, Esc = clear
+                    Keys.onPressed: e => {
+                        if (e.key === Qt.Key_Return || e.key === Qt.Key_Enter) {
+                            snippetService.search(input.text.trim());
+                            e.accepted = true;
+                        } else if (e.key === Qt.Key_Escape) {
+                            input.text = "";
+                            snippetService.search("");       // reset to all
+                            e.accepted = true;
+                        }
+                    }
                 }
 
                 // Placeholder label (non-interactive so clicks pass through)
                 Text {
                     id: hint
+                    x: 0
+                    y: 0
+                    width: 586
+                    height: 82
                     anchors.fill: input
                     anchors.leftMargin: -6
                     anchors.rightMargin: 0
@@ -228,9 +254,9 @@ Page {
             Basic.Button {
                 id: search_button
                 x: 17
-                y: 21
+                y: 17
                 width: 42
-                height: 46
+                height: 38
                 display: AbstractButton.IconOnly
                 padding: 0   // so the image centers nicely
 
@@ -242,8 +268,8 @@ Page {
                         source: "qrc:/resources/icons/search.png"
                         anchors.verticalCenterOffset: -1
                         anchors.horizontalCenterOffset: 1
-                        width: 35
-                        height: 35
+                        width: 28
+                        height: 28
                         opacity: search_button.enabled ? (search_button.down ? 0.55 : (search_button.hovered ? 0.25 : .40)) : 0.35
                         Behavior on opacity {
                             NumberAnimation {
@@ -253,11 +279,47 @@ Page {
                         fillMode: Image.PreserveAspectFit
                     }
                 }
-
                 background: Rectangle {
                     radius: 10
                     color: search_button.down ? '#cdcdcd' : (search_button.hovered ? '#d7d7d7' : "#cfcfcf")
                 }
+
+                onClicked: snippetService.search(input.text.trim())
+            }
+
+            Basic.Button {
+                id: clearBtn
+                x: 620
+                y: 29
+                width: 24
+                height: 26
+                // shows only an "x"
+                Accessible.name: "Clear search"
+                padding: 6
+                background: null                 // <- no background at all
+                focusPolicy: Qt.NoFocus          // avoid focus ring if any
+                contentItem: Text {
+                    text: "✕"
+                    font.pixelSize: 18
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    color: clearBtn.pressed ? "#555" : (clearBtn.hovered ? "#777" : "#999")
+                    opacity: clearBtn.enabled ? 1 : 0.4
+                }
+
+                // click action
+                onClicked: {
+                    input.text = "";
+                    snippetService.search("");
+                }
+            }
+
+            Label {
+                x: 17
+                y: 58
+                width: 44
+                height: 16
+                text: `${snippetList.count} results`
             }
         }
 
@@ -413,3 +475,9 @@ Page {
         }
     }
 }
+
+/*##^##
+Designer {
+    D{i:0}D{i:39;invisible:true}
+}
+##^##*/
