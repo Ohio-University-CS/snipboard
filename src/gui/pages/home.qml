@@ -92,11 +92,38 @@ Page {
                         Button {
                             text: "❌"
                             Layout.alignment: Qt.AlignRight
-                            onClicked: snippetService.deleteSnippet(id)
+                            onClicked: {
+                                window.snippetDialogId = id
+                                window.snippetDialogName = name
+                                deleteDialog.open()
+                            } //snippetService.deleteSnippet(id)
                         }
                     }
                 }
             }
+
+            Dialog {
+                id: deleteDialog
+                title: "Delete Snippet?"
+                modal: true
+                standardButtons: Dialog.Ok | Dialog.Cancel
+                anchors.centerIn: parent
+                Column {
+                    anchors.fill: parent
+                    anchors.margins: 20
+                    spacing: 10
+
+                    Label {
+                        text: "Are you sure you want to delete the snippet: " + window.snippetDialogName
+                        wrapMode: Text.WordWrap
+                    }
+                }
+
+                onAccepted: {
+                    snippetService.deleteSnippet(window.snippetDialogId)
+                }
+            }
+
 
             // --- Control Row ---
         }
