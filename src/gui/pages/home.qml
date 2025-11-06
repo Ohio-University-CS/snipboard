@@ -77,7 +77,7 @@ Page {
                         onExited: parent.hovered = false
                         onClicked: {
                             // Copy the snippet's code to clipboard
-                            root.copyToClipboard("NEED TO PUT CODE HERE");   // or model.code if that’s your role
+                            root.copyToClipboard("contents_placeholder");   // or model.code if that’s your role
                             //Tell user code copied
                             ToolTip.show("Code copied", 1200, root);
                         }
