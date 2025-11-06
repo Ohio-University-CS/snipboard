@@ -2,10 +2,14 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import SnipBoard 1.0  // for SnippetObject and ClipboardHelper type if needed
-import QtQuick.Controls.Basic as Basic   // <-- add this
+import QtQuick.Controls.Basic as Basic   
 
 Page {
     id: root
+
+    // property int snippetDialogId: -1
+    // property string snippetDialogName: ""
+
     visible: true
     width: 800
     height: 600
@@ -93,15 +97,11 @@ Page {
                             text: "❌"
                             Layout.alignment: Qt.AlignRight
                             onClicked: snippetService.deleteSnippet(id)
-                            //{
-                                // window.snippetDialogId = id
-                                // window.snippetDialogName = name
-                                // deleteDialog.open()
-                            //} 
+                            //     window.snippetDialogId = id
+                            //     window.snippetDialogName = name
+                            //     deleteDialog.open()
+                            // } 
                         }
-
-                        Component.onCompleted: console.log("roles:", model.name, model.description, model.data)
-
                     }
                 }
             }

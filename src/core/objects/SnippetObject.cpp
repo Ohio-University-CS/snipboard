@@ -14,7 +14,7 @@ SnippetObject::SnippetObject(const Snippet& snippetModel, const QVector<QString>
     m_name = snippetModel.name;
     m_description = snippetModel.description;
     m_language = snippetModel.language;
-    m_data = snippetModel.contents;
+    m_data = snippetModel.contents; //Lucas added
     m_folder = snippetModel.folder;
     m_favorite = snippetModel.favorite;
     m_timesCopied = snippetModel.timesCopied;
