@@ -6,6 +6,8 @@ import QtQuick.Controls.Basic as Basic   // <-- add this
 
 Page {
     id: root
+    property int snippetDialogId: -1
+    property string snippetDialogName: ""
     visible: true
     width: 800
     height: 600
@@ -92,12 +94,35 @@ Page {
                         Button {
                             text: "❌"
                             Layout.alignment: Qt.AlignRight
-                            onClicked: snippetService.deleteSnippet(id)
-                            //{
-                                // window.snippetDialogId = id
-                                // window.snippetDialogName = name
-                                // deleteDialog.open()
-                            //} 
+                            onClicked: {//snippetService.deleteSnippet(id)
+                                root.snippetDialogId = id
+                                root.snippetDialogName = name
+                                deleteDialog.open()
+                            } 
+
+                                            // --- Delete Snippet Dialog ---
+                            Dialog {
+                                id: deleteDialog
+                                title: "Delete Snippet?"
+                                modal: true
+                                standardButtons: Dialog.Ok | Dialog.Cancel
+                                anchors.centerIn: Overlay.overlay
+                                ColumnLayout {
+                                    //anchors.fill: parent
+                                    anchors.margins: 20
+                                    spacing: 10
+
+                                    Label {
+                                        text: "Are you sure you want to delete the snippet: " + root.snippetDialogName
+                                        wrapMode: Text.WordWrap
+                                        //color: "#000000"
+                                    }
+                                }
+
+                                onAccepted: {
+                                    snippetService.deleteSnippet(root.snippetDialogId)
+                                }
+                            }
                         }
 
                         Component.onCompleted: console.log("roles:", model.name, model.description, model.data)
@@ -106,27 +131,7 @@ Page {
                 }
             }
 
-            // Dialog {
-            //     id: deleteDialog
-            //     title: "Delete Snippet?"
-            //     modal: true
-            //     standardButtons: Dialog.Ok | Dialog.Cancel
-            //     anchors.centerIn: parent
-            //     Column {
-            //         anchors.fill: parent
-            //         anchors.margins: 20
-            //         spacing: 10
 
-            //         Label {
-            //             text: "Are you sure you want to delete the snippet: " + window.snippetDialogName
-            //             wrapMode: Text.WordWrap
-            //         }
-            //     }
-
-            //     onAccepted: {
-            //         snippetService.deleteSnippet(window.snippetDialogId)
-            //     }
-            // }
 
 
             // --- Control Row ---
