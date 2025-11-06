@@ -4,7 +4,7 @@ import QtQuick.Window
 import QtQuick.Controls.Basic as Basic   // <-- add this
 
 Window {
-    id: win
+    id: main_window
     visible: true
     width: 800
     height: 600
