@@ -9,7 +9,7 @@ Page {
     visible: true
     width: 800
     height: 600
-    title: "Snippet Testing File"
+    title: "The home screen of SnipBoard"
 
     Rectangle {
         id: bg_rect
@@ -58,7 +58,7 @@ Page {
                         onClicked: {
                             // Copy the snippet's code to clipboard
                             // root.copyToClipboard(String(contents));   // or model.code if that’s your role
-                            Clipboard.copyText("String(model.contents)");
+                            Clipboard.copyText(String(model.data));
                             //Tell user code copied
                             ToolTip.show("Code copied", 1200, root);
                         }
@@ -92,37 +92,41 @@ Page {
                         Button {
                             text: "❌"
                             Layout.alignment: Qt.AlignRight
-                            onClicked: {
-                                window.snippetDialogId = id
-                                window.snippetDialogName = name
-                                deleteDialog.open()
-                            } //snippetService.deleteSnippet(id)
+                            onClicked: snippetService.deleteSnippet(id)
+                            //{
+                                // window.snippetDialogId = id
+                                // window.snippetDialogName = name
+                                // deleteDialog.open()
+                            //} 
                         }
+
+                        Component.onCompleted: console.log("roles:", model.name, model.description, model.data)
+
                     }
                 }
             }
 
-            Dialog {
-                id: deleteDialog
-                title: "Delete Snippet?"
-                modal: true
-                standardButtons: Dialog.Ok | Dialog.Cancel
-                anchors.centerIn: parent
-                Column {
-                    anchors.fill: parent
-                    anchors.margins: 20
-                    spacing: 10
+            // Dialog {
+            //     id: deleteDialog
+            //     title: "Delete Snippet?"
+            //     modal: true
+            //     standardButtons: Dialog.Ok | Dialog.Cancel
+            //     anchors.centerIn: parent
+            //     Column {
+            //         anchors.fill: parent
+            //         anchors.margins: 20
+            //         spacing: 10
 
-                    Label {
-                        text: "Are you sure you want to delete the snippet: " + window.snippetDialogName
-                        wrapMode: Text.WordWrap
-                    }
-                }
+            //         Label {
+            //             text: "Are you sure you want to delete the snippet: " + window.snippetDialogName
+            //             wrapMode: Text.WordWrap
+            //         }
+            //     }
 
-                onAccepted: {
-                    snippetService.deleteSnippet(window.snippetDialogId)
-                }
-            }
+            //     onAccepted: {
+            //         snippetService.deleteSnippet(window.snippetDialogId)
+            //     }
+            // }
 
 
             // --- Control Row ---
