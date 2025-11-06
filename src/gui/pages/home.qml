@@ -130,12 +130,9 @@ Page {
                     }
                 }
             }
-
-
-
+        }
 
             // --- Control Row ---
-        }
 
         Rectangle {
             id: selection_rect
@@ -145,6 +142,7 @@ Page {
             height: 600
             color: "#cfcfcf"
 
+            // Home
             Basic.Button {
                 id: home_button
                 x: 36
@@ -158,6 +156,10 @@ Page {
                 background: Rectangle {
                     radius: 12
                     color: home_button.down ? "#5a2f86" : (home_button.hovered ? '#915fc4' : "#734c91")
+                }
+                onClicked: {
+                    settingsLoader.visible = false
+                    settingsLoader.source = ""
                 }
             }
 
@@ -176,6 +178,10 @@ Page {
                     radius: 12
                     color: fav_button.down ? '#958235' : (fav_button.hovered ? '#c7af4b' : '#b19b3b')
                 }
+                onClicked: {
+                    settingsLoader.visible = false
+                    settingsLoader.source = ""
+                }
             }
 
             // Settings
@@ -192,6 +198,18 @@ Page {
                 background: Rectangle {
                     radius: 12
                     color: settings_button.down ? '#797979' : (settings_button.hovered ? '#828181' : '#a9a8a8')
+                }
+                onClicked: {
+                    //favoritesLoader.visible = false -> uncomment once favorites loader exists
+                    //favoritesLoader.source = ""
+                    if (settingsLoader.visible) { //toggles settings
+                        settingsLoader.visible = false
+                        settingsLoader.source = ""
+                    }
+                    else {
+                        settingsLoader.source = "qrc:/qt/qml/SnipBoard/src/gui/pages/settings.qml"
+                        settingsLoader.visible = true
+                    }
                 }
             }
 
@@ -502,6 +520,18 @@ Page {
                     }
                 }
             }
+        }
+        //  --- Settings Loader ---
+        Loader {
+            id: settingsLoader
+            anchors {
+                top: parent.top
+                bottom: parent.bottom
+                right: parent.right
+                left: selection_rect.right
+            }
+            asynchronous: true
+            visible: false
         }
     }
 }

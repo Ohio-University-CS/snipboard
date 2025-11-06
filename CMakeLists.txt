@@ -87,7 +87,6 @@ qt_add_qml_module(SnipBoard
         src/gui/Settings/generalSettings.qml
         src/gui/Settings/snippetManagementSettings.qml
         src/gui/snippetServiceTest.qml
-        # src/gui/appSettings.qrc
 )
 
 #Resources for UI
