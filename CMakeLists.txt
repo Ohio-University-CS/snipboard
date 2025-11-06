@@ -46,6 +46,7 @@ set(HEADERS
     src/core/objects/FolderTreeModel.h
     src/core/repositories/SnippetRepository.h
     src/core/services/SnippetService.h
+    src/core/utils/ClipboardHelper.h
 )
 
 # Add c++ to be compiled
