@@ -78,7 +78,6 @@ qt_add_qml_module(SnipBoard
         src/gui/Scaling.qml
         src/gui/Font.qml
         src/gui/colors.qml
-        src/gui/pages/delete_overlay.qml
         src/gui/pages/home.qml
         src/gui/pages/new_snippet.qml
         src/gui/pages/settings.qml
@@ -88,7 +87,6 @@ qt_add_qml_module(SnipBoard
         src/gui/Settings/generalSettings.qml
         src/gui/Settings/snippetManagementSettings.qml
         src/gui/snippetServiceTest.qml
-        # src/gui/appSettings.qrc
 )
 
 #Resources for UI
