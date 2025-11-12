@@ -8,14 +8,16 @@
 #pragma once
 
 #include <QString>
+#include <QDateTime>
 
 struct Tag {
     int id = -1;
     QString name;
-    QString dateCreated;
-    QString dateUpdated;
+    QDateTime dateCreated;
+    QDateTime dateModified;
     bool showDate = true;
 
-    Tag(int id, QString name, QString dateCreated, QString dateUpdated, bool showDate)
-        : id(id), name(name), dateCreated(dateCreated), dateUpdated(dateUpdated), showDate(showDate) {}
+    Tag() {}
+    Tag(int id, QString name, QDateTime dateCreated, QDateTime dateModified, bool showDate)
+        : id(id), name(name), dateCreated(dateCreated), dateModified(dateModified), showDate(showDate) {}
 };

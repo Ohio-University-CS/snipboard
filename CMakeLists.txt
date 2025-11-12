@@ -44,6 +44,13 @@ set(HEADERS
     src/core/objects/SnippetListModel.h
     src/core/objects/TagListModel.h
     src/core/objects/FolderTreeModel.h
+    src/core/repositories/SnippetRepository.h
+    src/core/services/SnippetService.h
+    src/core/utils/ClipboardHelper.h
+    src/core/repositories/TagRepository.h
+    src/core/services/TagService.h
+    src/core/repositories/FolderRepository.h
+    src/core/services/FolderService.h
 )
 
 # Add c++ to be compiled
@@ -58,6 +65,12 @@ qt_add_executable(SnipBoard
     src/core/objects/SnippetListModel.cpp
     src/core/objects/TagListModel.cpp
     src/core/objects/FolderTreeModel.cpp
+    src/core/repositories/SnippetRepository.cpp
+    src/core/services/SnippetService.cpp
+    src/core/repositories/TagRepository.cpp
+    src/core/services/TagService.cpp
+    src/core/repositories/FolderRepository.cpp
+    src/core/services/FolderService.cpp
     # Add other c++ files here
 )
 
@@ -73,7 +86,6 @@ qt_add_qml_module(SnipBoard
         src/gui/Scaling.qml
         src/gui/Font.qml
         src/gui/colors.qml
-        src/gui/pages/delete_overlay.qml
         src/gui/pages/home.qml
         src/gui/pages/new_snippet.qml
         src/gui/pages/settings.qml
@@ -82,7 +94,19 @@ qt_add_qml_module(SnipBoard
         src/gui/Settings/exportImportSettings.qml
         src/gui/Settings/generalSettings.qml
         src/gui/Settings/snippetManagementSettings.qml
-        # src/gui/appSettings.qrc
+        src/gui/snippetServiceTest.qml
+)
+
+#Resources for UI
+qt_add_resources(${PROJECT_NAME} snipboard_resources
+    PREFIX "/"
+    FILES
+        resources/icons/search.png
+        resources/icons/setting.png
+        resources/icons/folder.png
+        resources/icons/star.png
+        resources/icons/home.png
+        resources/icons/sb_logo.png
 )
 
 # ADDED: Set singleton properties

@@ -1,26 +1,16 @@
 import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import SnipBoard 1.0  // for SnippetObject and ClipboardHelper type if needed
+import QtQuick.Controls.Basic as Basic   // <-- add this
 
-Window {
-    width: 640
-    height: 480
-    visible: true
-    title: qsTr("Hello World")
-
+Item {
+    anchors.fill: parent
     Rectangle {
-        id: rectangle
-        x: 220
-        y: 140
-        width: 200
-        height: 200
-        color: '#3ba169'
-        radius: 16
-
-        Text {
-            id: text1
-            x: 81
-            y: 92
-            text: qsTr("Testing")
-            font.pixelSize: 12
-        }
+        id: settingsBg
+        width: parent.width
+        height: parent.height
+        color: "#ff0000"
     }
+
 }
