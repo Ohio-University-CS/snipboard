@@ -14,6 +14,8 @@
 #include "src/core/objects/SnippetObject.h"
 #include "src/core/objects/SnippetListModel.h"
 #include "src/core/services/SnippetService.h"
+#include "src/core/utils/ClipboardHelper.h"
+
 
 using namespace Qt::StringLiterals;
 
@@ -27,10 +29,16 @@ void loadModules(QQmlApplicationEngine& engine);
 
 int main(int argc, char* argv[]) {
     // Create app and engine
+    std::cout<<"test1";
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
 
     qmlRegisterType<SnippetObject>("SnipBoard", 1, 0, "SnippetObject");
+
+    // Register the singleton (Qt 6+)
+    static ClipboardHelper clipboardSingleton; // must outlive the engine
+    qmlRegisterSingletonInstance<ClipboardHelper>(
+        "SnipBoard", 1, 0, "Clipboard", &clipboardSingleton);
     
     SnippetService snippetService;
     engine.rootContext()->setContextProperty("snippetService", &snippetService);
@@ -48,6 +56,6 @@ void loadModules(QQmlApplicationEngine& engine) {
     // Will need to add other QML files to this
 
     // commented out the main to add the testing file
-    // engine.load(QUrl(QStringLiteral("qrc:/qt/qml/SnipBoard/src/gui/main.qml")));
-    engine.load(QUrl(QStringLiteral("qrc:/qt/qml/SnipBoard/src/gui/snippetServiceTest.qml")));
+    engine.load(QUrl(QStringLiteral("qrc:/qt/qml/SnipBoard/src/gui/main.qml")));
+    // engine.load(QUrl(QStringLiteral("qrc:/qt/qml/SnipBoard/src/gui/pages/home.qml")));
 }

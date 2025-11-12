@@ -46,6 +46,7 @@ set(HEADERS
     src/core/objects/FolderTreeModel.h
     src/core/repositories/SnippetRepository.h
     src/core/services/SnippetService.h
+    src/core/utils/ClipboardHelper.h
     src/core/repositories/TagRepository.h
     src/core/services/TagService.h
     src/core/repositories/FolderRepository.h
@@ -85,7 +86,6 @@ qt_add_qml_module(SnipBoard
         src/gui/Scaling.qml
         src/gui/Font.qml
         src/gui/colors.qml
-        src/gui/pages/delete_overlay.qml
         src/gui/pages/home.qml
         src/gui/pages/new_snippet.qml
         src/gui/pages/settings.qml
@@ -95,7 +95,18 @@ qt_add_qml_module(SnipBoard
         src/gui/Settings/generalSettings.qml
         src/gui/Settings/snippetManagementSettings.qml
         src/gui/snippetServiceTest.qml
-        # src/gui/appSettings.qrc
+)
+
+#Resources for UI
+qt_add_resources(${PROJECT_NAME} snipboard_resources
+    PREFIX "/"
+    FILES
+        resources/icons/search.png
+        resources/icons/setting.png
+        resources/icons/folder.png
+        resources/icons/star.png
+        resources/icons/home.png
+        resources/icons/sb_logo.png
 )
 
 # ADDED: Set singleton properties
