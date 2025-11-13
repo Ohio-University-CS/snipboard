@@ -179,8 +179,13 @@ Page {
                     color: fav_button.down ? '#958235' : (fav_button.hovered ? '#c7af4b' : '#b19b3b')
                 }
                 onClicked: {
-                    settingsLoader.visible = false
-                    settingsLoader.source = ""
+                    if (settingsLoader.visible) {
+                        settingsLoader.visible = false
+                        settingsLoader.source = ""
+                    } else {
+                        settingsLoader.source = "qrc:/qt/qml/SnipBoard/src/gui/pages/settings.qml"
+                        settingsLoader.visible = true
+                    }
                 }
             }
 
@@ -200,13 +205,10 @@ Page {
                     color: settings_button.down ? '#797979' : (settings_button.hovered ? '#828181' : '#a9a8a8')
                 }
                 onClicked: {
-                    //favoritesLoader.visible = false -> uncomment once favorites loader exists
-                    //favoritesLoader.source = ""
-                    if (settingsLoader.visible) { //toggles settings
+                    if (settingsLoader.visible) {
                         settingsLoader.visible = false
                         settingsLoader.source = ""
-                    }
-                    else {
+                    } else {
                         settingsLoader.source = "qrc:/qt/qml/SnipBoard/src/gui/pages/settings.qml"
                         settingsLoader.visible = true
                     }
@@ -521,18 +523,17 @@ Page {
                 }
             }
         }
-        //  --- Settings Loader ---
+
         Loader {
             id: settingsLoader
-            anchors {
-                top: parent.top
-                bottom: parent.bottom
-                right: parent.right
-                left: selection_rect.right
-            }
-            asynchronous: true
+            source: ""
+            anchors.fill: parent
             visible: false
+            onLoaded: {
+                item.parentLoader = settingsLoader
+            }
         }
+
     }
 }
 
