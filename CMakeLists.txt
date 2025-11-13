@@ -99,6 +99,7 @@ qt_add_resources(${PROJECT_NAME} snipboard_resources
         resources/icons/star.png
         resources/icons/home.png
         resources/icons/sb_logo.png
+        resources/icons/edit.png
 )
 
 # ADDED: Set singleton properties

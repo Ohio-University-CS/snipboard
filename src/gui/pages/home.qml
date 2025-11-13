@@ -6,12 +6,14 @@ import QtQuick.Controls.Basic as Basic
 
 Page {
     id: root
-    property int snippetDialogId: -1
-    property string snippetDialogName: ""
     visible: true
     width: 800
     height: 600
     title: "The home screen of SnipBoard"
+
+    //Properties of delete dialog
+    property int snippetDialogId: -1
+    property string snippetDialogName: ""
 
     Rectangle {
         id: bg_rect
