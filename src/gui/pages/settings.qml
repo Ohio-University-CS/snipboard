@@ -103,7 +103,7 @@ Item {
                             radius: 8
                             color: toEditorAppearance.down ? '#bfbfbf' : (toEditorAppearance.hovered ? '#d0d0d0' : '#c0c0c0')
                         }
-                        onClicked: scroll.contentY = appearanceSpacer.y
+                        onClicked: scroll.contentY = editorAppearanceColumn.y
                     }
                     Basic.Button {
                         id: toSnippetBehavior
