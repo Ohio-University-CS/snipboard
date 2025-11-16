@@ -81,11 +81,6 @@ qt_add_qml_module(SnipBoard
         src/gui/pages/home.qml
         src/gui/pages/new_snippet.qml
         src/gui/pages/settings.qml
-        src/gui/Settings/appearanceSettings.qml
-        src/gui/Settings/editorSettings.qml
-        src/gui/Settings/exportImportSettings.qml
-        src/gui/Settings/generalSettings.qml
-        src/gui/Settings/snippetManagementSettings.qml
         src/gui/snippetServiceTest.qml
 )
 
