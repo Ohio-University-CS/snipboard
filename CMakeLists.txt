@@ -82,7 +82,6 @@ qt_add_qml_module(SnipBoard
     RESOURCE_PREFIX "/qt/qml"
     QML_FILES
         src/gui/main.qml
-        src/gui/mainsettings.qml
         src/gui/Scaling.qml
         src/gui/Font.qml
         src/gui/colors.qml
