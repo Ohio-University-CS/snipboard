@@ -59,7 +59,131 @@ Item {
                         }
                     }
                 }
+                
+                ColumnLayout {
+                    id: columnLayout
+                    x: 10
+                    y: 134
+                    width: 104
+                    height: 320
+                    
+                    Basic.Button {
+                        id: toAppearance
+                        text: "Appearance"
+                        contentItem: Text {
+                                text: toAppearance.text
+                                color: "#333333"
+                                font.pixelSize: 14
+                                horizontalAlignment: Text.AlignLeft
+                                verticalAlignment: Text.AlignVCenter
+                        }
+                        Layout.fillWidth: true
+                        height: 25
 
+                        background: Rectangle{
+                            radius: 8
+                            color: toAppearance.down ? '#bfbfbf' : (toAppearance.hovered ? '#d0d0d0' : '#c0c0c0')
+                        }
+                        onClicked: scroll.contentY = 0
+                    }
+                    Basic.Button {
+                        id: toEditorAppearance
+                        text: "Editor\nAppearance"
+                        contentItem: Text {
+                                text: toEditorAppearance.text
+                                color: "#333333"
+                                font.pixelSize: 14
+                                horizontalAlignment: Text.AlignLeft
+                                verticalAlignment: Text.AlignVCenter
+                        }
+                        Layout.fillWidth: true
+                        height: 25
+
+                        background: Rectangle{
+                            radius: 8
+                            color: toEditorAppearance.down ? '#bfbfbf' : (toEditorAppearance.hovered ? '#d0d0d0' : '#c0c0c0')
+                        }
+                        onClicked: scroll.contentY = appearanceSpacer.y
+                    }
+                    Basic.Button {
+                        id: toSnippetBehavior
+                        text: "Snippet\nBehavior"
+                        contentItem: Text {
+                                text: toSnippetBehavior.text
+                                color: "#333333"
+                                font.pixelSize: 14
+                                horizontalAlignment: Text.AlignLeft
+                                verticalAlignment: Text.AlignVCenter
+                        }
+                        Layout.fillWidth: true
+                        height: 25
+
+                        background: Rectangle{
+                            radius: 8
+                            color: toSnippetBehavior.down ? '#bfbfbf' : (toSnippetBehavior.hovered ? '#d0d0d0' : '#c0c0c0')
+                        }
+                        onClicked: scroll.contentY = snippetBehaviorColumn.y - 10
+                    }
+                    Basic.Button {
+                        id: toSnippetOrganization
+                        text: "Snippet\nOrganization"
+                        contentItem: Text {
+                                text: toSnippetOrganization.text
+                                color: "#333333"
+                                font.pixelSize: 14
+                                horizontalAlignment: Text.AlignLeft
+                                verticalAlignment: Text.AlignVCenter
+                        }
+                        Layout.fillWidth: true
+                        height: 25
+
+                        background: Rectangle{
+                            radius: 8
+                            color: toSnippetOrganization.down ? '#bfbfbf' : (toSnippetOrganization.hovered ? '#d0d0d0' : '#c0c0c0')
+                        }
+                        onClicked: scroll.contentY = snippetOrganizationColumn.y - 10
+                    }
+                    Basic.Button {
+                        id: toExportOptions
+                        text: "Export\nOptions"
+                        contentItem: Text {
+                                text: toExportOptions.text
+                                color: "#333333"
+                                font.pixelSize: 14
+                                horizontalAlignment: Text.AlignLeft
+                                verticalAlignment: Text.AlignVCenter
+                        }
+                        Layout.fillWidth: true
+                        height: 25
+
+                        background: Rectangle{
+                            radius: 8
+                            color: toExportOptions.down ? '#bfbfbf' : (toExportOptions.hovered ? '#d0d0d0' : '#c0c0c0')
+                        }
+                        onClicked: scroll.contentY = snippetOrganizationColumn.y - 10
+                    }
+                    Basic.Button {
+                        id: toImportOptions
+                        text: "Import\nOptions"
+                        contentItem: Text {
+                                text: toImportOptions.text
+                                color: "#333333"
+                                font.pixelSize: 14
+                                horizontalAlignment: Text.AlignLeft
+                                verticalAlignment: Text.AlignVCenter
+                        }
+                        Layout.fillWidth: true
+                        height: 25
+
+                        background: Rectangle{
+                            radius: 8
+                            color: toImportOptions.down ? '#bfbfbf' : (toImportOptions.hovered ? '#d0d0d0' : '#c0c0c0')
+                        }
+                        onClicked: scroll.contentY = snippetOrganizationColumn.y - 10
+                    }
+                    
+                }
+                
                 Image {
                     id: image1
                     x: 25
@@ -69,6 +193,7 @@ Item {
                     source: "qrc:/resources/icons/sb_logo.png"
                     fillMode: Image.PreserveAspectFit
                 }
+                
             }
             
             Rectangle {
@@ -113,6 +238,7 @@ Item {
                             //Layout.fillWidth: true
     
                             Item{
+                                id: appearanceSpacer
                                 height: 2
                                 Layout.fillWidth: true
                             }
@@ -574,7 +700,7 @@ Item {
                             }
                             
                             ColumnLayout {
-                                id: exportColumn
+                                id: exportOptionsColumn
                                 Layout.fillWidth: true
                                 Layout.margins: 10
                                 RowLayout {
@@ -660,7 +786,7 @@ Item {
                                 
                             }
                             ColumnLayout {
-                                id: importColumn
+                                id: importOptionsColumn
                                 Layout.fillWidth: true
                                 Layout.margins: 10
                                 RowLayout {
