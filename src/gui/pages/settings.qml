@@ -75,7 +75,7 @@ Item {
                 id: settingsOptions
                 width: parent.width - settingsMenu.width
                 height: parent.height
-                color: "#ffffff"
+                color: "#969696"
                 visible: true
 
                 Label {
@@ -85,158 +85,164 @@ Item {
                     font.pixelSize: 24
                     font.bold: true
                 }
+            
+                
 
-                Flickable {
-                    id: scroll
-                    x: 31
-                    y: 76
-                    width: 615
-                    height: 487
-                    contentHeight: parentColumn.implicitHeight
-                    contentWidth: width
-                    clip: true
-
-                    ColumnLayout {
-                        id: parentColumn
-                        Layout.margins: 10
-                        Layout.fillWidth: true
-
+                    Flickable {
+                        id: scroll
+                        x: 31
+                        y: 76
+                        width: 615
+                        height: 487
+                        contentHeight: parentColumn.implicitHeight
+                        contentWidth: width
+                        clip: true
+                        
+                        Rectangle {
+                            id: scrollRectangle
+                            anchors.fill: parent
+                            color: "#767676"
+                        }
                         ColumnLayout {
-                            id: appearanceColumn
+                            id: parentColumn
                             Layout.margins: 10
                             Layout.fillWidth: true
-                            Label {
-                                text: "Appearance"
-                                font.pixelSize: 18
-                                font.styleName: "Bold"
-                            }
-
-                            RowLayout {
-                                spacing: 8
-                                Layout.leftMargin: 10
-                                Layout.preferredHeight: 40
-
+    
+                            ColumnLayout {
+                                id: appearanceColumn
+                                Layout.margins: 10
+                                Layout.fillWidth: true
                                 Label {
-                                    text: "Theme:"
+                                    text: "Appearance"
+                                    font.pixelSize: 18
+                                    font.styleName: "Bold"
                                 }
-                                ComboBox {
-                                    width: 100
-                                    height: 25
-                                    Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-                                    model: ["Light", "Dark"]
-                                    currentIndex: 0
+    
+                                RowLayout {
+                                    spacing: 8
+                                    Layout.leftMargin: 10
+                                    Layout.preferredHeight: 40
+    
+                                    Label {
+                                        text: "Theme:"
+                                    }
+                                    ComboBox {
+                                        width: 100
+                                        height: 25
+                                        model: ["Light", "Dark"]
+                                        currentIndex: 0
+                                    }
                                 }
-                            }
-                            RowLayout {
-                                spacing: 8
-                                Layout.leftMargin: 10
-                                Layout.preferredHeight: 40
-
-                                Label {
-                                    text: "Font size:"
+                                RowLayout {
+                                    spacing: 8
+                                    Layout.leftMargin: 10
+                                    Layout.preferredHeight: 40
+    
+                                    Label {
+                                        text: "Font size:"
+                                    }
+    
+                                    Slider {
+                                        id: fontSlider
+                                        from: 0
+                                        to: 100
+                                        value: 50
+                                        stepSize: 1
+                                        width: 200
+                                        height: 30
+    
+                                        onValueChanged: console.log("Opacity:", value)
+                                    }
+    
+                                    Label {
+                                        text: (Math.round(fontSlider.value) + 50) + "%"
+    
+                                    }
                                 }
-
-                                Slider {
-                                    id: fontSlider
-                                    from: 0
-                                    to: 100
-                                    value: 50
-                                    stepSize: 1
-                                    width: 200
-                                    height: 30
-
-                                    onValueChanged: console.log("Opacity:", value)
+                                RowLayout {
+                                    spacing: 8
+                                    Layout.leftMargin: 10
+                                    Layout.preferredHeight: 40
+    
+                                    Label {
+                                        text: "Line numbers:"
+                                    }
+    
+                                    Switch {
+                                        id: lineNumbersSwitch
+                                        checked: true
+    
+                                        onCheckedChanged: {
+                                            console.log("Line numbers toggled:", checked)
+    
+                                        }
+                                    }
                                 }
-
-                                Label {
-                                    text: "                               " + Math.round(fontSlider.value) + "%"
-
-                                }
-                            }
-                            RowLayout {
-                                spacing: 8
-                                Layout.leftMargin: 10
-                                Layout.preferredHeight: 40
-
-                                Label {
-                                    text: "Line numbers:"
-                                }
-
-                                Switch {
-                                    id: lineNumbersSwitch
-                                    checked: true
-
-                                    onCheckedChanged: {
-                                        console.log("Line numbers toggled:", checked)
-
+                                RowLayout {
+                                    spacing: 8
+                                    Layout.leftMargin: 10
+                                    Layout.preferredHeight: 40
+    
+                                    Label {
+                                        text: "Syntax highlighting:"
+                                    }
+    
+                                    Switch {
+                                        id: syntaxHighlightingSwitch
+                                        checked: true
+    
+                                        onCheckedChanged: {
+                                            console.log("Syntax highlighting:", checked)
+    
+                                        }
                                     }
                                 }
                             }
-                            RowLayout {
-                                spacing: 8
-                                Layout.leftMargin: 10
-                                Layout.preferredHeight: 40
-
+                            ColumnLayout {
+                                id: editorColumn
+                                Layout.fillWidth: true
+                                Layout.margins: 10
                                 Label {
-                                    text: "Syntax highlighting:"
+                                    text: "Editor"
+                                    font.pixelSize: 18
+                                    font.styleName: "Bold"
                                 }
-
-                                Switch {
-                                    id: syntaxHighlightingSwitch
-                                    checked: true
-
-                                    onCheckedChanged: {
-                                        console.log("Syntax highlighting:", checked)
-
+    
+                                RowLayout {
+                                    spacing: 8
+                                    Layout.leftMargin: 10
+                                    Layout.preferredHeight: 40
+    
+                                    Label {
+                                        text: "Theme:"
+                                    }
+                                    ComboBox {
+                                        width: 100
+                                        height: 25
+                                        model: ["Light", "Dark"]
+                                        currentIndex: 0
                                     }
                                 }
                             }
-                        }
-                        ColumnLayout {
-                            id: editorColumn
-                            Layout.fillWidth: true
-                            Layout.margins: 10
-                            Label {
-                                text: "Editor"
-                                font.pixelSize: 18
-                                font.styleName: "Bold"
-                            }
-
-                            RowLayout {
-                                spacing: 8
-                                Layout.leftMargin: 10
-                                Layout.preferredHeight: 40
-
-                                Label {
-                                    text: "Theme:"
-                                }
-                                ComboBox {
-                                    width: 100
-                                    height: 25
-                                    Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-                                    model: ["Light", "Dark"]
-                                    currentIndex: 0
+    
+    
+                            Item {
+                                id: exportImportSettings
+    
+                                Column {
+                                    id: exportImportColumn
                                 }
                             }
-                        }
-
-
-                        Item {
-                            id: exportImportSettings
-
-                            Column {
-                                id: exportImportColumn
-                            }
-                        }
-                        Item {
-                            id: snippetManagerSettings
-
-                            Column {
-                                id: snippetManagerColumn
+                            Item {
+                                id: snippetManagerSettings
+    
+                                Column {
+                                    id: snippetManagerColumn
+                                }
                             }
                         }
                     }
-                }
+                
             }
             
 
