@@ -142,6 +142,7 @@ Item {
                                 }
     
                                 RowLayout {
+                                    height: 34
                                     spacing: 8
                                     Layout.leftMargin: 10
                                     Layout.preferredHeight: 40
@@ -168,6 +169,12 @@ Item {
                                         Layout.rightMargin: 50
                                     }
                                 }
+                                Label {
+                                    color: "#979797"
+                                    text: "         Changes the theme of the whole application"
+                                    font.pixelSize: 10
+                                    font.styleName: "Regular Italic"
+                                }
                             }
                             ColumnLayout {
                                 id: editorAppearanceColumn
@@ -191,6 +198,7 @@ Item {
                                     }
                                 }
                                 RowLayout {
+                                    height: 34
                                     spacing: 8
                                     Layout.leftMargin: 10
                                     Layout.preferredHeight: 40
@@ -217,10 +225,17 @@ Item {
                                     Label {
                                         color: "#545454"
                                         text: Math.round(fontSlider.value) + "px"
-                                        Layout.rightMargin: 50
+                                        Layout.rightMargin: 60
                                     }
                                 }
+                                Label {
+                                    color: "#979797"
+                                    text: "         Controls font size in the editor"
+                                    font.pixelSize: 10
+                                    font.styleName: "Regular Italic"
+                                }
                                 RowLayout {
+                                    height: 34
                                     spacing: 8
                                     Layout.leftMargin: 10
                                     Layout.preferredHeight: 40
@@ -247,7 +262,14 @@ Item {
                                         Layout.rightMargin: 50
                                     }
                                 }
+                                Label {
+                                    color: "#979797"
+                                    text: "         Controls font style in the editor"
+                                    font.pixelSize: 10
+                                    font.styleName: "Regular Italic"
+                                }
                                 RowLayout {
+                                    height: 34
                                     spacing: 8
                                     Layout.leftMargin: 10
                                     Layout.preferredHeight: 40
@@ -270,7 +292,14 @@ Item {
                                         Layout.rightMargin: 50
                                     }
                                 }
+                                Label {
+                                    color: "#979797"
+                                    text: "         Enables/Disables line numbers in the editor"
+                                    font.pixelSize: 10
+                                    font.styleName: "Regular Italic"
+                                }
                                 RowLayout {
+                                    height: 34
                                     spacing: 8
                                     Layout.leftMargin: 10
                                     Layout.preferredHeight: 40
@@ -293,6 +322,12 @@ Item {
                                         }
                                         Layout.rightMargin: 50
                                     }
+                                }
+                                Label {
+                                    color: "#979797"
+                                    text: "         Enables/Disables syntax highlighting in the editor"
+                                    font.pixelSize: 10
+                                    font.styleName: "Regular Italic"
                                 }
                                 
                             }
@@ -318,6 +353,7 @@ Item {
                                 }
     
                                 RowLayout {
+                                    height: 34
                                     spacing: 8
                                     Layout.leftMargin: 10
                                     Layout.preferredHeight: 40
@@ -340,7 +376,14 @@ Item {
                                         Layout.rightMargin: 50
                                     }
                                 }
+                                Label {
+                                    color: "#979797"
+                                    text: "         When enabled, automatically wrap long lines in the snippet editor"
+                                    font.pixelSize: 10
+                                    font.styleName: "Regular Italic"
+                                }
                                 RowLayout {
+                                    height: 34
                                     spacing: 8
                                     Layout.leftMargin: 10
                                     Layout.preferredHeight: 40
@@ -363,9 +406,16 @@ Item {
                                         Layout.rightMargin: 50
                                     }
                                 }
+                                Label {
+                                    color: "#979797"
+                                    text: "         When enabled, deleting snippets required confirmation"
+                                    font.pixelSize: 10
+                                    font.styleName: "Regular Italic"
+                                }
                                 
                                 
                                 RowLayout {
+                                    height: 34
                                     spacing: 8
                                     Layout.leftMargin: 10
                                     Layout.preferredHeight: 40
@@ -392,7 +442,14 @@ Item {
                                         Layout.rightMargin: 50
                                     }
                                 }
+                                Label {
+                                    color: "#979797"
+                                    text: "         Controls size of tabs in the editor"
+                                    font.pixelSize: 10
+                                    font.styleName: "Regular Italic"
+                                }
                                 RowLayout {
+                                    height: 34
                                     spacing: 8
                                     Layout.leftMargin: 10
                                     Layout.preferredHeight: 40
@@ -419,6 +476,12 @@ Item {
                                         Layout.rightMargin: 50
                                     }
                                 }
+                                Label {
+                                    color: "#979797"
+                                    text: "         Controls the default language selected when creating a new snippet"
+                                    font.pixelSize: 10
+                                    font.styleName: "Regular Italic"
+                                }
                             }
                             ColumnLayout {
                                 id: snippetOrganizationColumn
@@ -441,6 +504,7 @@ Item {
                                     }
                                 }
                                 RowLayout {
+                                    height: 34
                                     spacing: 8
                                     Layout.leftMargin: 10
                                     Layout.preferredHeight: 40
@@ -467,7 +531,14 @@ Item {
                                         Layout.rightMargin: 50
                                     }
                                 }
+                                Label {
+                                    color: "#979797"
+                                    text: "         Controls the default sorting of snippets"
+                                    font.pixelSize: 10
+                                    font.styleName: "Regular Italic"
+                                }
                                 RowLayout {
+                                    height: 34
                                     spacing: 8
                                     Layout.leftMargin: 10
                                     Layout.preferredHeight: 40
@@ -494,6 +565,12 @@ Item {
                                         Layout.rightMargin: 50
                                     }
                                 }
+                                Label {
+                                    color: "#979797"
+                                    text: "         Controls the default snippet folder when creating a new snippet"
+                                    font.pixelSize: 10
+                                    font.styleName: "Regular Italic"
+                                }
                             }
                             
                             ColumnLayout {
@@ -517,6 +594,37 @@ Item {
                                     }
                                 }
                                 RowLayout {
+                                    height: 34
+                                    spacing: 8
+                                    Layout.leftMargin: 10
+                                    Layout.preferredHeight: 40
+    
+                                    Label {
+                                        color: "#545454"
+                                        text: "Export location:"
+                                    }
+                                    Item {
+                                        Layout.fillWidth: true
+                                    }
+                                    TextField {
+                                        id: exportFolderField
+                                        placeholderText: "Enter folder path"
+                                        text: ""             // current value
+                                        width: 300
+                                        onEditingFinished: {
+                                            console.log("User export folder:", text)
+                                        }
+                                        Layout.rightMargin: 50
+                                    }
+                                }
+                                Label {
+                                    color: "#979797"
+                                    text: "         Controls where on your computer snippets are saved to"
+                                    font.pixelSize: 10
+                                    font.styleName: "Regular Italic"
+                                }
+                                RowLayout {
+                                    height: 34
                                     spacing: 8
                                     Layout.leftMargin: 10
                                     Layout.preferredHeight: 40
@@ -543,29 +651,13 @@ Item {
                                         Layout.rightMargin: 50
                                     }
                                 }
-                                RowLayout {
-                                    spacing: 8
-                                    Layout.leftMargin: 10
-                                    Layout.preferredHeight: 40
-    
-                                    Label {
-                                        color: "#545454"
-                                        text: "Export location:"
-                                    }
-                                    Item {
-                                        Layout.fillWidth: true
-                                    }
-                                    TextField {
-                                        id: exportFolderField
-                                        placeholderText: "Enter folder path"
-                                        text: ""             // current value
-                                        width: 300
-                                        onEditingFinished: {
-                                            console.log("User export folder:", text)
-                                        }
-                                        Layout.rightMargin: 50
-                                    }
+                                Label {
+                                    color: "#979797"
+                                    text: "         Controls the export format of snippets"
+                                    font.pixelSize: 10
+                                    font.styleName: "Regular Italic"
                                 }
+                                
                             }
                             ColumnLayout {
                                 id: importColumn
@@ -589,6 +681,7 @@ Item {
                                 }
                                 
                                 RowLayout {
+                                    height: 34
                                     spacing: 8
                                     Layout.leftMargin: 10
                                     Layout.preferredHeight: 40
@@ -610,8 +703,15 @@ Item {
                                         }
                                         Layout.rightMargin: 50
                                     }
-                                }                                
+                                }
+                                Label {
+                                    color: "#979797"
+                                    text: "         Controls where on your computer snippets are loaded from"
+                                    font.pixelSize: 10
+                                    font.styleName: "Regular Italic"
+                                }
                                 RowLayout {
+                                    height: 34
                                     spacing: 8
                                     Layout.leftMargin: 10
                                     Layout.preferredHeight: 40
@@ -637,6 +737,12 @@ Item {
                                         }
                                         Layout.rightMargin: 50
                                     }
+                                }
+                                Label {
+                                    color: "#979797"
+                                    text: "         Determines outcome of adding a snippet with an already used ID/Name"
+                                    font.pixelSize: 10
+                                    font.styleName: "Regular Italic"
                                 }
                             }
     
