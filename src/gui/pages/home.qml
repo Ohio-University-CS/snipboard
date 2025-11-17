@@ -155,8 +155,6 @@ Page {
                     color: home_button.down ? "#5a2f86" : (home_button.hovered ? '#915fc4' : "#734c91")
                 }
                 onClicked: {
-                    settingsLoader.visible = false
-                    settingsLoader.source = ""
                 }
             }
 
@@ -176,13 +174,6 @@ Page {
                     color: fav_button.down ? '#958235' : (fav_button.hovered ? '#c7af4b' : '#b19b3b')
                 }
                 onClicked: {
-                    if (settingsLoader.visible) {
-                        settingsLoader.visible = false
-                        settingsLoader.source = ""
-                    } else {
-                        settingsLoader.source = "qrc:/qt/qml/SnipBoard/src/gui/pages/settings.qml"
-                        settingsLoader.visible = true
-                    }
                 }
             }
 
