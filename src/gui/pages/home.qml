@@ -90,37 +90,67 @@ Page {
                                 wrapMode: Text.WordWrap
                             }
                         }
-
-                        Button {
-                            text: "❌"
+                        RowLayout {
+                            spacing: 4
                             Layout.alignment: Qt.AlignRight
-                            onClicked: {//snippetService.deleteSnippet(id)
-                                root.snippetDialogId = id
-                                root.snippetDialogName = name
-                                deleteDialog.open()
-                            } 
 
-                                            // --- Delete Snippet Dialog ---
-                            Dialog {
-                                id: deleteDialog
-                                title: "Delete Snippet?"
-                                modal: true
-                                standardButtons: Dialog.Ok | Dialog.Cancel
-                                anchors.centerIn: Overlay.overlay
-                                ColumnLayout {
-                                    //anchors.fill: parent
-                                    anchors.margins: 20
-                                    spacing: 10
-
-                                    Label {
-                                        text: "Are you sure you want to delete the snippet: " + root.snippetDialogName
-                                        wrapMode: Text.WordWrap
-                                        //color: "#000000"
-                                    }
+                            Button {
+                                id: favButton
+                                height: 42
+                                width: 46
+                                implicitWidth: width
+                                implicitHeight: height
+                                padding: 0
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: favorite ? "⭐" : "☆"
+                                    font.pixelSize: favorite ? 18 : 22
+                                    color: "#a7a7a7"
                                 }
+                                onClicked: {
+                                    snippetService.toggleFavorite(id)
+                                }
+                            }
 
-                                onAccepted: {
-                                    snippetService.deleteSnippet(root.snippetDialogId)
+                            Button {
+                                height: 42
+                                width: 46
+                                implicitWidth: width
+                                implicitHeight: height
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: "❌"
+                                }
+                                padding: 0
+                                //Layout.alignment: Qt.AlignRight
+                                onClicked: {//snippetService.deleteSnippet(id)
+                                    root.snippetDialogId = id
+                                    root.snippetDialogName = name
+                                    deleteDialog.open()
+                                } 
+
+                                                // --- Delete Snippet Dialog ---
+                                Dialog {
+                                    id: deleteDialog
+                                    title: "Delete Snippet?"
+                                    modal: true
+                                    standardButtons: Dialog.Ok | Dialog.Cancel
+                                    anchors.centerIn: Overlay.overlay
+                                    ColumnLayout {
+                                        //anchors.fill: parent
+                                        anchors.margins: 20
+                                        spacing: 10
+
+                                        Label {
+                                            text: "Are you sure you want to delete the snippet: " + root.snippetDialogName
+                                            wrapMode: Text.WordWrap
+                                            //color: "#000000"
+                                        }
+                                    }
+
+                                    onAccepted: {
+                                        snippetService.deleteSnippet(root.snippetDialogId)
+                                    }
                                 }
                             }
                         }

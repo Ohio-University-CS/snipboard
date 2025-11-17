@@ -84,6 +84,21 @@ void SnippetService::updateSnippet(int id, const QString& name, const QString& d
     }
 }
 
+void SnippetService::toggleFavorite(int id) {
+    Snippet s = m_repo->loadById(id);
+    if (s.id == -1) {
+        return;
+    }
+
+    s.favorite = !s.favorite;
+
+    if (m_repo->update(s)) {
+        auto* obj = new SnippetObject(s);
+        m_snippetModel.onSnippetUpdated(id, obj);
+        m_snippetModelFiltered.onSnippetUpdated(id, obj);
+    }
+}
+
 void SnippetService::reload() {
     loadSnippetsFromDb();
 }
