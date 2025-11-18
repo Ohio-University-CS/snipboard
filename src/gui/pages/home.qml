@@ -667,6 +667,7 @@ Page {
                 }
             }
         }
+    }
 
         // --- SETTINGS LOADER ---
         Loader {
@@ -679,7 +680,7 @@ Page {
             }
         }
     }
-}
+
 
 /*##^##
 Designer {
