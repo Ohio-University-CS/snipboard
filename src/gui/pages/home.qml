@@ -190,7 +190,7 @@ Page {
                         // Wrap both buttons in a RowLayout
                         RowLayout {
                             Layout.alignment: Qt.AlignRight
-                            spacing: 6  // Space between the two buttons
+                            spacing: 4  // Space between the two buttons
 
                             //Edit a snippet
                             Basic.Button {
@@ -221,15 +221,41 @@ Page {
 
                             //Delete a snippet
                             Button {
-                                text: "❌"
-                                Layout.alignment: Qt.AlignRight
-                                onClicked: {//snippetService.deleteSnippet(id)
-                                    root.snippetDialogId = id;
-                                    root.snippetDialogName = name;
-                                    deleteDialog.open();
+                                id: favButton
+                                height: 42
+                                width: 46
+                                implicitWidth: width
+                                implicitHeight: height
+                                padding: 0
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: favorite ? "⭐" : "☆"
+                                    font.pixelSize: favorite ? 16 : 22
+                                    color: "#a7a7a7"
                                 }
+                                onClicked: {
+                                    snippetService.toggleFavorite(id)
+                                }
+                            }
 
-                                // --- Delete Snippet Dialog ---
+                            Button {
+                                height: 42
+                                width: 46
+                                implicitWidth: width
+                                implicitHeight: height
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: "❌"
+                                }
+                                padding: 0
+                                //Layout.alignment: Qt.AlignRight
+                                onClicked: {//snippetService.deleteSnippet(id)
+                                    root.snippetDialogId = id
+                                    root.snippetDialogName = name
+                                    deleteDialog.open()
+                                } 
+
+                                                // --- Delete Snippet Dialog ---
                                 Dialog {
                                     id: deleteDialog
                                     title: "Delete Snippet?"
@@ -249,7 +275,7 @@ Page {
                                     }
 
                                     onAccepted: {
-                                        snippetService.deleteSnippet(root.snippetDialogId);
+                                        snippetService.deleteSnippet(root.snippetDialogId)
                                     }
                                 }
                             }
@@ -262,6 +288,95 @@ Page {
 
     // --- Control Row ---
 
+    // Rectangle {
+    //     id: selection_rect
+    //     x: 0
+    //     y: 0
+    //     width: 124
+    //     height: 600
+    //     color: "#cfcfcf"
+
+    //     // Home
+    //     Basic.Button {
+    //         id: home_button
+    //         x: 36
+    //         y: 130
+    //         width: 52
+    //         height: 52
+    //         display: AbstractButton.IconOnly
+    //         icon.source: "qrc:/resources/icons/home.png"
+    //         icon.width: 32
+    //         icon.height: 32
+    //         background: Rectangle {
+    //             radius: 12
+    //             color: home_button.down ? "#5a2f86" : (home_button.hovered ? '#915fc4' : "#734c91")
+    //         }
+    //         onClicked: {
+    //             settingsLoader.visible = false;
+    //             settingsLoader.source = "";
+    //         }
+    //     }
+
+    //     // Favorites
+    //     Basic.Button {
+    //         id: fav_button
+    //         x: 36
+    //         y: 200
+    //         width: 52
+    //         height: 52
+    //         display: AbstractButton.IconOnly
+    //         icon.source: "qrc:/resources/icons/star.png"
+    //         icon.width: 30
+    //         icon.height: 30
+    //         background: Rectangle {
+    //             radius: 12
+    //             color: fav_button.down ? '#958235' : (fav_button.hovered ? '#c7af4b' : '#b19b3b')
+    //         }
+    //         onClicked: {
+    //             settingsLoader.visible = false;
+    //             settingsLoader.source = "";
+    //         }
+    //     }
+
+    //     // Settings
+    //     Basic.Button {
+    //         id: settings_button
+    //         x: 36
+    //         y: 533
+    //         width: 52
+    //         height: 52
+    //         display: AbstractButton.IconOnly
+    //         icon.source: "qrc:/resources/icons/setting.png"
+    //         icon.width: 30
+    //         icon.height: 30
+    //         background: Rectangle {
+    //             radius: 12
+    //             color: settings_button.down ? '#797979' : (settings_button.hovered ? '#828181' : '#a9a8a8')
+    //         }
+    //         onClicked: {
+    //             //favoritesLoader.visible = false -> uncomment once favorites loader exists
+    //             //favoritesLoader.source = ""
+    //             if (settingsLoader.visible) { //toggles settings
+    //                 settingsLoader.visible = false;
+    //                 settingsLoader.source = "";
+    //             } else {
+    //                 settingsLoader.source = "qrc:/qt/qml/SnipBoard/src/gui/pages/settings.qml";
+    //                 settingsLoader.visible = true;
+    //             }
+    //         }
+    //     }
+
+    //     Image {
+    //         id: image1
+    //         x: 25
+    //         y: 20
+    //         width: 75
+    //         height: 75
+    //         source: "qrc:/resources/icons/sb_logo.png"
+    //         fillMode: Image.PreserveAspectFit
+    //     }
+    // }
+
     Rectangle {
         id: selection_rect
         x: 0
@@ -270,101 +385,93 @@ Page {
         height: 600
         color: "#cfcfcf"
 
-        // Home
-        Basic.Button {
-            id: home_button
-            x: 36
-            y: 130
-            width: 52
-            height: 52
-            display: AbstractButton.IconOnly
-            icon.source: "qrc:/resources/icons/home.png"
-            icon.width: 32
-            icon.height: 32
-            background: Rectangle {
-                radius: 12
-                color: home_button.down ? "#5a2f86" : (home_button.hovered ? '#915fc4' : "#734c91")
-            }
-            onClicked: {
-                settingsLoader.visible = false;
-                settingsLoader.source = "";
-            }
-        }
-
-        // Favorites
-        Basic.Button {
-            id: fav_button
-            x: 36
-            y: 200
-            width: 52
-            height: 52
-            display: AbstractButton.IconOnly
-            icon.source: "qrc:/resources/icons/star.png"
-            icon.width: 30
-            icon.height: 30
-            background: Rectangle {
-                radius: 12
-                color: fav_button.down ? '#958235' : (fav_button.hovered ? '#c7af4b' : '#b19b3b')
-            }
-            onClicked: {
-                settingsLoader.visible = false;
-                settingsLoader.source = "";
-            }
-        }
-
-        // Settings
-        Basic.Button {
-            id: settings_button
-            x: 36
-            y: 533
-            width: 52
-            height: 52
-            display: AbstractButton.IconOnly
-            icon.source: "qrc:/resources/icons/setting.png"
-            icon.width: 30
-            icon.height: 30
-            background: Rectangle {
-                radius: 12
-                color: settings_button.down ? '#797979' : (settings_button.hovered ? '#828181' : '#a9a8a8')
-            }
-            onClicked: {
-                //favoritesLoader.visible = false -> uncomment once favorites loader exists
-                //favoritesLoader.source = ""
-                if (settingsLoader.visible) { //toggles settings
-                    settingsLoader.visible = false;
-                    settingsLoader.source = "";
-                } else {
-                    settingsLoader.source = "qrc:/qt/qml/SnipBoard/src/gui/pages/settings.qml";
-                    settingsLoader.visible = true;
-                }
-            }
-        }
-
-        Image {
-            id: image1
-            x: 25
-            y: 20
-            width: 75
-            height: 75
-            source: "qrc:/resources/icons/sb_logo.png"
-            fillMode: Image.PreserveAspectFit
-        }
-    }
-
-    Rectangle {
-        id: search_rect
-        x: 136
-        y: 15
-        width: 652
-        height: 82
-        radius: 12          // <- round the corners
-        clip: true          // keeps children clipped to the rounded shape
-        color: "#cfcfcf"
-
         FocusScope {
             x: 58
             y: 0
-            width: 594
+            width: 124
+            height: 600
+            color: "#cfcfcf"
+
+            // Home
+            Basic.Button {
+                id: home_button
+                x: 36
+                y: 130
+                width: 52
+                height: 52
+                display: AbstractButton.IconOnly
+                icon.source: "qrc:/resources/icons/home.png"
+                icon.width: 32
+                icon.height: 32
+                background: Rectangle {
+                    radius: 12
+                    color: home_button.down ? "#5a2f86" : (home_button.hovered ? '#915fc4' : "#734c91")
+                }
+                onClicked: {
+                }
+            }
+
+            // Favorites
+            Basic.Button {
+                id: fav_button
+                x: 36
+                y: 200
+                width: 52
+                height: 52
+                display: AbstractButton.IconOnly
+                icon.source: "qrc:/resources/icons/star.png"
+                icon.width: 30
+                icon.height: 30
+                background: Rectangle {
+                    radius: 12
+                    color: fav_button.down ? '#958235' : (fav_button.hovered ? '#c7af4b' : '#b19b3b')
+                }
+                onClicked: {
+                }
+            }
+
+            // Settings
+            Basic.Button {
+                id: settings_button
+                x: 36
+                y: 533
+                width: 52
+                height: 52
+                display: AbstractButton.IconOnly
+                icon.source: "qrc:/resources/icons/setting.png"
+                icon.width: 30
+                icon.height: 30
+                background: Rectangle {
+                    radius: 12
+                    color: settings_button.down ? '#797979' : (settings_button.hovered ? '#828181' : '#a9a8a8')
+                }
+                onClicked: {
+                    if (settingsLoader.visible) {
+                        settingsLoader.visible = false
+                        settingsLoader.source = ""
+                    } else {
+                        settingsLoader.source = "qrc:/qt/qml/SnipBoard/src/gui/pages/settings.qml"
+                        settingsLoader.visible = true
+                    }
+                }
+            }
+
+            Image {
+                id: sb_image
+                x: 25
+                y: 20
+                width: 75
+                height: 75
+                source: "qrc:/resources/icons/sb_logo.png"
+                fillMode: Image.PreserveAspectFit
+            }
+        }
+
+        Rectangle {
+            id: search_rect
+            x: 136
+            y: 15
+            width: 652
             height: 82
 
             // Debounce timer so we don't call search on every keystroke immediately
@@ -647,18 +754,17 @@ Page {
                 }
             }
         }
-    }
-    //  --- Settings Loader ---
-    Loader {
-        id: settingsLoader
-        anchors {
-            top: parent.top
-            bottom: parent.bottom
-            right: parent.right
-            left: selection_rect.right
+
+        // --- SETTINGS LOADER ---
+        Loader {
+            id: settingsLoader
+            source: ""
+            anchors.fill: parent
+            visible: false
+            onLoaded: {
+                item.parentLoader = settingsLoader
+            }
         }
-        asynchronous: true
-        visible: false
     }
 }
 
