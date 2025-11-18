@@ -19,6 +19,8 @@ SnippetObject::SnippetObject(const Snippet& snippetModel, const QVector<QString>
     m_favorite = snippetModel.favorite;
     m_timesCopied = snippetModel.timesCopied;
     m_tagNames = tagNames;
+    m_dateCreated = snippetModel.dateCreated;
+    m_dateModified = snippetModel.dateModified;
 }
 
 void SnippetObject::setId(int id) {

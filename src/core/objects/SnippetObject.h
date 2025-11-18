@@ -44,6 +44,10 @@ class SnippetObject : public QObject {
     quint64 timesCopied() const { return m_timesCopied; }
     QVector<QString> tagNames() const { return m_tagNames; }
 
+    // Getters for sorting
+    QDateTime getDateCreated() { return m_dateCreated; }
+    QDateTime getDateModified() { return m_dateModified; }
+
     // Setters (for QML)
     void setId(int id);
     void setName(QString name);
@@ -79,4 +83,8 @@ class SnippetObject : public QObject {
     bool m_favorite = false;
     quint64 m_timesCopied = 0;
     QVector<QString> m_tagNames;
+
+    // Added for sorting
+    QDateTime m_dateCreated;
+    QDateTime m_dateModified;
 };
