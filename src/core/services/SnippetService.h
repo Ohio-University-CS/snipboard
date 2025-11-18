@@ -35,8 +35,7 @@ class SnippetService : public QObject {
     Q_INVOKABLE void removeSearchTag(const TagObject& tag);
     Q_INVOKABLE void addSearchLanguage(const QString& language);
     Q_INVOKABLE void removeSearchLanguage(const QString& language);
-   //  Q_INVOKABLE void searchByLanguage(const QString& languageKeyword);
-
+    Q_INVOKABLE void incrementSnippet(int id);
 
  private:
     void loadSnippetsFromDb();

@@ -151,3 +151,17 @@ void SnippetService::removeSearchLanguage(const QString& language) {
         }
     }
 }
+
+void SnippetService::incrementSnippet(int id) {
+    // Call repository function to update database
+    
+    // update ui
+    const auto snippets = m_snippetModel.viewSnippets();
+
+    for (auto& s : snippets) {
+        if (s->id() == id) {
+            s->setTimesCopied(s->timesCopied() + 1);
+            break;
+        }
+    }
+}
