@@ -268,3 +268,17 @@ void SnippetService::removeTagFromSnippet(int id, const QString& tagName) {
         }
     }
 }
+
+// I think for right now we just need to sort the filtered list... can easily change if needed
+void SnippetService::sortByDateCreated(bool ascending) {
+    m_snippetModelFiltered.sortByDateCreated(ascending);
+}
+void SnippetService::sortByDateModified(bool ascending) {
+    m_snippetModelFiltered.sortByDateModified(ascending);
+}
+void SnippetService::sortByMostCopied(bool ascending) {
+    m_snippetModelFiltered.sortByMostCopied(ascending);
+}
+void SnippetService::sortByName(bool alphabetical) {
+    m_snippetModelFiltered.sortByName(alphabetical);
+}

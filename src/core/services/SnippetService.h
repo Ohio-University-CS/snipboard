@@ -9,6 +9,7 @@
 
 #include <QObject>
 #include <QSqlDatabase>
+#include <algorithm>
 
 #include "../models/Snippet.h"
 #include "../objects/SnippetListModel.h"
@@ -44,6 +45,13 @@ class SnippetService : public QObject {
     Q_INVOKABLE void removeSearchTag(const TagObject& tag);
     Q_INVOKABLE void addSearchLanguage(const QString& language);
     Q_INVOKABLE void removeSearchLanguage(const QString& language);
+
+    // Sorting functions
+    Q_INVOKABLE void sortByDateCreated(bool ascending = true);
+    Q_INVOKABLE void sortByDateModified(bool ascending = true);
+    Q_INVOKABLE void sortByMostCopied(bool ascending = false);
+    Q_INVOKABLE void sortByName(bool alphabetical = true);
+
 
  private:
     void loadSnippetsFromDb();
