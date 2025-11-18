@@ -152,7 +152,7 @@ void SnippetService::removeSearchLanguage(const QString& language) {
     }
 }
 
-void SnippetService::incrementSnippet(int id) {
+void SnippetService::incrementCopiedSnippet(int id) {
     // Call repository function to update database
 
     // update ui
@@ -207,3 +207,4 @@ void SnippetService::removeFavoriteSnippet(const SnippetObject& snippet) {
         }
     }
 }
+
