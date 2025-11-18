@@ -14,6 +14,7 @@
 #include "../objects/SnippetListModel.h"
 #include "../objects/SnippetObject.h"
 #include "../repositories/SnippetRepository.h"
+#include "../objects/TagObject.h"
 
 class SnippetService : public QObject {
     Q_OBJECT
@@ -30,6 +31,8 @@ class SnippetService : public QObject {
     Q_INVOKABLE void updateSnippet(int id, const QString& name, const QString& description, const QString& language, const QString& contents, int folder, bool favorite);
     Q_INVOKABLE void reload();
     Q_INVOKABLE void search(const QString& phrase = "");
+    Q_INVOKABLE void addSearchTag(const TagObject& tag);
+    Q_INVOKABLE void removeSearchTag(const TagObject& tag);
 
 
  private:
@@ -37,6 +40,6 @@ class SnippetService : public QObject {
     
     QSqlDatabase m_db;
     SnippetRepository* m_repo;
-    SnippetListModel m_snippetModel; // list model that is all snippets in current folder
+    SnippetListModel m_snippetModel; // list model that is all snippets in current folder (all snippets in general right now i believe)
     SnippetListModel m_snippetModelFiltered; // the list model its responsible for
 };

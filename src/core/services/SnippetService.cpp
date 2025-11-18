@@ -100,3 +100,34 @@ void SnippetService::search(const QString& phrase) {
 
     m_snippetModelFiltered.setSnippets(results);
 }
+
+void SnippetService::addSearchTag(const TagObject& tag) {
+    const auto snippets = m_snippetModelFiltered.viewSnippets();
+
+    // iterate over each snippet in the already filtered list
+    for (const auto& s : snippets) {
+        // get tags name associated with each snippet and if names match, remove it
+        auto snippetTags = s->tagNames();
+        for (const auto& snippetTag : snippetTags) {
+            if (tag.name().toLower() == snippetTag.toLower()) {
+                m_snippetModelFiltered.onSnippetDeleted(tag.id());
+                break;
+            }
+        }
+    }
+}
+
+void SnippetService::removeSearchTag(const TagObject& tag) {
+    const auto snippets = m_snippetModel.viewSnippets();
+
+    // iterate over ALL snippets and add it if tag.name() matches a name of the snippet tag
+    for (const auto& s : snippets) {
+        auto snippetTags = s->tagNames();
+        for (const auto& snippetTag : snippetTags) {
+            if (tag.name().toLower() == snippetTag.toLower()) {
+                m_snippetModelFiltered.onSnippetAdded(s);
+                break;
+            }
+        }
+    }
+}
