@@ -154,13 +154,55 @@ void SnippetService::removeSearchLanguage(const QString& language) {
 
 void SnippetService::incrementSnippet(int id) {
     // Call repository function to update database
-    
+
     // update ui
     const auto snippets = m_snippetModel.viewSnippets();
 
     for (auto& s : snippets) {
         if (s->id() == id) {
             s->setTimesCopied(s->timesCopied() + 1);
+            break;
+        }
+    }
+}
+
+void SnippetService::favoriteSnippet(const SnippetObject& snippet) {
+    // call repo function
+    
+    auto snippets = m_snippetModel.viewSnippets();
+    auto snippetsFiltered = m_snippetModelFiltered.viewSnippets();
+
+    // update UI
+    for (auto& s : snippets) {
+        if (s->id() == snippet.id()) {
+            s->setFavorite(true);
+            break;
+        }
+    }
+
+    for (auto& s : snippetsFiltered) {
+        if (s->id() == snippet.id()) {
+            s->setFavorite(true);
+            break;
+        }
+    }
+}
+
+void SnippetService::removeFavoriteSnippet(const SnippetObject& snippet) {
+    // call repo function
+    auto snippets = m_snippetModel.viewSnippets();
+    auto snippetsFiltered = m_snippetModelFiltered.viewSnippets();
+
+    for (auto& s : snippets) {
+        if (s->id() == snippet.id()) {
+            s->setFavorite(false);
+            break;
+        }
+    }
+
+    for (auto& s : snippetsFiltered) {
+        if (s->id() == snippet.id()) {
+            s->setFavorite(false);
             break;
         }
     }
