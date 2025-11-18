@@ -45,8 +45,8 @@ class SnippetObject : public QObject {
     QVector<QString> tagNames() const { return m_tagNames; }
 
     // Getters for sorting
-    QDateTime getDateCreated() { return m_dateCreated; }
-    QDateTime getDateModified() { return m_dateModified; }
+    QDateTime getDateCreated() const { return m_dateCreated; }
+    QDateTime getDateModified() const { return m_dateModified; }
 
     // Setters (for QML)
     void setId(int id);
