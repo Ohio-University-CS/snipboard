@@ -40,6 +40,34 @@ QVector<Snippet> SnippetRepository::loadAll() {
     return result;
 }
 
+QVector<Snippet> SnippetRepository::loadAllFavorites() {
+    // Create query
+    QVector<Snippet> result;
+    QSqlQuery query(m_db);
+    if (!query.exec("SELECT id, name, dateCreated, dateModified, description, language, contents, folder, favorite, timesCopied FROM Snippet WHERE favorite = true")) {
+        qWarning() << "Failed to load snippets: " << query.lastError();
+        return result;
+    }
+
+    // While there are results, create a Snippet and add to result QVector
+    while (query.next()) {
+        Snippet s;
+        s.id = query.value(0).toInt();
+        s.name = query.value(1).toString();
+        s.dateCreated = query.value(2).toDateTime();
+        s.dateModified = query.value(3).toDateTime();
+        s.description = query.value(4).toString();
+        s.language = query.value(5).toString();
+        s.contents = query.value(6).toString();
+        s.folder = query.value(7).toInt();
+        s.favorite = query.value(8).toBool();
+        s.timesCopied = query.value(9).toInt();
+        result.append(s);
+    }
+
+    return result;
+}
+
 Snippet SnippetRepository::loadById(int id) {
     // Create query
     QSqlQuery query(m_db);

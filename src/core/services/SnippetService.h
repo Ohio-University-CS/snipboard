@@ -33,6 +33,8 @@ class SnippetService : public QObject {
     Q_INVOKABLE void favoriteSnippet(const SnippetObject& snippet);
     Q_INVOKABLE void removeFavoriteSnippet(const SnippetObject& snippet);
     Q_INVOKABLE void reload();
+    Q_INVOKABLE void loadAll();
+    Q_INVOKABLE void loadFavoriteSnippets();
 
     // Searching functions
     Q_INVOKABLE void search(const QString& phrase = "");

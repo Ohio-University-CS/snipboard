@@ -208,3 +208,21 @@ void SnippetService::removeFavoriteSnippet(const SnippetObject& snippet) {
     }
 }
 
+void SnippetService::loadAll() {
+    loadSnippetsFromDb();
+}
+
+void SnippetService::loadFavoriteSnippets() {
+    // Get all snippets
+    auto all = m_repo->loadAllFavorites();
+    QVector<SnippetObject*> objs;
+    objs.reserve(all.size());
+
+    // Create new SnippetObjects from Snippets returned from repo
+    for (const Snippet& s : all) {
+        objs.append(new SnippetObject(s));
+    }
+
+    m_snippetModel.setSnippets(objs);
+    m_snippetModelFiltered.setSnippets(objs);
+}

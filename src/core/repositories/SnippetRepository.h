@@ -17,6 +17,7 @@ class SnippetRepository {
     explicit SnippetRepository(QSqlDatabase db);
 
     QVector<Snippet> loadAll();
+    QVector<Snippet> loadAllFavorites();
     Snippet loadById(int id);
     bool insert(Snippet& snippet);
     bool update(Snippet& snippet);
