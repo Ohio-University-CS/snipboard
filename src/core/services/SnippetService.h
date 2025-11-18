@@ -32,6 +32,8 @@ class SnippetService : public QObject {
     Q_INVOKABLE void incrementCopiedSnippet(int id);
     Q_INVOKABLE void favoriteSnippet(const SnippetObject& snippet);
     Q_INVOKABLE void removeFavoriteSnippet(const SnippetObject& snippet);
+    Q_INVOKABLE void addTagToSnippet(int id, const QString& tagName);
+    Q_INVOKABLE void removeTagFromSnippet(int id, const QString& tagName);
     Q_INVOKABLE void reload();
     Q_INVOKABLE void loadAll();
     Q_INVOKABLE void loadFavoriteSnippets();

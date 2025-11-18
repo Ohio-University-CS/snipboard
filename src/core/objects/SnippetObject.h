@@ -54,6 +54,8 @@ class SnippetObject : public QObject {
     void setFavorite(bool favorite);
     void setTimesCopied(int timesCopied);
     void setTagNames(const QVector<QString>& tagNames);
+    void addTagName(const QString& name);
+    void removeTagName(const QString& name);
 
  signals:
     // Tells the UI to update specified property whenever one of these are called

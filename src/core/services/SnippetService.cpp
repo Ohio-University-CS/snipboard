@@ -226,3 +226,45 @@ void SnippetService::loadFavoriteSnippets() {
     m_snippetModel.setSnippets(objs);
     m_snippetModelFiltered.setSnippets(objs);
 }
+
+void SnippetService::addTagToSnippet(int id, const QString& tagName) {
+    // call repo function
+    auto snippets = m_snippetModel.viewSnippets();
+    auto snippetsFiltered = m_snippetModelFiltered.viewSnippets();
+
+    // update ui objects
+    for (auto& s : snippets) {
+        if (s->id() == id) {
+            s->addTagName(tagName);
+            break;
+        }
+    }
+
+    for (auto& s : snippetsFiltered) {
+        if (s->id() == id) {
+            s->addTagName(tagName);
+            break;
+        }
+    }
+}
+
+void SnippetService::removeTagFromSnippet(int id, const QString& tagName) {
+    // call repo function
+    auto snippets = m_snippetModel.viewSnippets();
+    auto snippetsFiltered = m_snippetModelFiltered.viewSnippets();
+
+    // update ui objects
+    for (auto& s : snippets) {
+        if (s->id() == id) {
+            s->removeTagName(tagName);
+            break;
+        }
+    }
+
+    for (auto& s : snippetsFiltered) {
+        if (s->id() == id) {
+            s->removeTagName(tagName);
+            break;
+        }
+    }
+}
