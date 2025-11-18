@@ -33,11 +33,14 @@ class SnippetService : public QObject {
     Q_INVOKABLE void search(const QString& phrase = "");
     Q_INVOKABLE void addSearchTag(const TagObject& tag);
     Q_INVOKABLE void removeSearchTag(const TagObject& tag);
+    Q_INVOKABLE void addSearchLanguage(const QString& language);
+    Q_INVOKABLE void removeSearchLanguage(const QString& language);
+   //  Q_INVOKABLE void searchByLanguage(const QString& languageKeyword);
 
 
  private:
     void loadSnippetsFromDb();
-    
+    // TODO: add search phrase to store here so we can accurately add back to DB
     QSqlDatabase m_db;
     SnippetRepository* m_repo;
     SnippetListModel m_snippetModel; // list model that is all snippets in current folder (all snippets in general right now i believe)

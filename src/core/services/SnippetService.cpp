@@ -131,3 +131,23 @@ void SnippetService::removeSearchTag(const TagObject& tag) {
         }
     }
 }
+
+void SnippetService::addSearchLanguage(const QString& language) {
+    const auto snippets = m_snippetModelFiltered.viewSnippets();
+
+    for (const auto& s : snippets) {
+        if (s->language().toLower() == language.toLower()) {
+            m_snippetModelFiltered.onSnippetDeleted(s->id());
+        }
+    }
+}
+
+void SnippetService::removeSearchLanguage(const QString& language) {
+    const auto snippets = m_snippetModel.viewSnippets();
+
+    for (const auto& s : snippets) {
+        if (s->language().toLower() == language.toLower()) {
+            m_snippetModelFiltered.onSnippetAdded(s);
+        }
+    }
+}
