@@ -104,7 +104,7 @@ Page {
                                 Text {
                                     anchors.centerIn: parent
                                     text: favorite ? "⭐" : "☆"
-                                    font.pixelSize: favorite ? 18 : 22
+                                    font.pixelSize: favorite ? 16 : 22
                                     color: "#a7a7a7"
                                 }
                                 onClicked: {
