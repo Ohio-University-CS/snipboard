@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import SnipBoard 1.0  // for SnippetObject and ClipboardHelper type if needed
-import QtQuick.Controls.Basic as Basic   
+import QtQuick.Controls.Basic as Basic
 
 Page {
     id: root
@@ -15,12 +15,106 @@ Page {
     property int snippetDialogId: -1
     property string snippetDialogName: ""
 
+    //Properties of edit dialog
+    property int editDialogId: -1
+    property string editDialogName: ""
+    property string editDialogDescription: ""
+    property string editDialogLanguage: ""
+    property string editDialogContent: ""
+
+    //EDit dialog
+    Dialog {
+        id: editDialog
+        title: "Edit Snippet"
+        modal: true
+        focus: true
+        implicitWidth: 520
+        anchors.centerIn: Overlay.overlay
+        standardButtons: Dialog.Ok | Dialog.Cancel
+
+        onAccepted: {
+            // Trim and validate
+            const trimmedName = root.editDialogName.trim();
+            const trimmedContent = root.editDialogContent.trim();
+
+            if (!trimmedName || !trimmedContent) {
+                // Show error and prevent dialog from closing
+                console.log("Validation failed: missing required fields");
+                return;
+            }
+
+            // Perform the update
+            snippetService.updateSnippet(root.editDialogId, trimmedName, root.editDialogDescription.trim(), (root.editDialogLanguage && root.editDialogLanguage.length) ? root.editDialogLanguage : "Plain Text", trimmedContent, 0      // folderId for now
+            , false   // favorite for now
+            );
+
+            // Note: You might not need reload() since updateSnippet already updates both models
+            // snippetService.reload();
+        }
+
+        contentItem: ColumnLayout {
+            spacing: 10
+
+            Basic.TextField {
+                id: editTitleField
+                Layout.fillWidth: true
+                placeholderText: "Title *"
+                text: root.editDialogName
+                onTextChanged: root.editDialogName = text
+            }
+
+            Basic.TextField {
+                Layout.fillWidth: true
+                placeholderText: "Short description"
+                text: root.editDialogDescription
+                onTextChanged: root.editDialogDescription = text
+            }
+
+            // Keep ComboBox in sync with current language
+            Basic.ComboBox {
+                Layout.fillWidth: true
+                model: ["C++", "QML", "Python", "JavaScript", "Plain Text"]
+                currentIndex: {
+                    const list = ["C++", "QML", "Python", "JavaScript", "Plain Text"];
+                    const cur = root.editDialogLanguage || "Plain Text";
+                    const idx = list.indexOf(cur);
+                    return idx >= 0 ? idx : 0;
+                }
+                onCurrentTextChanged: root.editDialogLanguage = currentText
+            }
+
+            Label {
+                text: "Code *"
+            }
+
+            Frame {
+                Layout.fillWidth: true
+                Layout.preferredHeight: 220
+                background: Rectangle {
+                    radius: 8
+                    color: "white"
+                    border.color: "#ddd"
+                }
+
+                Basic.TextArea {
+                    anchors.fill: parent
+                    anchors.margins: 12
+                    wrapMode: TextArea.Wrap
+                    text: root.editDialogContent
+                    onTextChanged: root.editDialogContent = text
+                }
+            }
+        }
+    }
+
+    //Main bg rect
     Rectangle {
         id: bg_rect
         width: parent.width
         height: parent.height
         color: "#f4f4f4"
 
+        //Lays out the snippet list and delete/reload buttons
         ColumnLayout {
             anchors.fill: parent
             spacing: 12
@@ -54,20 +148,20 @@ Page {
 
                     property bool hovered: false
 
+                    //Copies snippet code to clipboard
                     MouseArea {
+                        z: -1
                         anchors.fill: parent
                         hoverEnabled: true
                         onEntered: parent.hovered = true
                         onExited: parent.hovered = false
                         onClicked: {
-                            // Copy the snippet's code to clipboard
-                            // root.copyToClipboard(String(contents));   // or model.code if that’s your role
                             Clipboard.copyText(String(model.data));
-                            //Tell user code copied
                             ToolTip.show("Code copied", 1200, root);
                         }
                     }
 
+                    //Displays snippet in list
                     RowLayout {
                         anchors.fill: parent
                         anchors.margins: 10
@@ -93,445 +187,478 @@ Page {
                             }
                         }
 
-                        Button {
-                            text: "❌"
+                        // Wrap both buttons in a RowLayout
+                        RowLayout {
                             Layout.alignment: Qt.AlignRight
-                            onClicked: {//snippetService.deleteSnippet(id)
-                                root.snippetDialogId = id
-                                root.snippetDialogName = name
-                                deleteDialog.open()
-                            } 
+                            spacing: 6  // Space between the two buttons
 
-                                            // --- Delete Snippet Dialog ---
-                            Dialog {
-                                id: deleteDialog
-                                title: "Delete Snippet?"
-                                modal: true
-                                standardButtons: Dialog.Ok | Dialog.Cancel
-                                anchors.centerIn: Overlay.overlay
-                                ColumnLayout {
-                                    //anchors.fill: parent
-                                    anchors.margins: 20
-                                    spacing: 10
+                            //Edit a snippet
+                            Basic.Button {
+                                id: edit_button
+                                Layout.alignment: Qt.AlignRight
+                                icon.source: "qrc:/resources/icons/edit.png" 
+                                icon.height: 14
+                                icon.width: 14
+                                implicitHeight: 28
+                                implicitWidth: 28
+                                padding: 6
+                                background: Rectangle {
+                                    radius: 8
+                                    color: hovered ? '#ffffff' : "#f2f2f2"
+                                    border.color: "#d0d0d0"
+                                }
 
-                                    Label {
-                                        text: "Are you sure you want to delete the snippet: " + root.snippetDialogName
-                                        wrapMode: Text.WordWrap
-                                        //color: "#000000"
+                                onClicked: {
+                                    // pull roles from this row
+                                    root.editDialogId = model.id;
+                                    root.editDialogName = model.name;
+                                    root.editDialogDescription = model.description;
+                                    root.editDialogLanguage = model.language;
+                                    root.editDialogContent = model.data;
+                                    editDialog.open();  // <-- open the page-level dialog
+                                }
+                            }
+
+                            //Delete a snippet
+                            Button {
+                                text: "❌"
+                                Layout.alignment: Qt.AlignRight
+                                onClicked: {//snippetService.deleteSnippet(id)
+                                    root.snippetDialogId = id;
+                                    root.snippetDialogName = name;
+                                    deleteDialog.open();
+                                }
+
+                                // --- Delete Snippet Dialog ---
+                                Dialog {
+                                    id: deleteDialog
+                                    title: "Delete Snippet?"
+                                    modal: true
+                                    standardButtons: Dialog.Ok | Dialog.Cancel
+                                    anchors.centerIn: Overlay.overlay
+                                    ColumnLayout {
+                                        //anchors.fill: parent
+                                        anchors.margins: 20
+                                        spacing: 10
+
+                                        Label {
+                                            text: "Are you sure you want to delete the snippet: " + root.snippetDialogName
+                                            wrapMode: Text.WordWrap
+                                            //color: "#000000"
+                                        }
+                                    }
+
+                                    onAccepted: {
+                                        snippetService.deleteSnippet(root.snippetDialogId);
                                     }
                                 }
-
-                                onAccepted: {
-                                    snippetService.deleteSnippet(root.snippetDialogId)
-                                }
                             }
                         }
                     }
                 }
             }
         }
+    }
 
-            // --- Control Row ---
+    // --- Control Row ---
 
-        Rectangle {
-            id: selection_rect
-            x: 0
+    Rectangle {
+        id: selection_rect
+        x: 0
+        y: 0
+        width: 124
+        height: 600
+        color: "#cfcfcf"
+
+        // Home
+        Basic.Button {
+            id: home_button
+            x: 36
+            y: 130
+            width: 52
+            height: 52
+            display: AbstractButton.IconOnly
+            icon.source: "qrc:/resources/icons/home.png"
+            icon.width: 32
+            icon.height: 32
+            background: Rectangle {
+                radius: 12
+                color: home_button.down ? "#5a2f86" : (home_button.hovered ? '#915fc4' : "#734c91")
+            }
+            onClicked: {
+                settingsLoader.visible = false;
+                settingsLoader.source = "";
+            }
+        }
+
+        // Favorites
+        Basic.Button {
+            id: fav_button
+            x: 36
+            y: 200
+            width: 52
+            height: 52
+            display: AbstractButton.IconOnly
+            icon.source: "qrc:/resources/icons/star.png"
+            icon.width: 30
+            icon.height: 30
+            background: Rectangle {
+                radius: 12
+                color: fav_button.down ? '#958235' : (fav_button.hovered ? '#c7af4b' : '#b19b3b')
+            }
+            onClicked: {
+                settingsLoader.visible = false;
+                settingsLoader.source = "";
+            }
+        }
+
+        // Settings
+        Basic.Button {
+            id: settings_button
+            x: 36
+            y: 533
+            width: 52
+            height: 52
+            display: AbstractButton.IconOnly
+            icon.source: "qrc:/resources/icons/setting.png"
+            icon.width: 30
+            icon.height: 30
+            background: Rectangle {
+                radius: 12
+                color: settings_button.down ? '#797979' : (settings_button.hovered ? '#828181' : '#a9a8a8')
+            }
+            onClicked: {
+                //favoritesLoader.visible = false -> uncomment once favorites loader exists
+                //favoritesLoader.source = ""
+                if (settingsLoader.visible) { //toggles settings
+                    settingsLoader.visible = false;
+                    settingsLoader.source = "";
+                } else {
+                    settingsLoader.source = "qrc:/qt/qml/SnipBoard/src/gui/pages/settings.qml";
+                    settingsLoader.visible = true;
+                }
+            }
+        }
+
+        Image {
+            id: image1
+            x: 25
+            y: 20
+            width: 75
+            height: 75
+            source: "qrc:/resources/icons/sb_logo.png"
+            fillMode: Image.PreserveAspectFit
+        }
+    }
+
+    Rectangle {
+        id: search_rect
+        x: 136
+        y: 15
+        width: 652
+        height: 82
+        radius: 12          // <- round the corners
+        clip: true          // keeps children clipped to the rounded shape
+        color: "#cfcfcf"
+
+        FocusScope {
+            x: 58
             y: 0
-            width: 124
-            height: 600
-            color: "#cfcfcf"
-
-            // Home
-            Basic.Button {
-                id: home_button
-                x: 36
-                y: 130
-                width: 52
-                height: 52
-                display: AbstractButton.IconOnly
-                icon.source: "qrc:/resources/icons/home.png"
-                icon.width: 32
-                icon.height: 32
-                background: Rectangle {
-                    radius: 12
-                    color: home_button.down ? "#5a2f86" : (home_button.hovered ? '#915fc4' : "#734c91")
-                }
-                onClicked: {
-                    settingsLoader.visible = false
-                    settingsLoader.source = ""
-                }
-            }
-
-            // Favorites
-            Basic.Button {
-                id: fav_button
-                x: 36
-                y: 200
-                width: 52
-                height: 52
-                display: AbstractButton.IconOnly
-                icon.source: "qrc:/resources/icons/star.png"
-                icon.width: 30
-                icon.height: 30
-                background: Rectangle {
-                    radius: 12
-                    color: fav_button.down ? '#958235' : (fav_button.hovered ? '#c7af4b' : '#b19b3b')
-                }
-                onClicked: {
-                    settingsLoader.visible = false
-                    settingsLoader.source = ""
-                }
-            }
-
-            // Settings
-            Basic.Button {
-                id: settings_button
-                x: 36
-                y: 533
-                width: 52
-                height: 52
-                display: AbstractButton.IconOnly
-                icon.source: "qrc:/resources/icons/setting.png"
-                icon.width: 30
-                icon.height: 30
-                background: Rectangle {
-                    radius: 12
-                    color: settings_button.down ? '#797979' : (settings_button.hovered ? '#828181' : '#a9a8a8')
-                }
-                onClicked: {
-                    //favoritesLoader.visible = false -> uncomment once favorites loader exists
-                    //favoritesLoader.source = ""
-                    if (settingsLoader.visible) { //toggles settings
-                        settingsLoader.visible = false
-                        settingsLoader.source = ""
-                    }
-                    else {
-                        settingsLoader.source = "qrc:/qt/qml/SnipBoard/src/gui/pages/settings.qml"
-                        settingsLoader.visible = true
-                    }
-                }
-            }
-
-            Image {
-                id: image1
-                x: 25
-                y: 20
-                width: 75
-                height: 75
-                source: "qrc:/resources/icons/sb_logo.png"
-                fillMode: Image.PreserveAspectFit
-            }
-        }
-
-        Rectangle {
-            id: search_rect
-            x: 136
-            y: 15
-            width: 652
+            width: 594
             height: 82
-            radius: 12          // <- round the corners
-            clip: true          // keeps children clipped to the rounded shape
-            color: "#cfcfcf"
 
-            FocusScope {
-                x: 58
+            // Debounce timer so we don't call search on every keystroke immediately
+            Timer {
+                id: debounceSearch
+                interval: 200
+                repeat: false
+                onTriggered: snippetService.search(input.text.trim())
+            }
+
+            TextEdit {
+                id: input
+                x: 20
                 y: 0
-                width: 594
+                width: 560
                 height: 82
+                verticalAlignment: Text.AlignVCenter
+                wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+                font.pointSize: 30
+                textFormat: TextEdit.PlainText
+                cursorVisible: activeFocus   // shows only when focused
+                // Optional styling to look like a field
+                padding: 8
+                // ... your existing props ...
+                onTextChanged: debounceSearch.restart()
 
-                // Debounce timer so we don't call search on every keystroke immediately
-                Timer {
-                    id: debounceSearch
-                    interval: 200
-                    repeat: false
-                    onTriggered: snippetService.search(input.text.trim())
-                }
-
-                TextEdit {
-                    id: input
-                    x: 20
-                    y: 0
-                    width: 560
-                    height: 82
-                    verticalAlignment: Text.AlignVCenter
-                    wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
-                    font.pointSize: 30
-                    textFormat: TextEdit.PlainText
-                    cursorVisible: activeFocus   // shows only when focused
-                    // Optional styling to look like a field
-                    padding: 8
-                    // ... your existing props ...
-                    onTextChanged: debounceSearch.restart()
-
-                    // Enter = search now, Esc = clear
-                    Keys.onPressed: function (e) {
-                        if (e.key === Qt.Key_Return || e.key === Qt.Key_Enter) {
-                            snippetService.search(input.text.trim());
-                            e.accepted = true;
-                        } else if (e.key === Qt.Key_Escape) {
-                            input.text = "";
-                            snippetService.search("");       // reset to all
-                            e.accepted = true;
-                        }
+                // Enter = search now, Esc = clear
+                Keys.onPressed: function (e) {
+                    if (e.key === Qt.Key_Return || e.key === Qt.Key_Enter) {
+                        snippetService.search(input.text.trim());
+                        e.accepted = true;
+                    } else if (e.key === Qt.Key_Escape) {
+                        input.text = "";
+                        snippetService.search("");       // reset to all
+                        e.accepted = true;
                     }
                 }
-
-                // Placeholder label (non-interactive so clicks pass through)
-                Text {
-                    id: hint
-                    x: 0
-                    y: 0
-                    width: 586
-                    height: 82
-                    anchors.fill: input
-                    anchors.leftMargin: -6
-                    anchors.rightMargin: 0
-                    anchors.topMargin: 0
-                    anchors.bottomMargin: 0
-                    z: 1
-                    verticalAlignment: Text.AlignVCenter
-                    color: "#767676"
-                    text: "Search..."
-                    font.pixelSize: 40
-                    visible: !input.activeFocus && input.text.length === 0
-                    // Important: make sure the overlay doesn't eat events
-                    enabled: false
-                }
-
-                // Click helper that focuses the input while not stealing the event
-                TapHandler {
-                    // Attach to the input’s area
-                    parent: input
-                    enabled: hint.visible
-                    onTapped: input.forceActiveFocus()
-                    // Passive by default; TextInput will still place the caret
-                }
             }
 
-            Basic.Button {
-                id: search_button
-                x: 17
-                y: 17
-                width: 42
-                height: 38
-                display: AbstractButton.IconOnly
-                padding: 0   // so the image centers nicely
-
-                // custom content so we can control opacity
-                contentItem: Item {
-                    anchors.fill: parent
-                    Image {
-                        anchors.centerIn: parent
-                        source: "qrc:/resources/icons/search.png"
-                        anchors.verticalCenterOffset: -1
-                        anchors.horizontalCenterOffset: 1
-                        width: 28
-                        height: 28
-                        opacity: search_button.enabled ? (search_button.down ? 0.55 : (search_button.hovered ? 0.25 : .40)) : 0.35
-                        Behavior on opacity {
-                            NumberAnimation {
-                                duration: 120
-                            }
-                        }
-                        fillMode: Image.PreserveAspectFit
-                    }
-                }
-                background: Rectangle {
-                    radius: 10
-                    color: search_button.down ? '#cdcdcd' : (search_button.hovered ? '#d7d7d7' : "#cfcfcf")
-                }
-
-                onClicked: snippetService.search(input.text.trim())
+            // Placeholder label (non-interactive so clicks pass through)
+            Text {
+                id: hint
+                x: 0
+                y: 0
+                width: 586
+                height: 82
+                anchors.fill: input
+                anchors.leftMargin: -6
+                anchors.rightMargin: 0
+                anchors.topMargin: 0
+                anchors.bottomMargin: 0
+                z: 1
+                verticalAlignment: Text.AlignVCenter
+                color: "#767676"
+                text: "Search..."
+                font.pixelSize: 40
+                visible: !input.activeFocus && input.text.length === 0
+                // Important: make sure the overlay doesn't eat events
+                enabled: false
             }
 
-            Basic.Button {
-                id: clearBtn
-                x: 620
-                y: 29
-                width: 24
-                height: 26
-                // shows only an "x"
-                Accessible.name: "Clear search"
-                padding: 6
-                background: null                 // <- no background at all
-                focusPolicy: Qt.NoFocus          // avoid focus ring if any
-                contentItem: Text {
-                    text: "✕"
-                    font.pixelSize: 18
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    color: clearBtn.pressed ? "#555" : (clearBtn.hovered ? "#777" : "#999")
-                    opacity: clearBtn.enabled ? 1 : 0.4
-                }
-
-                // click action
-                onClicked: {
-                    input.text = "";
-                    snippetService.search("");
-                }
-            }
-
-            Label {
-                x: 17
-                y: 58
-                width: 44
-                height: 16
-                text: `${snippetList.count} results`
+            // Click helper that focuses the input while not stealing the event
+            TapHandler {
+                // Attach to the input’s area
+                parent: input
+                enabled: hint.visible
+                onTapped: input.forceActiveFocus()
+                // Passive by default; TextInput will still place the caret
             }
         }
 
         Basic.Button {
-            id: reload_button
-            x: 246
-            y: 540
-            width: 90
-            height: 40
-            text: "Reload"
-            padding: 0
-            background: Rectangle {
-                radius: 12
-                color: reload_button.down ? '#797979' : (reload_button.hovered ? '#969696' : '#cfcfcf')
+            id: search_button
+            x: 17
+            y: 17
+            width: 42
+            height: 38
+            display: AbstractButton.IconOnly
+            padding: 0   // so the image centers nicely
+
+            // custom content so we can control opacity
+            contentItem: Item {
+                anchors.fill: parent
+                Image {
+                    anchors.centerIn: parent
+                    source: "qrc:/resources/icons/search.png"
+                    anchors.verticalCenterOffset: -1
+                    anchors.horizontalCenterOffset: 1
+                    width: 28
+                    height: 28
+                    opacity: search_button.enabled ? (search_button.down ? 0.55 : (search_button.hovered ? 0.25 : .40)) : 0.35
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: 120
+                        }
+                    }
+                    fillMode: Image.PreserveAspectFit
+                }
             }
-            onClicked: snippetService.loadSnippetsFromDb()
+            background: Rectangle {
+                radius: 10
+                color: search_button.down ? '#cdcdcd' : (search_button.hovered ? '#d7d7d7' : "#cfcfcf")
+            }
+
+            onClicked: snippetService.search(input.text.trim())
         }
 
         Basic.Button {
-            id: addSnippetBtn
-            x: 142
-            y: 540
-            width: 90
-            height: 40
-            text: "Add Snippet"
-            padding: 0
-            background: Rectangle {
-                radius: 12
-                color: addSnippetBtn.down ? '#797979' : (addSnippetBtn.hovered ? '#969696' : '#cfcfcf')
+            id: clearBtn
+            x: 620
+            y: 29
+            width: 24
+            height: 26
+            // shows only an "x"
+            Accessible.name: "Clear search"
+            padding: 6
+            background: null                 // <- no background at all
+            focusPolicy: Qt.NoFocus          // avoid focus ring if any
+            contentItem: Text {
+                text: "✕"
+                font.pixelSize: 18
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                color: clearBtn.pressed ? "#555" : (clearBtn.hovered ? "#777" : "#999")
+                opacity: clearBtn.enabled ? 1 : 0.4
             }
-            onClicked: newSnippetDialog.open()
 
-            Dialog {
-                id: newSnippetDialog
-                title: "New Snippet"
-                modal: true
-                focus: true
-                implicitWidth: 520
-                anchors.centerIn: Overlay.overlay       // center over the whole window
-                standardButtons: Dialog.Ok | Dialog.Cancel
+            // click action
+            onClicked: {
+                input.text = "";
+                snippetService.search("");
+            }
+        }
 
-                // simple model of the form's values
-                property string fTitle: ""
-                property string fDesc: ""
-                property string fLang: ""
-                property string fCode: ""
+        Label {
+            x: 17
+            y: 58
+            width: 44
+            height: 16
+            text: `${snippetList.count} results`
+        }
+    }
 
-                // reset when opened/closed
-                onOpened: {
-                    fTitle = "";
-                    fDesc = "";
-                    fLang = "";
-                    fCode = "";
-                    titleField.forceActiveFocus();
+    Basic.Button {
+        id: reload_button
+        x: 246
+        y: 540
+        width: 90
+        height: 40
+        text: "Reload"
+        padding: 0
+        background: Rectangle {
+            radius: 12
+            color: reload_button.down ? '#797979' : (reload_button.hovered ? '#969696' : '#cfcfcf')
+        }
+        onClicked: snippetService.reload()
+    }
+
+    Basic.Button {
+        id: addSnippetBtn
+        x: 142
+        y: 540
+        width: 90
+        height: 40
+        text: "Add Snippet"
+        padding: 0
+        background: Rectangle {
+            radius: 12
+            color: addSnippetBtn.down ? '#797979' : (addSnippetBtn.hovered ? '#969696' : '#cfcfcf')
+        }
+        onClicked: newSnippetDialog.open()
+
+        Dialog {
+            id: newSnippetDialog
+            title: "New Snippet"
+            modal: true
+            focus: true
+            implicitWidth: 520
+            anchors.centerIn: Overlay.overlay       // center over the whole window
+            standardButtons: Dialog.Ok | Dialog.Cancel
+
+            // simple model of the form's values
+            property string fTitle: ""
+            property string fDesc: ""
+            property string fLang: ""
+            property string fCode: ""
+
+            // reset when opened/closed
+            onOpened: {
+                fTitle = "";
+                fDesc = "";
+                fLang = "";
+                fCode = "";
+                titleField.forceActiveFocus();
+            }
+
+            // validate + submit
+            onAccepted: {
+                if (!fTitle.trim() || !fCode.trim()) {
+                    // keep dialog open and show error
+                    err.visible = true;
+                    // prevent Dialog from auto-closing
+                    newSnippetDialog.open();
+                    return;
+                }
+                // Call whichever API you exposed:
+                // If you registered a singleton: SnippetService.createSnippet(...)
+                // If you set a context property:  snippetService.createSnippet(...)
+                (typeof SnippetService !== "undefined" ? SnippetService : snippetService).createSnippet(fTitle, fDesc, fLang.length ? fLang : "Plain Text", fCode, 0      // folderId (adjust as needed)
+                , false   // favorite flag
+                );
+            }
+
+            contentItem: ColumnLayout {
+                spacing: 10
+
+                Label {
+                    id: err
+                    text: "Title and Code are required."
+                    color: "#b00020"
+                    visible: false
+                    Layout.fillWidth: true
                 }
 
-                // validate + submit
-                onAccepted: {
-                    if (!fTitle.trim() || !fCode.trim()) {
-                        // keep dialog open and show error
-                        err.visible = true;
-                        // prevent Dialog from auto-closing
-                        newSnippetDialog.open();
-                        return;
+                // Title
+                Basic.TextField {
+                    id: titleField
+                    Layout.fillWidth: true
+                    placeholderText: "Title *"
+                    text: newSnippetDialog.fTitle
+                    onTextChanged: {
+                        newSnippetDialog.fTitle = text;
+                        err.visible = false;
                     }
-                    // Call whichever API you exposed:
-                    // If you registered a singleton: SnippetService.createSnippet(...)
-                    // If you set a context property:  snippetService.createSnippet(...)
-                    (typeof SnippetService !== "undefined" ? SnippetService : snippetService).createSnippet(fTitle, fDesc, fLang.length ? fLang : "Plain Text", fCode, 0      // folderId (adjust as needed)
-                    , false   // favorite flag
-                    );
                 }
 
-                contentItem: ColumnLayout {
-                    spacing: 10
+                // Description
+                Basic.TextField {
+                    Layout.fillWidth: true
+                    placeholderText: "Short description"
+                    text: newSnippetDialog.fDesc
+                    onTextChanged: newSnippetDialog.fDesc = text
+                }
+
+                // Language
+                Basic.ComboBox {
+                    Layout.fillWidth: true
+                    model: ["C++", "QML", "Python", "JavaScript", "Plain Text"]
+                    currentIndex: 0
+                    onCurrentTextChanged: newSnippetDialog.fLang = currentText
+                }
+
+                //Code editor
+                ColumnLayout {
+                    Layout.fillWidth: true
+                    spacing: 6
 
                     Label {
-                        id: err
-                        text: "Title and Code are required."
-                        color: "#b00020"
-                        visible: false
-                        Layout.fillWidth: true
+                        text: "Code *"
                     }
 
-                    // Title
-                    Basic.TextField {
-                        id: titleField
+                    Frame {
                         Layout.fillWidth: true
-                        placeholderText: "Title *"
-                        text: newSnippetDialog.fTitle
-                        onTextChanged: {
-                            newSnippetDialog.fTitle = text;
-                            err.visible = false;
-                        }
-                    }
-
-                    // Description
-                    Basic.TextField {
-                        Layout.fillWidth: true
-                        placeholderText: "Short description"
-                        text: newSnippetDialog.fDesc
-                        onTextChanged: newSnippetDialog.fDesc = text
-                    }
-
-                    // Language
-                    Basic.ComboBox {
-                        Layout.fillWidth: true
-                        model: ["C++", "QML", "Python", "JavaScript", "Plain Text"]
-                        currentIndex: 0
-                        onCurrentTextChanged: newSnippetDialog.fLang = currentText
-                    }
-
-                    //Code editor
-                    ColumnLayout {
-                        Layout.fillWidth: true
-                        spacing: 6
-
-                        Label {
-                            text: "Code *"
+                        Layout.preferredHeight: 220
+                        background: Rectangle {
+                            radius: 8
+                            color: "white"
+                            border.color: "#ddd"
                         }
 
-                        Frame {
-                            Layout.fillWidth: true
-                            Layout.preferredHeight: 220
-                            background: Rectangle {
-                                radius: 8
-                                color: "white"
-                                border.color: "#ddd"
-                            }
-
-                            Basic.TextArea {
-                                anchors.fill: parent
-                                anchors.margins: 12
-                                wrapMode: TextArea.Wrap
-                                placeholderText: "// Paste or type your snippet here"
-                                text: newSnippetDialog.fCode
-                                onTextChanged: newSnippetDialog.fCode = text
-                            }
+                        Basic.TextArea {
+                            anchors.fill: parent
+                            anchors.margins: 12
+                            wrapMode: TextArea.Wrap
+                            placeholderText: "// Paste or type your snippet here"
+                            text: newSnippetDialog.fCode
+                            onTextChanged: newSnippetDialog.fCode = text
                         }
                     }
                 }
             }
         }
-        //  --- Settings Loader ---
-        Loader {
-            id: settingsLoader
-            anchors {
-                top: parent.top
-                bottom: parent.bottom
-                right: parent.right
-                left: selection_rect.right
-            }
-            asynchronous: true
-            visible: false
+    }
+    //  --- Settings Loader ---
+    Loader {
+        id: settingsLoader
+        anchors {
+            top: parent.top
+            bottom: parent.bottom
+            right: parent.right
+            left: selection_rect.right
         }
+        asynchronous: true
+        visible: false
     }
 }
 

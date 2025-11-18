@@ -81,6 +81,8 @@ void SnippetService::updateSnippet(int id, const QString& name, const QString& d
     if (m_repo->update(s)) {
         auto* obj = new SnippetObject(s);
         m_snippetModel.onSnippetUpdated(id, obj);
+        //UPDATE FILTERED LIST 
+        m_snippetModelFiltered.onSnippetUpdated(id, obj); 
     }
 }
 
