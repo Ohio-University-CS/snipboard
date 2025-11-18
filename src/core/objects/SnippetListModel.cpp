@@ -128,44 +128,44 @@ void SnippetListModel::updateSnippetById(int id, SnippetObject* updatedSnippet) 
 
 void SnippetListModel::sortByDateCreated(bool ascending) {
     // Sort by date created, with order dependent on ascending
-    std::sort(m_snippets.begin(), m_snippets.end(), [ascending](const SnippetObject& x, const SnippetObject& y) {
+    std::sort(m_snippets.begin(), m_snippets.end(), [ascending](const auto& x, const auto& y) {
         if (ascending) {
-            return x.getDateCreated() < y.getDateCreated();
+            return x->getDateCreated() < y->getDateCreated();
         }
 
-        return x.getDateCreated() > y.getDateCreated();
+        return x->getDateCreated() > y->getDateCreated();
     });
 }
 
 void SnippetListModel::sortByDateModified(bool ascending) {
     // Sort by date modified, with order dependent on ascending
-    std::sort(m_snippets.begin(), m_snippets.end(), [ascending](const SnippetObject& x, const SnippetObject& y) {
+    std::sort(m_snippets.begin(), m_snippets.end(), [ascending](const auto& x, const auto& y) {
         if (ascending) {
-            return x.getDateModified() < y.getDateModified();
+            return x->getDateModified() < y->getDateModified();
         }
 
-        return x.getDateModified() > y.getDateModified();
+        return x->getDateModified() > y->getDateModified();
     });
 }
 
 void SnippetListModel::sortByMostCopied(bool ascending) {
     // Sort by total number of times copied
-    std::sort(m_snippets.begin(), m_snippets.end(), [ascending](const SnippetObject& x, const SnippetObject& y) {
+    std::sort(m_snippets.begin(), m_snippets.end(), [ascending](const auto& x, const auto& y) {
         if (ascending) {
-            return x.timesCopied() < y.timesCopied();
+            return x->timesCopied() < y->timesCopied();
         }
 
-        return x.timesCopied() > y.timesCopied();
+        return x->timesCopied() > y->timesCopied();
     });
 }
 
 void SnippetListModel::sortByName(bool alphabetical) {
     // Sort by name
-    std::sort(m_snippets.begin(), m_snippets.end(), [alphabetical](const SnippetObject& x, const SnippetObject& y) {
+    std::sort(m_snippets.begin(), m_snippets.end(), [alphabetical](const auto& x, const auto& y) {
         if (alphabetical) {
-            return x.name() < y.name();
+            return x->name() < y->name();
         }
 
-        return x.name() > y.name();
+        return x->name() > y->name();
     });
 }
