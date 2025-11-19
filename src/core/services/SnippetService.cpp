@@ -117,3 +117,185 @@ void SnippetService::search(const QString& phrase) {
 
     m_snippetModelFiltered.setSnippets(results);
 }
+
+void SnippetService::addSearchTag(const TagObject& tag) {
+    const auto snippets = m_snippetModelFiltered.viewSnippets();
+
+    // iterate over each snippet in the already filtered list
+    for (const auto& s : snippets) {
+        // get tags name associated with each snippet and if names match, remove it
+        auto snippetTags = s->tagNames();
+        for (const auto& snippetTag : snippetTags) {
+            if (tag.name().toLower() == snippetTag.toLower()) {
+                m_snippetModelFiltered.onSnippetDeleted(tag.id());
+                break;
+            }
+        }
+    }
+}
+
+void SnippetService::removeSearchTag(const TagObject& tag) {
+    const auto snippets = m_snippetModel.viewSnippets();
+
+    // iterate over ALL snippets and add it if tag.name() matches a name of the snippet tag
+    for (const auto& s : snippets) {
+        auto snippetTags = s->tagNames();
+        for (const auto& snippetTag : snippetTags) {
+            if (tag.name().toLower() == snippetTag.toLower()) {
+                m_snippetModelFiltered.onSnippetAdded(s);
+                break;
+            }
+        }
+    }
+}
+
+void SnippetService::addSearchLanguage(const QString& language) {
+    const auto snippets = m_snippetModelFiltered.viewSnippets();
+
+    for (const auto& s : snippets) {
+        if (s->language().toLower() == language.toLower()) {
+            m_snippetModelFiltered.onSnippetDeleted(s->id());
+        }
+    }
+}
+
+void SnippetService::removeSearchLanguage(const QString& language) {
+    const auto snippets = m_snippetModel.viewSnippets();
+
+    for (const auto& s : snippets) {
+        if (s->language().toLower() == language.toLower()) {
+            m_snippetModelFiltered.onSnippetAdded(s);
+        }
+    }
+}
+
+void SnippetService::incrementCopiedSnippet(int id) {
+    // Call repository function to update database
+
+    // update ui
+    const auto snippets = m_snippetModel.viewSnippets();
+
+    for (auto& s : snippets) {
+        if (s->id() == id) {
+            s->setTimesCopied(s->timesCopied() + 1);
+            break;
+        }
+    }
+}
+
+void SnippetService::favoriteSnippet(const SnippetObject& snippet) {
+    // call repo function
+    
+    auto snippets = m_snippetModel.viewSnippets();
+    auto snippetsFiltered = m_snippetModelFiltered.viewSnippets();
+
+    // update UI
+    for (auto& s : snippets) {
+        if (s->id() == snippet.id()) {
+            s->setFavorite(true);
+            break;
+        }
+    }
+
+    for (auto& s : snippetsFiltered) {
+        if (s->id() == snippet.id()) {
+            s->setFavorite(true);
+            break;
+        }
+    }
+}
+
+void SnippetService::removeFavoriteSnippet(const SnippetObject& snippet) {
+    // call repo function
+    auto snippets = m_snippetModel.viewSnippets();
+    auto snippetsFiltered = m_snippetModelFiltered.viewSnippets();
+
+    for (auto& s : snippets) {
+        if (s->id() == snippet.id()) {
+            s->setFavorite(false);
+            break;
+        }
+    }
+
+    for (auto& s : snippetsFiltered) {
+        if (s->id() == snippet.id()) {
+            s->setFavorite(false);
+            break;
+        }
+    }
+}
+
+void SnippetService::loadAll() {
+    loadSnippetsFromDb();
+}
+
+void SnippetService::loadFavoriteSnippets() {
+    // Get all snippets
+    auto all = m_repo->loadAllFavorites();
+    QVector<SnippetObject*> objs;
+    objs.reserve(all.size());
+
+    // Create new SnippetObjects from Snippets returned from repo
+    for (const Snippet& s : all) {
+        objs.append(new SnippetObject(s));
+    }
+
+    m_snippetModel.setSnippets(objs);
+    m_snippetModelFiltered.setSnippets(objs);
+}
+
+void SnippetService::addTagToSnippet(int id, const QString& tagName) {
+    // call repo function
+    auto snippets = m_snippetModel.viewSnippets();
+    auto snippetsFiltered = m_snippetModelFiltered.viewSnippets();
+
+    // update ui objects
+    for (auto& s : snippets) {
+        if (s->id() == id) {
+            s->addTagName(tagName);
+            break;
+        }
+    }
+
+    for (auto& s : snippetsFiltered) {
+        if (s->id() == id) {
+            s->addTagName(tagName);
+            break;
+        }
+    }
+}
+
+void SnippetService::removeTagFromSnippet(int id, const QString& tagName) {
+    // call repo function
+    auto snippets = m_snippetModel.viewSnippets();
+    auto snippetsFiltered = m_snippetModelFiltered.viewSnippets();
+
+    // update ui objects
+    for (auto& s : snippets) {
+        if (s->id() == id) {
+            s->removeTagName(tagName);
+            break;
+        }
+    }
+
+    for (auto& s : snippetsFiltered) {
+        if (s->id() == id) {
+            s->removeTagName(tagName);
+            break;
+        }
+    }
+}
+
+// I think for right now we just need to sort the filtered list... can easily change if needed
+void SnippetService::sortByDateCreated(bool ascending) {
+    m_snippetModelFiltered.sortByDateCreated(ascending);
+}
+void SnippetService::sortByDateModified(bool ascending) {
+    m_snippetModelFiltered.sortByDateModified(ascending);
+}
+void SnippetService::sortByMostCopied(bool ascending) {
+    m_snippetModelFiltered.sortByMostCopied(ascending);
+}
+void SnippetService::sortByName(bool alphabetical) {
+    m_snippetModelFiltered.sortByName(alphabetical);
+}
