@@ -26,7 +26,7 @@ class SnippetRepository {
     bool favorite(int id);
     bool unfavorite(int id);
     bool addTag(int snippetId, int tagId);
-    bool remove(int snippetId, int tagId);
+    bool removeTag(int snippetId, int tagId);
 
  private:
     QSqlDatabase m_db;

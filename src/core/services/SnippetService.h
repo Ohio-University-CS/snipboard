@@ -15,6 +15,7 @@
 #include "../objects/SnippetListModel.h"
 #include "../objects/SnippetObject.h"
 #include "../repositories/SnippetRepository.h"
+#include "../repositories/TagRepository.h"
 #include "../objects/TagObject.h"
 
 class SnippetService : public QObject {
@@ -58,6 +59,7 @@ class SnippetService : public QObject {
     // TODO: add search phrase to store here so we can accurately add back to DB
     QSqlDatabase m_db;
     SnippetRepository* m_repo;
+    TagRepository* m_tagRepo;
     SnippetListModel m_snippetModel; // list model that is all snippets in current folder (all snippets in general right now i believe)
     SnippetListModel m_snippetModelFiltered; // the list model its responsible for
 };
