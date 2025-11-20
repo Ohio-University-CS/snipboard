@@ -37,7 +37,7 @@ QVector<Tag> TagRepository::loadAll() {
 Tag TagRepository::loadById(int id) {
     // Create query
     QSqlQuery query(m_db);
-    query.prepare("SELECT id, name, dateCreated, dateModified, showDate FROM Snippet WHERE id = ?");
+    query.prepare("SELECT id, name, dateCreated, dateModified, showDate FROM Tag WHERE id = ?");
     query.addBindValue(id);
 
     // Execute and warn if error
@@ -108,4 +108,21 @@ bool TagRepository::remove(int id) {
     }
 
     return true;
+}
+
+int TagRepository::findIdByName(const QString& name){
+    QSqlQuery query(m_db);
+    query.prepare("SELECT id FROM Tag WHERE name=?");
+    query.addBindValue(name);
+
+    if (!query.exec()) {
+        qWarning() << "findIdByName query failed:" << query.lastError();
+        return -1;
+    }
+
+    if (query.next()) {
+        return query.value(0).toInt();
+    }
+
+    return -1;
 }
