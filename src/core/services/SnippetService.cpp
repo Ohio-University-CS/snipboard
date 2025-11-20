@@ -154,6 +154,10 @@ void SnippetService::removeSearchLanguage(const QString& language) {
 
 void SnippetService::incrementCopiedSnippet(int id) {
     // Call repository function to update database
+    if (!m_snippetRepository.incrementCopied(id)) {
+        qWarning() << "Failed to increment times copied in DB";
+        return;
+    }
 
     // update ui
     const auto snippets = m_snippetModel.viewSnippets();
@@ -168,6 +172,10 @@ void SnippetService::incrementCopiedSnippet(int id) {
 
 void SnippetService::favoriteSnippet(const SnippetObject& snippet) {
     // call repo function
+    if (!m_snippetRepository.favorite(snippet.id())) {
+        qWarning() << "Failed to favorite snippet in DB";
+        return;
+    }
     
     auto snippets = m_snippetModel.viewSnippets();
     auto snippetsFiltered = m_snippetModelFiltered.viewSnippets();
@@ -190,6 +198,11 @@ void SnippetService::favoriteSnippet(const SnippetObject& snippet) {
 
 void SnippetService::removeFavoriteSnippet(const SnippetObject& snippet) {
     // call repo function
+    if (!m_snippetRepository.unfavorite(snippet.id())) {
+        qWarning() << "Failed to remove favorite from snippet in DB";
+        return;
+    }
+
     auto snippets = m_snippetModel.viewSnippets();
     auto snippetsFiltered = m_snippetModelFiltered.viewSnippets();
 
@@ -229,6 +242,12 @@ void SnippetService::loadFavoriteSnippets() {
 
 void SnippetService::addTagToSnippet(int id, const QString& tagName) {
     // call repo function
+    int tagId = m_tagRepository.findIdByName(tagName);
+    if (!m_snippetRepository.addTag(id, tagId)) {
+        qWarning() << "Failed to add tag to snippet in DB";
+        return;
+    }
+
     auto snippets = m_snippetModel.viewSnippets();
     auto snippetsFiltered = m_snippetModelFiltered.viewSnippets();
 
@@ -250,6 +269,12 @@ void SnippetService::addTagToSnippet(int id, const QString& tagName) {
 
 void SnippetService::removeTagFromSnippet(int id, const QString& tagName) {
     // call repo function
+    int tagId = m_tagRepository.findIdByName(tagName);
+    if (!m_snippetRepository.removeTag(id, tagId)) {
+        qWarning() << "Failed to remove tag to snippet in DB";
+        return;
+    }
+
     auto snippets = m_snippetModel.viewSnippets();
     auto snippetsFiltered = m_snippetModelFiltered.viewSnippets();
 
