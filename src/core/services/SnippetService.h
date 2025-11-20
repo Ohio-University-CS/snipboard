@@ -52,6 +52,7 @@ class SnippetService : public QObject {
     Q_INVOKABLE void sortByDateModified(bool ascending = true);
     Q_INVOKABLE void sortByMostCopied(bool ascending = false);
     Q_INVOKABLE void sortByName(bool alphabetical = true);
+    Q_INVOKABLE void sortByTags(QVector<Tag> tags);
 
 
  private:

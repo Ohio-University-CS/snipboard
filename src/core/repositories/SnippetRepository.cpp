@@ -68,6 +68,52 @@ QVector<Snippet> SnippetRepository::loadAllFavorites() {
     return result;
 }
 
+QVector<Snippet> SnippetRepository::loadByTags(Qvector<int> tagIds){
+    QVector<Snippet> result;
+
+    
+    for(int tagId : tagIds){
+        //find the snippetIds corresponding to the current tagId
+        QSqlQuery linkQuery(m_db);
+        linkQuery.prepare("SELECT snippetId FROM SnippetTagLink WHERE tagId = ?");
+        linkQuery.addBindValue(tagId);
+
+        if (!linkQuery.exec()) {
+            qWarning() << "Failed to load snippetIds for tag:" << tagId << linkQuery.lastError();
+            return;
+        }
+
+        while(linkQuery.next()) {
+            int snippetId = linkQuery.value(0).toInt();
+
+            QSqlQuery snippetQuery(m_db);
+            snippetQuery.prepare("SELECT id, name, dateCreated, dateModified, description, language, contents, folder, favorite, timesCopied FROM Snippet WHERE id = ?");
+            snippetQuery.addBindValue(snippetId);
+
+            if (!snippetQuery.exec()) {
+                qWarning() << "Failed to load snippet:" << snippetId << snippetQuery.lastError();
+                return;
+            }
+
+            if(snippetQuery.next()) {
+                Snippet s;
+                s.id = snippetQuery.value(0).toInt();
+                s.name = snippetQuery.value(1).toString();
+                s.dateCreated = snippetQuery.value(2).toDateTime();
+                s.dateModified = snippetQuery.value(3).toDateTime();
+                s.description = snippetQuery.value(4).toString();
+                s.language = snippetQuery.value(5).toString();
+                s.contents = snippetQuery.value(6).toString();
+                s.folder = snippetQuery.value(7).toInt();
+                s.favorite = snippetQuery.value(8).toBool();
+                s.timesCopied = snippetQuery.value(9).toInt();
+                result.append(s);
+            }
+        }
+    }
+    return result;
+}
+
 Snippet SnippetRepository::loadById(int id) {
     // Create query
     QSqlQuery query(m_db);
