@@ -18,7 +18,7 @@ class SnippetRepository {
 
     QVector<Snippet> loadAll();
     QVector<Snippet> loadAllFavorites();
-    QVector<Snippet> loadByTags(Qvector<int> tagIds);
+    QVector<Snippet> loadByTags(const QVector<int>& tagIds);
     Snippet loadById(int id);
     bool insert(Snippet& snippet);
     bool update(Snippet& snippet);
