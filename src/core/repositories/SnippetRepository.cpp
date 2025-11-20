@@ -68,7 +68,7 @@ QVector<Snippet> SnippetRepository::loadAllFavorites() {
     return result;
 }
 
-QVector<Snippet> SnippetRepository::loadByTags(const QVector<int>& tagIds){
+QVector<Snippet> SnippetRepository::loadByAnyTags(const QVector<int>& tagIds){
     QVector<Snippet> result;
 
     if (tagIds.isEmpty()){
@@ -97,6 +97,59 @@ QVector<Snippet> SnippetRepository::loadByTags(const QVector<int>& tagIds){
 
     if (!query.exec()) {
         qWarning() << "Failed to load snippets by ANY tag:" << query.lastError();
+        return result;
+    }
+
+    while (query.next()) {
+        Snippet s;
+        s.id = query.value(0).toInt();
+        s.name = query.value(1).toString();
+        s.dateCreated = query.value(2).toDateTime();
+        s.dateModified = query.value(3).toDateTime();
+        s.description = query.value(4).toString();
+        s.language = query.value(5).toString();
+        s.contents = query.value(6).toString();
+        s.folder = query.value(7).toInt();
+        s.favorite = query.value(8).toBool();
+        s.timesCopied = query.value(9).toInt();
+        result.append(s);
+    }
+
+    return result;
+}
+
+QVector<Snippet> SnippetRepository::loadByAllTags(const QVector<int>& tagIds){
+    QVector<Snippet> result;
+
+    if (tagIds.isEmpty()){
+        return result;
+    }
+    //? value placeholders
+    QStringList placeholders;
+    for (int i = 0; i < tagIds.size(); i++){
+        placeholders << "?";
+    }
+
+    QString sql = QString(
+        "SELECT Snippet.id, Snippet.name, Snippet.dateCreated, "
+        "Snippet.dateModified, Snippet.description, Snippet.language, "
+        "Snippet.contents, Snippet.folder, Snippet.favorite, Snippet.timesCopied "
+        "FROM Snippet "
+        "JOIN SnippetTagLink ON Snippet.id = SnippetTagLink.snippetId "
+        "WHERE SnippetTagLink.tagId IN (%1) "
+        "GROUP BY Snippet.id "
+        "HAVING COUNT(DISTINCT SnippetTagLink.tagId) = %2"
+    ).arg(placeholders.join(", ")).arg(tagIds.size());
+
+    QSqlQuery query(m_db);
+    query.prepare(sql);
+
+    for(int tagId : tagIds){
+        query.addBindValue(tagId);
+    }
+
+    if (!query.exec()) {
+        qWarning() << "Failed to load snippets by ALL tags:" << query.lastError();
         return result;
     }
 
