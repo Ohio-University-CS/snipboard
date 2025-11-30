@@ -52,6 +52,12 @@ class SnippetListModel : public QAbstractListModel {
     void onSnippetDeleted(int id);
     void onSnippetUpdated(int id, SnippetObject* updatedSnippet);
 
+    // Sorting functions
+    void sortByDateCreated(bool ascending);
+    void sortByDateModified(bool ascending);
+    void sortByMostCopied(bool ascending);
+    void sortByName(bool alphabetical);
+
  private:
     // Internal helpers (these will update the UI when snippetService calls a slot)
     void addSnippet(SnippetObject* snippet);

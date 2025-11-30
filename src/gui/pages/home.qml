@@ -21,6 +21,7 @@ Page {
     property string editDialogDescription: ""
     property string editDialogLanguage: ""
     property string editDialogContent: ""
+    property bool editDialogFavorite: false
 
     //EDit dialog
     Dialog {
@@ -44,8 +45,14 @@ Page {
             }
 
             // Perform the update
-            snippetService.updateSnippet(root.editDialogId, trimmedName, root.editDialogDescription.trim(), (root.editDialogLanguage && root.editDialogLanguage.length) ? root.editDialogLanguage : "Plain Text", trimmedContent, 0      // folderId for now
-            , false   // favorite for now
+            snippetService.updateSnippet(
+                root.editDialogId, 
+                trimmedName, 
+                root.editDialogDescription.trim(), 
+                (root.editDialogLanguage && root.editDialogLanguage.length) ? root.editDialogLanguage : "Plain Text", 
+                trimmedContent, 
+                0,     // folderId for now
+                root.editDialogFavorite,
             );
 
             // Note: You might not need reload() since updateSnippet already updates both models
@@ -215,19 +222,19 @@ Page {
                                     root.editDialogDescription = model.description;
                                     root.editDialogLanguage = model.language;
                                     root.editDialogContent = model.data;
+                                    root.editDialogFavorite = model.favorite;
                                     editDialog.open();  // <-- open the page-level dialog
                                 }
                             }
 
-                            //Delete a snippet
                             Button {
                                 id: favButton
-                                height: 42
-                                width: 46
+                                height: 34
+                                width: 28
                                 implicitWidth: width
                                 implicitHeight: height
                                 padding: 0
-                                Text {
+                                contentItem: Text {
                                     anchors.centerIn: parent
                                     text: favorite ? "⭐" : "☆"
                                     font.pixelSize: favorite ? 16 : 22
@@ -238,9 +245,10 @@ Page {
                                 }
                             }
 
+                            //Delete a snippet
                             Button {
-                                height: 42
-                                width: 46
+                                height: 34
+                                width: 28
                                 implicitWidth: width
                                 implicitHeight: height
                                 Text {
@@ -312,6 +320,8 @@ Page {
                 color: home_button.down ? "#5a2f86" : (home_button.hovered ? '#915fc4' : "#734c91")
             }
             onClicked: {
+                snippetService.loadAll();
+                snippetService.sortByDateModified(false)
             }
         }
 
@@ -331,6 +341,8 @@ Page {
                 color: fav_button.down ? '#958235' : (fav_button.hovered ? '#c7af4b' : '#b19b3b')
             }
             onClicked: {
+                snippetService.loadFavoriteSnippets();
+                snippetService.sortByDateModified(false)
             }
         }
 
