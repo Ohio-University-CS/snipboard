@@ -45,15 +45,8 @@ Page {
             }
 
             // Perform the update
-            snippetService.updateSnippet(
-                root.editDialogId, 
-                trimmedName, 
-                root.editDialogDescription.trim(), 
-                (root.editDialogLanguage && root.editDialogLanguage.length) ? root.editDialogLanguage : "Plain Text", 
-                trimmedContent, 
-                0,     // folderId for now
-                root.editDialogFavorite,
-            );
+            snippetService.updateSnippet(root.editDialogId, trimmedName, root.editDialogDescription.trim(), (root.editDialogLanguage && root.editDialogLanguage.length) ? root.editDialogLanguage : "Plain Text", trimmedContent, 0     // folderId for now
+            , root.editDialogFavorite);
 
             // Note: You might not need reload() since updateSnippet already updates both models
             // snippetService.reload();
@@ -128,7 +121,7 @@ Page {
             anchors.margins: 12
             anchors.leftMargin: 136
             anchors.rightMargin: 12
-            anchors.topMargin: 109
+            anchors.topMargin: 121
             anchors.bottomMargin: 66
 
             Label {
@@ -203,7 +196,7 @@ Page {
                             Basic.Button {
                                 id: edit_button
                                 Layout.alignment: Qt.AlignRight
-                                icon.source: "qrc:/resources/icons/edit.png" 
+                                icon.source: "qrc:/resources/icons/edit.png"
                                 icon.height: 14
                                 icon.width: 14
                                 implicitHeight: 28
@@ -241,7 +234,7 @@ Page {
                                     color: "#a7a7a7"
                                 }
                                 onClicked: {
-                                    snippetService.toggleFavorite(id)
+                                    snippetService.toggleFavorite(id);
                                 }
                             }
 
@@ -258,12 +251,12 @@ Page {
                                 padding: 0
                                 //Layout.alignment: Qt.AlignRight
                                 onClicked: {//snippetService.deleteSnippet(id)
-                                    root.snippetDialogId = id
-                                    root.snippetDialogName = name
-                                    deleteDialog.open()
-                                } 
+                                    root.snippetDialogId = id;
+                                    root.snippetDialogName = name;
+                                    deleteDialog.open();
+                                }
 
-                                                // --- Delete Snippet Dialog ---
+                                // --- Delete Snippet Dialog ---
                                 Dialog {
                                     id: deleteDialog
                                     title: "Delete Snippet?"
@@ -283,7 +276,7 @@ Page {
                                     }
 
                                     onAccepted: {
-                                        snippetService.deleteSnippet(root.snippetDialogId)
+                                        snippetService.deleteSnippet(root.snippetDialogId);
                                     }
                                 }
                             }
@@ -294,7 +287,7 @@ Page {
         }
     }
 
-        // --- Control Row ---
+    // --- Control Row ---
 
     Rectangle {
         id: selection_rect
@@ -321,7 +314,7 @@ Page {
             }
             onClicked: {
                 snippetService.loadAll();
-                snippetService.sortByDateModified(false)
+                snippetService.sortByDateModified(false);
             }
         }
 
@@ -342,7 +335,7 @@ Page {
             }
             onClicked: {
                 snippetService.loadFavoriteSnippets();
-                snippetService.sortByDateModified(false)
+                snippetService.sortByDateModified(false);
             }
         }
 
@@ -363,11 +356,11 @@ Page {
             }
             onClicked: {
                 if (settingsLoader.visible) {
-                    settingsLoader.visible = false
-                    settingsLoader.source = ""
+                    settingsLoader.visible = false;
+                    settingsLoader.source = "";
                 } else {
-                    settingsLoader.source = "qrc:/qt/qml/SnipBoard/src/gui/pages/settings.qml"
-                    settingsLoader.visible = true
+                    settingsLoader.source = "qrc:/qt/qml/SnipBoard/src/gui/pages/settings.qml";
+                    settingsLoader.visible = true;
                 }
             }
         }
@@ -540,6 +533,80 @@ Page {
         }
     }
 
+    Rectangle {
+        id: sort_rect
+        y: search_rect.y + search_rect.height + 8
+        width: 240  // Increased width to fit both dropdowns
+        height: 45
+        radius: 8
+        color: "#cfcfcf"
+
+        // Track selected languages to SHOW (not hide)
+        property var selectedLanguages: []
+        x: 548
+
+        // Function to apply the current sort
+        function applyCurrentSort() {
+            switch (sortCombo.currentIndex) {
+            case 0:
+                snippetService.sortByDateModified(false);
+                break;
+            case 1:
+                snippetService.sortByDateModified(true);
+                break;
+            case 2:
+                snippetService.sortByMostCopied(false);
+                break;
+            case 3:
+                snippetService.sortByName(true);
+                break;
+            case 4:
+                snippetService.sortByName(false);
+                break;
+            }
+        }
+
+        // Function to update language filter display
+        function getLanguageButtonText() {
+            if (selectedLanguages.length === 0) {
+                return "Languages";
+            } else if (selectedLanguages.length === 1) {
+                return selectedLanguages[0];
+            } else {
+                return selectedLanguages.join(", ");
+            }
+        }
+
+        RowLayout {
+            anchors.fill: parent
+            anchors.margins: 10
+            anchors.leftMargin: 8
+            anchors.rightMargin: 19
+            anchors.topMargin: 0
+            anchors.bottomMargin: 0
+            spacing: 12
+
+            // Sort dropdown
+            Label {
+                text: "Sort:"
+                font.pixelSize: 14
+                color: "#333"
+            }
+
+            Basic.ComboBox {
+                id: sortCombo
+                Layout.preferredWidth: 180
+                Layout.alignment: Qt.AlignVCenter
+
+                model: ["Last Edited (Newest)", "Last Edited (Oldest)", "Most Popular", "Name (A-Z)", "Name (Z-A)"]
+
+                onActivated: function (index) {
+                    sort_rect.applyCurrentSort();
+                }
+            }
+        }
+    }
+
     Basic.Button {
         id: reload_button
         x: 246
@@ -552,7 +619,11 @@ Page {
             radius: 12
             color: reload_button.down ? '#797979' : (reload_button.hovered ? '#969696' : '#cfcfcf')
         }
-        onClicked: snippetService.reload()
+        onClicked: {
+            sort_rect.selectedLanguages = []; //Clear languages
+            snippetService.reload();
+            sort_rect.applyCurrentSort(); //reapplies that previous sorting method
+        }
     }
 
     Basic.Button {
@@ -681,18 +752,17 @@ Page {
         }
     }
 
-        // --- SETTINGS LOADER ---
-        Loader {
-            id: settingsLoader
-            source: ""
-            anchors.fill: parent
-            visible: false
-            onLoaded: {
-                item.parentLoader = settingsLoader
-            }
+    // --- SETTINGS LOADER ---
+    Loader {
+        id: settingsLoader
+        source: ""
+        anchors.fill: parent
+        visible: false
+        onLoaded: {
+            item.parentLoader = settingsLoader;
         }
     }
-
+}
 
 /*##^##
 Designer {
