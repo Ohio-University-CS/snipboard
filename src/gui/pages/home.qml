@@ -122,7 +122,7 @@ Page {
             anchors.leftMargin: 136
             anchors.rightMargin: 12
             anchors.topMargin: 121
-            anchors.bottomMargin: 66
+            anchors.bottomMargin: 79
 
             Label {
                 text: "Snippets"
