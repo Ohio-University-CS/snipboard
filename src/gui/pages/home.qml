@@ -21,7 +21,11 @@ Page {
     property string editDialogDescription: ""
     property string editDialogLanguage: ""
     property string editDialogContent: ""
-
+    
+    //Properties of delete tag
+    property int tagDialogId: -1
+    property string tagDialogName: ""
+    
     //EDit dialog
     Dialog {
         id: editDialog
@@ -219,7 +223,7 @@ Page {
                                 }
                             }
 
-                            //Delete a snippet
+                            //favorite/unfavorite a snippet
                             Button {
                                 id: favButton
                                 height: 42
@@ -238,6 +242,7 @@ Page {
                                 }
                             }
 
+                            //delete a snippet
                             Button {
                                 height: 42
                                 width: 46
@@ -359,7 +364,7 @@ Page {
                 }
             }
         }
-
+        
         Image {
             id: image1
             x: 25
@@ -368,6 +373,253 @@ Page {
             height: 75
             source: "qrc:/resources/icons/sb_logo.png"
             fillMode: Image.PreserveAspectFit
+        }
+        
+        //tags column
+
+        ColumnLayout {
+            y: 288
+            width: 112
+            height: 210
+            anchors.horizontalCenter: parent.horizontalCenter
+            
+            Label {
+                text: " Tags"
+                font.pixelSize: 20
+                font.bold: true
+            }
+
+            //tags rectangle
+            Rectangle {
+                radius: 8
+                color: "#e6e6e6"
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                clip: true
+            
+                // -- LIST OF TAGS --
+                ListView {
+                    id: tagList
+                    anchors.fill: parent
+                    clip: true
+                    spacing: 2
+                    topMargin: 2
+                    bottomMargin: 2
+                    width: 83
+                    height: 154
+                    model: tagService.tags
+                    
+                    delegate: Rectangle {
+                        width: parent.width - 5
+                        height: 20
+                        radius: 4
+                        color: hovered ? "#e0e0e0" : "white"
+                        border.color: "#cccccc"
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        
+                        property bool hovered: false
+    
+                        //Copies tag to clipboard
+                        MouseArea {
+                            z: -1
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            onEntered: parent.hovered = true
+                            onExited: parent.hovered = false
+                            onClicked: {
+                                Clipboard.copyText(String(model.data));
+                                ToolTip.show("Tag copied", 1200, root);
+                            }
+                        }
+                        
+                        // tags
+                        RowLayout {
+                            anchors.fill: parent
+                            anchors.margins: 5
+                            spacing: 8
+    
+                            ColumnLayout {
+                                Layout.fillWidth: true
+                                spacing: 4
+    
+                                Text {
+                                    text: name
+                                    font.bold: true
+                                    font.pixelSize: 8
+                                    color: "#333"
+                                    elide: Text.ElideRight
+                                }
+    
+                            }
+                            
+                            Item {
+                                Layout.fillWidth: true
+                            }
+
+                            Button {
+                                id: deleteTagButton
+                                height: 5
+                                width: 5
+                                implicitWidth: width
+                                implicitHeight: height
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: "❌"
+                                    font.pixelSize: 5
+                                }
+                                background: Rectangle {
+                                    width: parent.width
+                                    height: parent.height
+                                    radius: 1
+                                    color: "#e5e5e5"    
+                                    border.color: "#bcbcbc"
+                                }
+                                padding: 0
+                                //Layout.alignment: Qt.AlignRight
+                                onClicked: {//snippetService.deleteSnippet(id)
+                                    root.tagDialogId = id
+                                    root.tagDialogName = name
+                                    deleteTagDialog.open()
+                                } 
+
+                                                // --- Delete Snippet Dialog ---
+                                Dialog {
+                                    id: deleteTagDialog
+                                    title: "Delete Tag?"
+                                    modal: true
+                                    standardButtons: Dialog.Ok | Dialog.Cancel
+                                    anchors.centerIn: Overlay.overlay
+                                    ColumnLayout {
+                                        //anchors.fill: parent
+                                        anchors.margins: 20
+                                        spacing: 10
+
+                                        Label {
+                                            text: "Are you sure you want to delete the tag: " + root.tagDialogName
+                                            wrapMode: Text.WordWrap
+                                            //color: "#000000"
+                                        }
+                                    }
+
+                                    onAccepted: {
+                                        tagService.deleteTag(root.tagDialogId)
+                                    }
+                                }
+                            }
+                        }
+                        
+                        
+    
+                    }
+                }
+            }
+            RowLayout {
+                height: 30
+                Layout.fillWidth: true
+                spacing: 0
+                Basic.Button {
+                    id: newTagButton
+                    implicitWidth: 52
+                    implicitHeight: 22
+                    padding: 0
+                    Text {
+                        text: "New tag"
+                        anchors.centerIn: parent
+                        font.pixelSize: 10     
+                        color: "#222"
+                        elide: Text.ElideRight
+                    }
+                    background: Rectangle {
+                        radius: 8
+                        color: newTagButton.down ? '#797979' : (newTagButton.hovered ? '#969696' : '#b4b4b4')
+                    }
+                    onClicked: newTagDialog.open()
+            
+                    Dialog {
+                        id: newTagDialog
+                        title: "New Tag"
+                        modal: true
+                        focus: true
+                        implicitWidth: 520
+                        anchors.centerIn: Overlay.overlay       // center over the whole window
+                        standardButtons: Dialog.Ok | Dialog.Cancel
+            
+                        // simple model of the form's values
+                        property string fTitle: ""
+            
+                        // reset when opened/closed
+                        onOpened: {
+                            fTitle = "";
+                            tagTitleField.forceActiveFocus();
+                        }
+            
+                        // validate + submit
+                        onAccepted: {
+                            if (!fTitle.trim()) {
+                                // keep dialog open and show error
+                                tagError.visible = true;
+                                // prevent Dialog from auto-closing
+                                newTagDialog.open();
+                                return;
+                            }
+                            // Call whichever API you exposed:
+                            // If you registered a singleton: SnippetService.createSnippet(...)
+                            // If you set a context property:  snippetService.createSnippet(...)
+                            (typeof TagService !== "undefined" ? TagService : tagService).createTag(fTitle);
+                        }
+            
+                        contentItem: ColumnLayout {
+                            spacing: 10
+            
+                            Label {
+                                id: tagError
+                                text: "Title is required."
+                                color: "#b00020"
+                                visible: false
+                                Layout.fillWidth: true
+                            }
+            
+                            // Title
+                            Basic.TextField {
+                                id: tagTitleField
+                                Layout.fillWidth: true
+                                placeholderText: "Title *"
+                                text: newTagDialog.fTitle
+                                onTextChanged: {
+                                    newTagDialog.fTitle = text;
+                                    tagError.visible = false;
+                                }
+                            }
+                        }
+                    }
+
+                    
+                }
+                Item { //spacer
+                        Layout.fillWidth: true
+                    }
+                
+                Basic.Button {
+                    id: reloadTagButton
+                    implicitWidth: 45
+                    implicitHeight: 22
+                    padding: 0
+                    Text {
+                        text: "Reload"
+                        anchors.centerIn: parent
+                        font.pixelSize: 10     // <-- CHANGE TEXT SIZE HERE
+                        color: "#222"
+                        elide: Text.ElideRight
+                    }
+                    background: Rectangle {
+                        radius: 8
+                        color: reloadTagButton.down ? '#797979' : (reloadTagButton.hovered ? '#969696' : '#b4b4b4')
+                    }
+                    onClicked: tagService.reload()
+                    
+                }
+                
+            }
         }
     }
 
@@ -680,10 +932,3 @@ Page {
             }
         }
     }
-
-
-/*##^##
-Designer {
-    D{i:0}D{i:39;invisible:true}
-}
-##^##*/
