@@ -18,10 +18,17 @@ class SnippetRepository {
 
     QVector<Snippet> loadAll();
     QVector<Snippet> loadAllFavorites();
+    QVector<Snippet> loadByAnyTags(const QVector<int>& tagIds);
+    QVector<Snippet> loadByAllTags(const QVector<int>& tagIds);
     Snippet loadById(int id);
     bool insert(Snippet& snippet);
     bool update(Snippet& snippet);
     bool remove(int id);
+    bool incrementCopied(int id);
+    bool favorite(int id);
+    bool unfavorite(int id);
+    bool addTag(int snippetId, int tagId);
+    bool removeTag(int snippetId, int tagId);
 
  private:
     QSqlDatabase m_db;
