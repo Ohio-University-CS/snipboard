@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import SnipBoard 1.0  // for SnippetObject and ClipboardHelper type if needed
 import QtQuick.Controls.Basic as Basic
 
+
 Page {
     id: root
     visible: true
@@ -108,6 +109,69 @@ Page {
                     onTextChanged: root.editDialogContent = text
                 }
             }
+        }
+    }
+
+        //EDit dialog
+    Dialog {
+        id: editTagDialog
+        title: "Edit Tag Name"
+        modal: true
+        focus: true
+        implicitWidth: 350
+        anchors.centerIn: Overlay.overlay
+        standardButtons: Dialog.Ok | Dialog.Cancel
+
+        onAccepted: {
+            // Trim and validate
+            const trimmedName = root.tagDialogName.trim();
+
+            if (!trimmedName) {
+                // Show error and prevent dialog from closing
+                console.log("Validation failed: missing required fields");
+                return;
+            }
+
+            // Perform the update
+            tagService.updateTag(root.tagDialogId, root.tagDialogName);
+
+        }
+
+        contentItem: ColumnLayout {
+            spacing: 10
+
+            Basic.TextField {
+                id: editTagTitleField
+                Layout.fillWidth: true
+                placeholderText: "Name *"
+                text: root.tagDialogName
+                onTextChanged: root.tagDialogName = text
+            }
+
+
+        }
+    }
+
+    Dialog {
+        id: deleteTagDialog
+        title: "Delete Tag?"
+        modal: true
+        standardButtons: Dialog.Ok | Dialog.Cancel
+        anchors.centerIn: Overlay.overlay
+        ColumnLayout {
+            //anchors.fill: parent
+            anchors.margins: 20
+            spacing: 10
+
+            Label {
+                text: "Are you sure you want to delete the tag: " + root.tagDialogName
+                wrapMode: Text.WordWrap
+                //color: "#000000"
+            }
+        }
+
+        onAccepted: {
+            tagService.deleteTag(root.tagDialogId)
         }
     }
 
@@ -396,8 +460,10 @@ Page {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 clip: true
+
+                layer.enabled: true
             
-                // -- LIST OF TAGS --
+                // -- TAG LIST --
                 ListView {
                     id: tagList
                     anchors.fill: parent
@@ -411,7 +477,7 @@ Page {
                     
                     delegate: Rectangle {
                         width: parent.width - 5
-                        height: 20
+                        height: tagRow.implicitHeight + 10
                         radius: 4
                         color: hovered ? "#e0e0e0" : "white"
                         border.color: "#cccccc"
@@ -434,77 +500,91 @@ Page {
                         
                         // tags
                         RowLayout {
-                            anchors.fill: parent
+                            id: tagRow
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            anchors.verticalCenter: parent.verticalCenter
                             anchors.margins: 5
                             spacing: 8
     
-                            ColumnLayout {
-                                Layout.fillWidth: true
-                                spacing: 4
+                            // ColumnLayout {
+                            //     Layout.fillWidth: true
+                            //     spacing: 4
     
-                                Text {
-                                    text: name
-                                    font.bold: true
-                                    font.pixelSize: 8
-                                    color: "#333"
-                                    elide: Text.ElideRight
-                                }
-    
-                            }
-                            
                             Item {
                                 Layout.fillWidth: true
-                            }
-
-                            Button {
-                                id: deleteTagButton
-                                height: 5
-                                width: 5
-                                implicitWidth: width
-                                implicitHeight: height
+                                Layout.preferredHeight: tagText.implicitHeight
+                            
                                 Text {
-                                    anchors.centerIn: parent
-                                    text: "❌"
-                                    font.pixelSize: 5
-                                }
-                                background: Rectangle {
+                                    id: tagText
+                                    text: name
+                                    wrapMode: Text.Wrap
+                                    font.bold: true
+                                    font.pixelSize: 10
+                                    color: "#333"
                                     width: parent.width
-                                    height: parent.height
-                                    radius: 1
-                                    color: "#e5e5e5"    
-                                    border.color: "#bcbcbc"
                                 }
-                                padding: 0
-                                //Layout.alignment: Qt.AlignRight
-                                onClicked: {//snippetService.deleteSnippet(id)
-                                    root.tagDialogId = id
-                                    root.tagDialogName = name
-                                    deleteTagDialog.open()
-                                } 
+                            }
+    
+                            //}
+                            
+                            // Item {
+                            //     Layout.fillWidth: true
+                            // }
+                            ColumnLayout {
 
-                                                // --- Delete Snippet Dialog ---
-                                Dialog {
-                                    id: deleteTagDialog
-                                    title: "Delete Tag?"
-                                    modal: true
-                                    standardButtons: Dialog.Ok | Dialog.Cancel
-                                    anchors.centerIn: Overlay.overlay
-                                    ColumnLayout {
-                                        //anchors.fill: parent
-                                        anchors.margins: 20
-                                        spacing: 10
 
-                                        Label {
-                                            text: "Are you sure you want to delete the tag: " + root.tagDialogName
-                                            wrapMode: Text.WordWrap
-                                            //color: "#000000"
-                                        }
+                                Button {
+                                    id: deleteTagButton
+                                    Layout.preferredHeight: 11
+                                    Layout.preferredWidth: 11
+                                    padding: 0
+                                    Text {
+                                        anchors.centerIn: parent
+                                        text: "❌"
+                                        font.pixelSize: 6
+                                    }
+                                    background: Rectangle {
+                                        width: parent.width
+                                        height: parent.height
+                                        radius: 1
+                                        color: "#e5e5e5"    
+                                        border.color: "#bcbcbc"
+                                    }
+                                    //Layout.alignment: Qt.AlignRight
+                                    onClicked: {//snippetService.deleteSnippet(id)
+                                        root.tagDialogId = model.id
+                                        root.tagDialogName = model.name
+                                        deleteTagDialog.open()
+                                    } 
+
+                                }
+
+                                Basic.Button {
+                                    id: edit_tag_button
+                                    Layout.alignment: Qt.AlignRight
+                                    icon.source: "qrc:/resources/icons/edit.png" 
+                                    icon.height: 6
+                                    icon.width: 6
+                                    implicitHeight: 11
+                                    implicitWidth: 11
+                                    padding: 0
+                                    background: Rectangle {
+                                        width: parent.width
+                                        height: parent.height
+                                        radius: 1
+                                        color: hovered ? '#ffffff' : "#f2f2f2"
+                                        border.color: "#d0d0d0"
                                     }
 
-                                    onAccepted: {
-                                        tagService.deleteTag(root.tagDialogId)
+                                    onClicked: {
+                                        // pull roles from this row
+                                        root.tagDialogId = model.id;
+                                        root.tagDialogName = model.name;
+                                        editTagDialog.open();  // <-- open the page-level dialog
                                     }
                                 }
+
                             }
                         }
                         
@@ -583,6 +663,7 @@ Page {
                             Basic.TextField {
                                 id: tagTitleField
                                 Layout.fillWidth: true
+                                maximumLength: 30
                                 placeholderText: "Title *"
                                 text: newTagDialog.fTitle
                                 onTextChanged: {
