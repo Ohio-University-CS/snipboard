@@ -38,6 +38,7 @@ set(HEADERS
     src/core/models/Folder.h
     src/core/models/Snippet.h
     src/core/models/Tag.h
+    src/core/models/Settings.h
     src/core/objects/SnippetObject.h
     src/core/objects/TagObject.h
     src/core/objects/FolderObject.h
@@ -51,6 +52,7 @@ set(HEADERS
     src/core/services/TagService.h
     src/core/repositories/FolderRepository.h
     src/core/services/FolderService.h
+    src/core/services/SettingsService.h
 )
 
 # Add c++ to be compiled
@@ -71,6 +73,7 @@ qt_add_executable(SnipBoard
     src/core/services/TagService.cpp
     src/core/repositories/FolderRepository.cpp
     src/core/services/FolderService.cpp
+    src/core/services/SettingsService.cpp
     # Add other c++ files here
 )
 
