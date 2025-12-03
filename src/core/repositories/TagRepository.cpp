@@ -37,7 +37,7 @@ QVector<Tag> TagRepository::loadAll() {
 Tag TagRepository::loadById(int id) {
     // Create query
     QSqlQuery query(m_db);
-    query.prepare("SELECT id, name, dateCreated, dateModified, showDate FROM Tag WHERE id = ?");
+    query.prepare("SELECT id, name, dateCreated, dateModified, userCreated FROM Tag WHERE id = ?");
     query.addBindValue(id);
 
     // Execute and warn if error
