@@ -11,6 +11,7 @@ class SettingsService : public QObject {
 public:
     explicit SettingsService(QObject* parent = nullptr);
 
+    QString settingsFilePath() const;
     Q_INVOKABLE void load();
     Q_INVOKABLE void save();
 

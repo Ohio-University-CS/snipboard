@@ -15,6 +15,19 @@ SettingsService::SettingsService(QObject* parent)
     load(); //load on startup
 }
 
+QString SettingsService::settingsFilePath() const
+{
+    //get the OS-standard config location
+    QString dir = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
+
+    //ensure the directory exists
+    QDir().mkpath(dir);
+
+    //return full path to the JSON file
+    return dir + "/settings.json";
+}
+
+
 void SettingsService::load() {
     QFile file(m_settingsPath);
     if (!file.exists()) {
