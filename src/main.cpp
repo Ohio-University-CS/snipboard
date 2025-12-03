@@ -18,6 +18,7 @@
 #include "src/core/services/SnippetService.h"
 #include "src/core/services/TagService.h"
 #include "src/core/utils/ClipboardHelper.h"
+#include "src/core/services/SettingsService.h"
 
 
 using namespace Qt::StringLiterals;
@@ -48,6 +49,9 @@ int main(int argc, char* argv[]) {
 
     TagService tagService;
     engine.rootContext()->setContextProperty("tagService", &tagService);
+    // SettingsService
+    SettingsService settingsService;
+    engine.rootContext()->setContextProperty("SettingsService", &settingsService);
     
     // Update this function with any new .qml paths
     loadModules(engine);

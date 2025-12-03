@@ -68,6 +68,109 @@ QVector<Snippet> SnippetRepository::loadAllFavorites() {
     return result;
 }
 
+QVector<Snippet> SnippetRepository::loadByAnyTags(const QVector<int>& tagIds){
+    QVector<Snippet> result;
+
+    if (tagIds.isEmpty()){
+        return result;
+    }
+    //? value placeholders
+    QStringList placeholders;
+    for (int i = 0; i < tagIds.size(); i++){
+        placeholders << "?";
+    }
+
+    QString sql =
+        "SELECT DISTINCT Snippet.id, Snippet.name, Snippet.dateCreated, "
+        "Snippet.dateModified, Snippet.description, Snippet.language, "
+        "Snippet.contents, Snippet.folder, Snippet.favorite, Snippet.timesCopied "
+        "FROM Snippet "
+        "JOIN SnippetTagLink ON Snippet.id = SnippetTagLink.snippetId "
+        "WHERE SnippetTagLink.tagId IN (" + placeholders.join(", ") + ")";
+
+    QSqlQuery query(m_db);
+    query.prepare(sql);
+
+    for(int tagId : tagIds){
+        query.addBindValue(tagId);
+    }
+
+    if (!query.exec()) {
+        qWarning() << "Failed to load snippets by ANY tag:" << query.lastError();
+        return result;
+    }
+
+    while (query.next()) {
+        Snippet s;
+        s.id = query.value(0).toInt();
+        s.name = query.value(1).toString();
+        s.dateCreated = query.value(2).toDateTime();
+        s.dateModified = query.value(3).toDateTime();
+        s.description = query.value(4).toString();
+        s.language = query.value(5).toString();
+        s.contents = query.value(6).toString();
+        s.folder = query.value(7).toInt();
+        s.favorite = query.value(8).toBool();
+        s.timesCopied = query.value(9).toInt();
+        result.append(s);
+    }
+
+    return result;
+}
+
+QVector<Snippet> SnippetRepository::loadByAllTags(const QVector<int>& tagIds){
+    QVector<Snippet> result;
+
+    if (tagIds.isEmpty()){
+        return result;
+    }
+    //? value placeholders
+    QStringList placeholders;
+    for (int i = 0; i < tagIds.size(); i++){
+        placeholders << "?";
+    }
+
+    QString sql = QString(
+        "SELECT Snippet.id, Snippet.name, Snippet.dateCreated, "
+        "Snippet.dateModified, Snippet.description, Snippet.language, "
+        "Snippet.contents, Snippet.folder, Snippet.favorite, Snippet.timesCopied "
+        "FROM Snippet "
+        "JOIN SnippetTagLink ON Snippet.id = SnippetTagLink.snippetId "
+        "WHERE SnippetTagLink.tagId IN (%1) "
+        "GROUP BY Snippet.id "
+        "HAVING COUNT(DISTINCT SnippetTagLink.tagId) = %2"
+    ).arg(placeholders.join(", ")).arg(tagIds.size());
+
+    QSqlQuery query(m_db);
+    query.prepare(sql);
+
+    for(int tagId : tagIds){
+        query.addBindValue(tagId);
+    }
+
+    if (!query.exec()) {
+        qWarning() << "Failed to load snippets by ALL tags:" << query.lastError();
+        return result;
+    }
+
+    while (query.next()) {
+        Snippet s;
+        s.id = query.value(0).toInt();
+        s.name = query.value(1).toString();
+        s.dateCreated = query.value(2).toDateTime();
+        s.dateModified = query.value(3).toDateTime();
+        s.description = query.value(4).toString();
+        s.language = query.value(5).toString();
+        s.contents = query.value(6).toString();
+        s.folder = query.value(7).toInt();
+        s.favorite = query.value(8).toBool();
+        s.timesCopied = query.value(9).toInt();
+        result.append(s);
+    }
+
+    return result;
+}
+
 Snippet SnippetRepository::loadById(int id) {
     // Create query
     QSqlQuery query(m_db);
@@ -154,6 +257,73 @@ bool SnippetRepository::remove(int id) {
     // Execute and get status
     if (!query.exec()) {
         qWarning() << "Delete failed:" << query.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+bool SnippetRepository::incrementCopied(int id){
+    QSqlQuery query(m_db);
+    query.prepare("UPDATE Snippet SET timesCopied = timesCopied + 1 WHERE id = ?");
+    query.addBindValue(id);
+
+    if(!query.exec()){
+        qWarning() << "Failed to increment times copied:" << query.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+bool SnippetRepository::favorite(int id){
+    QSqlQuery query(m_db);
+    query.prepare("UPDATE Snippet SET favorite = true WHERE id = ?");
+    query.addBindValue(id);
+
+    if(!query.exec()){
+        qWarning() << "Failed to favorite:" << query.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+bool SnippetRepository::unfavorite(int id){
+    QSqlQuery query(m_db);
+    query.prepare("UPDATE Snippet SET favorite = false WHERE id = ?");
+    query.addBindValue(id);
+
+    if(!query.exec()){
+        qWarning() << "Failed to unfavorite:" << query.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+bool SnippetRepository::addTag(int snippetId, int tagId){
+    QSqlQuery query(m_db);
+    query.prepare("INSERT INTO SnippetTagLink VALUES (?, ?)");
+    query.addBindValue(snippetId);
+    query.addBindValue(tagId);
+    
+    if(!query.exec()){
+        qWarning() << "Failed to unfavorite:" << query.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+bool SnippetRepository::removeTag(int snippetId, int tagId){
+    QSqlQuery query(m_db);
+    query.prepare("DELETE FROM SnippetTagLink WHERE snippetId = ? AND tagId = ?");
+    query.addBindValue(snippetId);
+    query.addBindValue(tagId);
+    
+    if(!query.exec()){
+        qWarning() << "Failed to unfavorite:" << query.lastError();
         return false;
     }
 

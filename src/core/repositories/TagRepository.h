@@ -21,6 +21,7 @@ class TagRepository {
     bool insert(Tag& tag);
     bool update(Tag& tag);
     bool remove(int id);
+    int findIdByName(const QString& name);
 
  private:
     QSqlDatabase m_db;

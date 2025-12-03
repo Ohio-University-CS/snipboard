@@ -52,9 +52,6 @@ Page {
             // Perform the update
             snippetService.updateSnippet(root.editDialogId, trimmedName, root.editDialogDescription.trim(), (root.editDialogLanguage && root.editDialogLanguage.length) ? root.editDialogLanguage : "Plain Text", trimmedContent, 0     // folderId for now
             , root.editDialogFavorite);
-
-            // Note: You might not need reload() since updateSnippet already updates both models
-            // snippetService.reload();
         }
 
         contentItem: ColumnLayout {
@@ -224,6 +221,7 @@ Page {
                         onEntered: parent.hovered = true
                         onExited: parent.hovered = false
                         onClicked: {
+                            snippetService.incrementCopiedSnippet(model.id);
                             Clipboard.copyText(String(model.data));
                             ToolTip.show("Code copied", 1200, root);
                         }
@@ -868,15 +866,12 @@ Page {
 
     Rectangle {
         id: sort_rect
+        x: 548
         y: search_rect.y + search_rect.height + 8
         width: 240  // Increased width to fit both dropdowns
         height: 45
         radius: 8
         color: "#cfcfcf"
-
-        // Track selected languages to SHOW (not hide)
-        property var selectedLanguages: []
-        x: 548
 
         // Function to apply the current sort
         function applyCurrentSort() {
@@ -891,22 +886,14 @@ Page {
                 snippetService.sortByMostCopied(false);
                 break;
             case 3:
-                snippetService.sortByName(true);
+                snippetService.sortByMostCopied(true);
                 break;
             case 4:
+                snippetService.sortByName(true);
+                break;
+            case 5:
                 snippetService.sortByName(false);
                 break;
-            }
-        }
-
-        // Function to update language filter display
-        function getLanguageButtonText() {
-            if (selectedLanguages.length === 0) {
-                return "Languages";
-            } else if (selectedLanguages.length === 1) {
-                return selectedLanguages[0];
-            } else {
-                return selectedLanguages.join(", ");
             }
         }
 
@@ -931,7 +918,7 @@ Page {
                 Layout.preferredWidth: 180
                 Layout.alignment: Qt.AlignVCenter
 
-                model: ["Last Edited (Newest)", "Last Edited (Oldest)", "Most Popular", "Name (A-Z)", "Name (Z-A)"]
+                model: ["Last Edited (Newest)", "Last Edited (Oldest)", "Most Popular", "Least Popular", "Name (A-Z)", "Name (Z-A)"]
 
                 onActivated: function (index) {
                     sort_rect.applyCurrentSort();
@@ -953,7 +940,6 @@ Page {
             color: reload_button.down ? '#797979' : (reload_button.hovered ? '#969696' : '#cfcfcf')
         }
         onClicked: {
-            sort_rect.selectedLanguages = []; //Clear languages
             snippetService.reload();
             sort_rect.applyCurrentSort(); //reapplies that previous sorting method
         }
