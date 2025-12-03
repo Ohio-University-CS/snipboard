@@ -15,6 +15,7 @@
 #include "src/core/objects/SnippetListModel.h"
 #include "src/core/services/SnippetService.h"
 #include "src/core/utils/ClipboardHelper.h"
+#include "src/core/services/SettingsService.h"
 
 
 using namespace Qt::StringLiterals;
@@ -42,6 +43,10 @@ int main(int argc, char* argv[]) {
     
     SnippetService snippetService;
     engine.rootContext()->setContextProperty("snippetService", &snippetService);
+
+    // SettingsService
+    SettingsService settingsService;
+    engine.rootContext()->setContextProperty("SettingsService", &settingsService);
     
     // Update this function with any new .qml paths
     loadModules(engine);
