@@ -6,6 +6,7 @@
  */
 
 #include "SnippetListModel.h"
+#include <algorithm>
 
 SnippetListModel::SnippetListModel(QObject* parent)
     : QAbstractListModel(parent) {}
@@ -123,4 +124,58 @@ void SnippetListModel::updateSnippetById(int id, SnippetObject* updatedSnippet) 
             return;
         }
     }
+}
+
+void SnippetListModel::sortByDateCreated(bool ascending) {
+    //starts reset
+    beginResetModel();
+    // Sort by date created, with order dependent on ascending
+    std::sort(m_snippets.begin(), m_snippets.end(), [ascending](const auto& x, const auto& y) {
+        if (ascending) {
+            return x->getDateCreated() < y->getDateCreated();
+        }
+
+        return x->getDateCreated() > y->getDateCreated();
+    });
+    //Added by lucas so we notify the sorting has changed the listview
+    endResetModel();
+}
+
+void SnippetListModel::sortByDateModified(bool ascending) {
+    beginResetModel();
+    // Sort by date modified, with order dependent on ascending
+    std::sort(m_snippets.begin(), m_snippets.end(), [ascending](const auto& x, const auto& y) {
+        if (ascending) {
+            return x->getDateModified() < y->getDateModified();
+        }
+
+        return x->getDateModified() > y->getDateModified();
+    });
+    endResetModel();
+}
+
+void SnippetListModel::sortByMostCopied(bool ascending) {
+    beginResetModel();
+    // Sort by total number of times copied
+    std::sort(m_snippets.begin(), m_snippets.end(), [ascending](const auto& x, const auto& y) {
+        if (ascending) {
+            return x->timesCopied() < y->timesCopied();
+        }
+
+        return x->timesCopied() > y->timesCopied();
+    });
+    endResetModel();
+}
+
+void SnippetListModel::sortByName(bool alphabetical) {
+    beginResetModel();
+    // Sort by name
+    std::sort(m_snippets.begin(), m_snippets.end(), [alphabetical](const auto& x, const auto& y) {
+        if (alphabetical) {
+            return x->name() < y->name();
+        }
+
+        return x->name() > y->name();
+    });
+    endResetModel();
 }
