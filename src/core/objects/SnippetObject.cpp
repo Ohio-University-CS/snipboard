@@ -19,6 +19,8 @@ SnippetObject::SnippetObject(const Snippet& snippetModel, const QVector<QString>
     m_favorite = snippetModel.favorite;
     m_timesCopied = snippetModel.timesCopied;
     m_tagNames = tagNames;
+    m_dateCreated = snippetModel.dateCreated;
+    m_dateModified = snippetModel.dateModified;
 }
 
 void SnippetObject::setId(int id) {
@@ -100,4 +102,18 @@ void SnippetObject::setTagNames(const QVector<QString>& tagNames) {
 
     m_tagNames = tagNames;
     emit tagNamesChanged();
+}
+
+void SnippetObject::addTagName(const QString& name) {
+    if (!m_tagNames.count(name)) {
+        m_tagNames.append(name);
+        emit tagNamesChanged();
+    }
+}
+
+void SnippetObject::removeTagName(const QString& name) {
+    if (m_tagNames.count(name)) {
+        m_tagNames.removeAll(name);
+        emit tagNamesChanged();
+    }
 }
