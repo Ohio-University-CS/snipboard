@@ -45,7 +45,7 @@ Page {
             }
 
             // Perform the update
-            snippetService.updateSnippet(root.editDialogId, trimmedName, root.editDialogDescription.trim(), (root.editDialogLanguage && root.editDialogLanguage.length) ? root.editDialogLanguage : "Plain Text", trimmedContent, 0     // folderId for now
+            snippetService.updateSnippet(root.editDialogId, trimmedName, root.editDialogDescription.trim(), (root.editDialogLanguage && root.editDialogLanguage.length) ? root.editDialogLanguage : "txt", trimmedContent, 0     // folderId for now
             , root.editDialogFavorite);
         }
 
@@ -70,10 +70,10 @@ Page {
             // Keep ComboBox in sync with current language
             Basic.ComboBox {
                 Layout.fillWidth: true
-                model: ["C++", "QML", "Python", "JavaScript", "Plain Text"]
+                model: ["cpp", "qml", "py", "js", "txt"]
                 currentIndex: {
-                    const list = ["C++", "QML", "Python", "JavaScript", "Plain Text"];
-                    const cur = root.editDialogLanguage || "Plain Text";
+                    const list = ["cpp", "qml", "py", "js", "txt"];
+                    const cur = root.editDialogLanguage || "txt";
                     const idx = list.indexOf(cur);
                     return idx >= 0 ? idx : 0;
                 }
@@ -662,7 +662,7 @@ Page {
                 // Call whichever API you exposed:
                 // If you registered a singleton: SnippetService.createSnippet(...)
                 // If you set a context property:  snippetService.createSnippet(...)
-                (typeof SnippetService !== "undefined" ? SnippetService : snippetService).createSnippet(fTitle, fDesc, fLang.length ? fLang : "Plain Text", fCode, 0      // folderId (adjust as needed)
+                (typeof SnippetService !== "undefined" ? SnippetService : snippetService).createSnippet(fTitle, fDesc, fLang.length ? fLang : "txt", fCode, 0      // folderId (adjust as needed)
                 , false   // favorite flag
                 );
             }
@@ -701,7 +701,7 @@ Page {
                 // Language
                 Basic.ComboBox {
                     Layout.fillWidth: true
-                    model: ["C++", "QML", "Python", "JavaScript", "Plain Text"]
+                    model: ["cpp", "qml", "py", "js", "txt"]
                     currentIndex: 0
                     onCurrentTextChanged: newSnippetDialog.fLang = currentText
                 }
