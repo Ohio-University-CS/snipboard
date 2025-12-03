@@ -1095,3 +1095,4 @@ Page {
             item.parentLoader = settingsLoader;
         }
     }
+}
