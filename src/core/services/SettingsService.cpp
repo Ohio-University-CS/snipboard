@@ -150,8 +150,8 @@ void SettingsService::setImportLocation(QString value) {
     emit settingsChanged();
 }
 
-void SettingsService::setConflictHandeling(QString value) {
-    m_settings.conflictHandeling = value;
+void SettingsService::setConflictHandling(QString value) {
+    m_settings.conflictHandling = value;
     save();
     emit settingsChanged();
 }

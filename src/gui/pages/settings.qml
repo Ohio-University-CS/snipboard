@@ -285,7 +285,7 @@ Item {
                                         width: 100
                                         height: 25
                                         model: ["Light", "Dark"]
-                                        currentIndex: 0
+                                        currentIndex: settingsService.theme()
                                         contentItem: Text {
                                                 text: themeControl.displayText
                                                 color: "#000000"
@@ -293,6 +293,8 @@ Item {
                                                 verticalAlignment: Text.AlignVCenter
                                         }
                                         Layout.rightMargin: 50
+
+                                        onCurrentIndexChanged: settingsService.setTheme(currentIndex)
                                     }
                                 }
                                 Label {
@@ -345,7 +347,7 @@ Item {
                                         width: 200
                                         height: 30
     
-                                        onValueChanged: console.log("Editor font size:", value)
+                                        onValueChanged: settingsService.setEditorFontSize(value)
                                     }
                                     
                                     Label {
@@ -386,6 +388,8 @@ Item {
                                                 verticalAlignment: Text.AlignVCenter
                                         }
                                         Layout.rightMargin: 50
+
+                                        onCurrentIndexChanged: settingsService.setEditorFontFamily(currentIndex)
                                     }
                                 }
                                 Label {
@@ -411,10 +415,7 @@ Item {
                                         id: lineNumbersSwitch
                                         checked: true
     
-                                        onCheckedChanged: {
-                                            console.log("Line numbers toggled:", checked)
-    
-                                        }
+                                        onCheckedChanged: settingsService.setLineNumbers(checked)
                                         Layout.rightMargin: 50
                                     }
                                 }
@@ -442,10 +443,8 @@ Item {
                                         id: syntaxHighlightingSwitch
                                         checked: true
     
-                                        onCheckedChanged: {
-                                            console.log("Syntax highlighting:", checked)
-    
-                                        }
+                                        onCheckedChanged: settingsService.setSyntaxHighlighting(checked)
+
                                         Layout.rightMargin: 50
                                     }
                                 }
@@ -495,10 +494,8 @@ Item {
                                         id: wrapLinesSwitch
                                         checked: false
     
-                                        onCheckedChanged: {
-                                            console.log("Wrap lines:", checked)
-    
-                                        }
+                                        onCheckedChanged: settingsService.setWrapLines(checked)
+                                        
                                         Layout.rightMargin: 50
                                     }
                                 }
@@ -525,10 +522,8 @@ Item {
                                         id: confirmDeleteSwitch
                                         checked: true
     
-                                        onCheckedChanged: {
-                                            console.log("Confirm before delete:", checked)
-    
-                                        }
+                                        onCheckedChanged: settingsService.setConfirmBeforeDelete(checked)
+                                        
                                         Layout.rightMargin: 50
                                     }
                                 }
@@ -566,6 +561,8 @@ Item {
                                                 verticalAlignment: Text.AlignVCenter
                                         }
                                         Layout.rightMargin: 50
+
+                                        onCurrentIndexChanged: settingsService.setTabSize(currentIndex)
                                     }
                                 }
                                 Label {
@@ -600,6 +597,8 @@ Item {
                                                 verticalAlignment: Text.AlignVCenter
                                         }
                                         Layout.rightMargin: 50
+
+                                        onCurrentIndexChanged: settingsService.setDefaultLanguage(currentText)
                                     }
                                 }
                                 Label {
@@ -655,6 +654,8 @@ Item {
                                                 verticalAlignment: Text.AlignVCenter
                                         }
                                         Layout.rightMargin: 50
+
+                                        onCurrentIndexChanged: settingsService.setDefaultSortMethod(currentText)
                                     }
                                 }
                                 Label {
@@ -689,6 +690,8 @@ Item {
                                                 verticalAlignment: Text.AlignVCenter
                                         }
                                         Layout.rightMargin: 50
+
+                                        onCurrentIndexChanged: settingsService.setDefaultSnippetFolder(currentIndex)
                                     }
                                 }
                                 Label {
@@ -741,6 +744,8 @@ Item {
                                             console.log("User export folder:", text)
                                         }
                                         Layout.rightMargin: 50
+
+                                        onTextChanged: settingsService.setExportLocation(text)
                                     }
                                 }
                                 Label {
@@ -775,6 +780,8 @@ Item {
                                             verticalAlignment: Text.AlignVCenter
                                         }
                                         Layout.rightMargin: 50
+
+                                        onCurrentIndexChanged: settingsService.setExportFormat(currentText)
                                     }
                                 }
                                 Label {
@@ -828,6 +835,8 @@ Item {
                                             console.log("User import folder:", text)
                                         }
                                         Layout.rightMargin: 50
+
+                                        onTextChanged: settingsService.setImportLocation(text)
                                     }
                                 }
                                 Label {
@@ -862,6 +871,8 @@ Item {
                                             verticalAlignment: Text.AlignVCenter
                                         }
                                         Layout.rightMargin: 50
+
+                                        onCurrentIndexChanged: settingsService.setConflictHandling(currentText)
                                     }
                                 }
                                 Label {

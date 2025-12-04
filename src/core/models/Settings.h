@@ -23,7 +23,7 @@ struct Settings {
     QString exportFormat = "txt";
 
     QString importLocation = "./";
-    QString conflictHandeling = "ask";
+    QString conflictHandling = "ask";
 
     Settings() {}
 
@@ -49,7 +49,7 @@ struct Settings {
         obj["exportFormat"] = exportFormat;
 
         obj["importLocation"] = importLocation;
-        obj["conflictHandeling"] = conflictHandeling;
+        obj["conflictHandling"] = conflictHandling;
 
         return obj;
     }
@@ -76,7 +76,7 @@ struct Settings {
         s.exportFormat = obj["exportFormat"].toString();
 
         s.importLocation = obj["importLocation"].toString();
-        s.conflictHandeling = obj["conflictHandeling"].toString();
+        s.conflictHandling = obj["conflictHandling"].toString();
 
         return s;
     }

@@ -619,10 +619,11 @@ Page {
                                     Layout.preferredWidth: 11
                                     Layout.preferredHeight: 11
                                     id: tagChecked
-                                    checked: true
+                                    checked: tag.checked
                                     padding: 0
                                     
                                     onCheckedChanged: {
+                                        tag.checked = checked;
                                         if(tagChecked.checked === false) {
                                             checkAllButton.allTagsChecked = false
                                         }

@@ -12,7 +12,7 @@ TagObject::TagObject(const Tag& tagModel, QObject* parent) : QObject(parent) {
     m_id = tagModel.id;
     m_name = tagModel.name;
     m_showDate = tagModel.showDate;
-    m_checked = tagModel.checked;
+    m_checked = true;
 }
 
 void TagObject::setId(int id) {

@@ -31,7 +31,7 @@ public:
     Q_INVOKABLE void setExportLocation(QString value);
     Q_INVOKABLE void setExportFormat(QString value);
     Q_INVOKABLE void setImportLocation(QString value);
-    Q_INVOKABLE void setConflictHandeling(QString value);
+    Q_INVOKABLE void setConflictHandling(QString value);
 
 signals:
     void settingsChanged();
