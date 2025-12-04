@@ -13,11 +13,11 @@ QtObject {
 
     // Example: surface/background tokens
     readonly property color surface:
-        mode === "dark" ? "#141218" : "#f4f4f4"
+        mode === "dark" ? "#141218" : '#e1e1e1'
     readonly property color surfaceContainer:
-        mode === "dark" ? "#1d1b20" : "#ffffff"
+        mode === "dark" ? "#1d1b20" : '#434343'
     readonly property color surfaceContainerHigh:
-        mode === "dark" ? "#2b292f" : "#ffffff"
+        mode === "dark" ? "#2b292f" : '#535353'
     readonly property color surfaceText:
         mode === "dark" ? "#e6e0e9" : "#000000"
     readonly property color surfaceTextVariant:
