@@ -22,6 +22,7 @@ class TagObject : public QObject {
     Q_PROPERTY(int id READ id WRITE setId NOTIFY idChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(bool showDate READ showDate WRITE setShowDate NOTIFY showDateChanged)
+    Q_PROPERTY(bool checked READ checked WRITE setChecked NOTIFY checkedChanged)
 
  public:
     explicit TagObject(QObject* parent = nullptr) : QObject(parent) {}
@@ -31,20 +32,24 @@ class TagObject : public QObject {
     int id() const { return m_id; }
     QString name() const { return m_name; }
     bool showDate() const { return m_showDate; }
+    bool checked() const { return m_checked; }
 
     // Setters (for QML)
     void setId(int id);
     void setName(QString name);
     void setShowDate(bool showDate);
+    void setChecked(bool checked);
 
  signals:
     // Tells the UI to update specified property (across app) whenever one of these are called
     void idChanged();
     void nameChanged();
     void showDateChanged();
+    void checkedChanged();
 
  private:
     int m_id = -1;
     QString m_name;
     bool m_showDate = true;
+    bool m_checked = true;
 };
