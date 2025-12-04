@@ -83,8 +83,7 @@ Item {
 
                         background: Rectangle {
                             radius: 8
-                            color: toAppearance.down ? Colors.surfaceContainerHighest : (toAppearance.hovered ? Colors.surfaceContainerHigh : Colors.surfaceContainer) 
-                            border.color: Colors.outlineVariant
+                            color: toAppearance.down ? '#bfbfbf' : (toAppearance.hovered ? '#d0d0d0' : '#c0c0c0')                               
                         }
                         onClicked: scroll.contentY = 0
                     }
