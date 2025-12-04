@@ -18,6 +18,7 @@ SnippetService::SnippetService(QObject* parent) : QObject(parent) {
     // Create repository and load all snippets
     /* WE PROBABLY WANT TO UPDATE THIS TO JUST LOAD ALL SNIPPETS THAT BELONG TO HOME FOLDER */
     m_repo = new SnippetRepository(m_db);
+    m_tagRepo = new TagRepository(m_db);  
     loadSnippetsFromDb();
 }
 
