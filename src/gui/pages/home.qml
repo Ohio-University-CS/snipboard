@@ -449,11 +449,45 @@ Page {
             width: 112
             height: 210
             anchors.horizontalCenter: parent.horizontalCenter
-            
-            Label {
-                text: " Tags"
-                font.pixelSize: 20
-                font.bold: true
+            RowLayout {
+
+                Label {
+                    text: " Tags"
+                    font.pixelSize: 20
+                    font.bold: true
+                }
+                Basic.Button {
+                    id: checkAllButton
+                    implicitWidth: 55
+                    implicitHeight: 22
+                    property bool allTagsChecked: true
+                    padding: 0
+                    Text {
+                        text: "Check All"
+                        anchors.centerIn: parent
+                        font.pixelSize: 10     // <-- CHANGE TEXT SIZE HERE
+                        color: "#222"
+                        elide: Text.ElideRight
+                    }
+                    background: Rectangle {
+                        radius: 8
+                        color: (checkAllButton.allTagsChecked || checkAllButton.down)
+                               ? "#797979"
+                               : (checkAllButton.hovered ? "#969696" : "#b4b4b4")
+                    }
+
+                    onClicked: {
+                        allTagsChecked = !allTagsChecked
+
+                        for (let i = 0; i < tagList.count; i++) {
+                            const item = tagList.itemAtIndex(i)
+                            if (item) {
+                                item.checkbox.checked = allTagsChecked
+                            }
+                        }
+                    }
+                    
+                }
             }
 
             //tags rectangle
@@ -479,6 +513,7 @@ Page {
                     model: tagService.tags
                     
                     delegate: Rectangle {
+                        id: tagBackground
                         width: parent.width - 5
                         height: tagRow.implicitHeight + 10
                         radius: 4
@@ -486,6 +521,7 @@ Page {
                         border.color: "#cccccc"
                         anchors.horizontalCenter: parent.horizontalCenter
                         
+                        property alias checkbox: tagChecked
                         property bool hovered: false
     
                         //Copies tag to clipboard
@@ -496,8 +532,7 @@ Page {
                             onEntered: parent.hovered = true
                             onExited: parent.hovered = false
                             onClicked: {
-                                Clipboard.copyText(String(model.data));
-                                ToolTip.show("Tag copied", 1200, root);
+                                tagChecked.checked = !tagChecked.checked
                             }
                         }
                         
@@ -509,10 +544,6 @@ Page {
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.margins: 5
                             spacing: 8
-    
-                            // ColumnLayout {
-                            //     Layout.fillWidth: true
-                            //     spacing: 4
     
                             Item {
                                 Layout.fillWidth: true
@@ -529,13 +560,9 @@ Page {
                                 }
                             }
     
-                            //}
-                            
-                            // Item {
-                            //     Layout.fillWidth: true
-                            // }
-                            ColumnLayout {
 
+                            ColumnLayout {
+                                spacing: 2
 
                                 Button {
                                     id: deleteTagButton
@@ -587,6 +614,23 @@ Page {
                                         editTagDialog.open();  // <-- open the page-level dialog
                                     }
                                 }
+
+                                CheckBox {
+                                    Layout.preferredWidth: 11
+                                    Layout.preferredHeight: 11
+                                    id: tagChecked
+                                    checked: true
+                                    padding: 0
+                                    
+                                    onCheckedChanged: {
+                                        if(tagChecked.checked === false) {
+                                            checkAllButton.allTagsChecked = false
+                                        }
+                                    }
+                                }
+
+
+                            
 
                             }
                         }
