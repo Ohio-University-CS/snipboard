@@ -285,9 +285,8 @@ Item {
                                         width: 100
                                         height: 25
                                         model: ["Light", "Dark"]
-                                        Component.onCompleted: {
-                                            currentIndex: settingsService.theme()
-                                        }
+                                        Component.onCompleted: currentIndex = settingsService.theme()
+                                        
                                         contentItem: Text {
                                                 text: themeControl.displayText
                                                 color: "#000000"
@@ -344,9 +343,8 @@ Item {
                                         id: fontSlider
                                         from: 10
                                         to: 24
-                                        Component.onCompleted: {
-                                            value: settingsService.editorFontSize()
-                                        }
+                                        Component.onCompleted: value = settingsService.editorFontSize()
+                                        
                                         stepSize: 1
                                         width: 200
                                         height: 30
@@ -384,9 +382,8 @@ Item {
                                         width: 100
                                         height: 25
                                         model: ["Consolas", "JetBrains Mono", "Fira Code", "Source Code Pro"]
-                                        Component.onCompleted: {
-                                            currentIndex: settingsService.editorFontFamily()
-                                        }
+                                        Component.onCompleted: currentIndex = settingsService.editorFontFamily()
+                                        
                                         contentItem: Text {
                                                 text: fontControl.displayText
                                                 color: "#000000"
@@ -420,9 +417,8 @@ Item {
                                     Switch {
                                         id: lineNumbersSwitch
 
-                                        Component.onCompleted: {
-                                            checked: settingsService.lineNumbers()
-                                        }
+                                        Component.onCompleted: checked = settingsService.lineNumbers()
+                                        
                                         onCheckedChanged: settingsService.setLineNumbers(checked)
                                         Layout.rightMargin: 50
                                     }
@@ -449,9 +445,7 @@ Item {
     
                                     Switch {
                                         id: syntaxHighlightingSwitch
-                                        Component.onCompleted: {
-                                            checked: settingsService.syntaxHighlighting()
-                                        }
+                                        Component.onCompleted: checked = settingsService.syntaxHighlighting()
 
                                         onCheckedChanged: settingsService.setSyntaxHighlighting(checked)
 
@@ -503,9 +497,7 @@ Item {
                                     Switch {
                                         id: wrapLinesSwitch
 
-                                        Component.onCompleted: {
-                                            checked: settingsService.wrapLines()
-                                        }
+                                        Component.onCompleted: checked = settingsService.wrapLines()
     
                                         onCheckedChanged: settingsService.setWrapLines(checked)
                                         
@@ -534,9 +526,7 @@ Item {
                                     Switch {
                                         id: confirmDeleteSwitch
 
-                                        Component.onCompleted: {
-                                            checked: settingsService.confirmBeforeDelete()
-                                        }
+                                        Component.onCompleted: checked = settingsService.confirmBeforeDelete()
     
                                         onCheckedChanged: settingsService.setConfirmBeforeDelete(checked)
                                         
@@ -570,9 +560,7 @@ Item {
                                         height: 25
                                         model: ["2", "4", "8"]
 
-                                        Component.onCompleted: {
-                                            currentIndex: settingsService.tabSize()
-                                        }
+                                        Component.onCompleted: currentIndex = settingsService.tabSize()
 
                                         contentItem: Text {
                                                 text: tabControl.displayText
@@ -610,9 +598,7 @@ Item {
                                         height: 25
                                         model: ["cpp", "py", "cs", "java", "js", "ts"]
 
-                                        Component.onCompleted: {
-                                            currentIndex: settingsService.defaultLanguage()
-                                        }
+                                        Component.onCompleted: currentIndex = languageControl.model.indexOf(settingsService.defaultLanguage())
 
                                         contentItem: Text {
                                                 text: languageControl.displayText
@@ -671,9 +657,8 @@ Item {
                                         height: 25
                                         model: ["Alphabetical", "Last modified", "Last created", "Favorites first"]
 
-                                        Component.onCompleted: {
-                                            currentIndex: settingsService.defaultSortMethod()
-                                        }
+                                        //Component.onCompleted: 
+                                        currentIndex: defaultSortControl.model.indexOf(settingsService.defaultSortMethod())
 
                                         contentItem: Text {
                                                 text: defaultSortControl.displayText
@@ -711,9 +696,7 @@ Item {
                                         height: 25 
                                         model: ["Folder1", "Folder2", "Another folder", "My folder"]
 
-                                        Component.onCompleted: {
-                                            currentIndex: settingsService.defaultSnippetFolder()
-                                        }
+                                        Component.onCompleted: currentIndex = defaultFolderControl.model.indexOf(settingsService.defaultSnippetFolder())
 
                                         contentItem: Text {
                                                 text: defaultFolderControl.displayText
@@ -771,9 +754,7 @@ Item {
                                         id: exportFolderField
                                         placeholderText: "Enter folder path"
 
-                                        Component.onCompleted: {
-                                            text: settingsService.exportLocation()             // current value
-                                        }
+                                        Component.onCompleted: text = settingsService.exportLocation()  
 
                                         width: 300
                                         onEditingFinished: {
@@ -809,9 +790,7 @@ Item {
                                         height: 25
                                         model: [".json", ".txt", ".csv"]
 
-                                        Component.onCompleted: {
-                                            currentIndex: settingsService.exportFormat()
-                                        }
+                                        currentIndex: exportFormat.model.indexOf(settingsService.exportFormat())
 
                                         contentItem: Text {
                                             text: exportFormat.displayText
@@ -822,6 +801,7 @@ Item {
                                         Layout.rightMargin: 50
 
                                         onCurrentIndexChanged: settingsService.setExportFormat(currentText)
+
                                     }
                                 }
                                 Label {
@@ -870,9 +850,7 @@ Item {
                                         id: importFolderField
                                         placeholderText: "Enter folder path"
 
-                                        Component.onCompleted: {
-                                            text: settingsService.importLocation()             // current value
-                                        }
+                                        Component.onCompleted: text = settingsService.importLocation()      
 
                                         width: 300
                                         onEditingFinished: {
@@ -908,9 +886,7 @@ Item {
                                         height: 25
                                         model: ["Replace old snippet with incoming", "Keep both / Rename incoming", "Ignore incoming"]
 
-                                        Component.onCompleted: {
-                                            currentIndex: settingsService.conflictHandling()
-                                        }
+                                        Component.onCompleted: currentIndex = conflictControl.model.indexOf(settingsService.conflictHandling())
 
                                         contentItem: Text {
                                             text: conflictControl.displayText
