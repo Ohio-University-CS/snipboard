@@ -49,9 +49,10 @@ int main(int argc, char* argv[]) {
 
     TagService tagService;
     engine.rootContext()->setContextProperty("tagService", &tagService);
+    
     // SettingsService
     SettingsService settingsService;
-    engine.rootContext()->setContextProperty("SettingsService", &settingsService);
+    engine.rootContext()->setContextProperty("settingsService", &settingsService);
     
     // Update this function with any new .qml paths
     loadModules(engine);

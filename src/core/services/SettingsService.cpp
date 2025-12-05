@@ -103,7 +103,7 @@ void SettingsService::setWrapLines(bool value) {
 }
 
 void SettingsService::setConfirmBeforeDelete(bool value) {
-    m_settings.confrimBeforeDelete = value;
+    m_settings.confirmBeforeDelete = value;
     save();
     emit settingsChanged();
 }

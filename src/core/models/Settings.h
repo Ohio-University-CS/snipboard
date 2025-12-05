@@ -12,7 +12,7 @@ struct Settings {
     bool syntaxHighlighting = true;
 
     bool wrapLines = true;
-    bool confrimBeforeDelete = true;
+    bool confirmBeforeDelete = true;
     int tabSize = 4;
     QString defaultLanguage = "cpp";
 
@@ -38,7 +38,7 @@ struct Settings {
         obj["syntaxHighlighting"] = syntaxHighlighting;
 
         obj["wrapLines"] = wrapLines;
-        obj["confrimBeforeDelete"] = confrimBeforeDelete;
+        obj["confirmBeforeDelete"] = confirmBeforeDelete;
         obj["tabSize"] = tabSize;
         obj["defaultLanguage"] = defaultLanguage;
 
@@ -65,7 +65,7 @@ struct Settings {
         s.syntaxHighlighting = obj["syntaxHighlighting"].toBool();
 
         s.wrapLines = obj["wrapLines"].toBool();
-        s.confrimBeforeDelete = obj["confrimBeforeDelete"].toBool();
+        s.confirmBeforeDelete = obj["confirmBeforeDelete"].toBool();
         s.tabSize = obj["tabSize"].toInt();
         s.defaultLanguage = obj["defaultLanguage"].toString();
 

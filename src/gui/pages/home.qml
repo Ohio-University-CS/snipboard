@@ -27,6 +27,9 @@ Page {
     //Properties of delete tag
     property int tagDialogId: -1
     property string tagDialogName: ""
+
+    //checked tag ID list
+    property var checkedTags: []
     
     //EDit dialog
     Dialog {
@@ -481,9 +484,21 @@ Page {
 
                         for (let i = 0; i < tagList.count; i++) {
                             const item = tagList.itemAtIndex(i)
+
+                            var index = checkedTags.indexOf(item.model.id)
+                            if (index === -1) {
+                                checkedTags.push(item.model.id)
+                            }
+
                             if (item) {
                                 item.checkbox.checked = allTagsChecked
                             }
+                        }
+                        if(allTagsChecked) {
+                            snippetService.loadAll()
+                        }
+                        else {
+                            snippetService.loadByAny(checkedTags)
                         }
                     }
                     
@@ -501,6 +516,7 @@ Page {
                 layer.enabled: true
             
                 // -- TAG LIST --
+                
                 ListView {
                     id: tagList
                     anchors.fill: parent
@@ -626,7 +642,18 @@ Page {
                                         tag.checked = checked;
                                         if(tagChecked.checked === false) {
                                             checkAllButton.allTagsChecked = false
+
+                                            var index = checkedTags.indexOf(model.id)
+                                            if (index !== -1) {
+                                                checkedTags.splice(index, 1) // removes 1 element at position index
+                                            }
                                         }
+                                        else {
+                                            if (checkedTags.indexOf(model.id) === -1) {
+                                                checkedTags.push(model.id)
+                                            }
+                                        }
+                                        snippetService.loadByAny(checkedTags)
                                     }
                                 }
 

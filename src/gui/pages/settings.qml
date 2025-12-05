@@ -285,7 +285,9 @@ Item {
                                         width: 100
                                         height: 25
                                         model: ["Light", "Dark"]
-                                        currentIndex: settingsService.theme()
+                                        Component.onCompleted: {
+                                            currentIndex: settingsService.theme()
+                                        }
                                         contentItem: Text {
                                                 text: themeControl.displayText
                                                 color: "#000000"
@@ -342,7 +344,9 @@ Item {
                                         id: fontSlider
                                         from: 10
                                         to: 24
-                                        value: 14
+                                        Component.onCompleted: {
+                                            value: settingsService.editorFontSize()
+                                        }
                                         stepSize: 1
                                         width: 200
                                         height: 30
@@ -380,7 +384,9 @@ Item {
                                         width: 100
                                         height: 25
                                         model: ["Consolas", "JetBrains Mono", "Fira Code", "Source Code Pro"]
-                                        currentIndex: 0
+                                        Component.onCompleted: {
+                                            currentIndex: settingsService.editorFontFamily()
+                                        }
                                         contentItem: Text {
                                                 text: fontControl.displayText
                                                 color: "#000000"
@@ -413,8 +419,10 @@ Item {
                                     }
                                     Switch {
                                         id: lineNumbersSwitch
-                                        checked: true
-    
+
+                                        Component.onCompleted: {
+                                            checked: settingsService.lineNumbers()
+                                        }
                                         onCheckedChanged: settingsService.setLineNumbers(checked)
                                         Layout.rightMargin: 50
                                     }
@@ -441,8 +449,10 @@ Item {
     
                                     Switch {
                                         id: syntaxHighlightingSwitch
-                                        checked: true
-    
+                                        Component.onCompleted: {
+                                            checked: settingsService.syntaxHighlighting()
+                                        }
+
                                         onCheckedChanged: settingsService.setSyntaxHighlighting(checked)
 
                                         Layout.rightMargin: 50
@@ -492,7 +502,10 @@ Item {
                                     }
                                     Switch {
                                         id: wrapLinesSwitch
-                                        checked: false
+
+                                        Component.onCompleted: {
+                                            checked: settingsService.wrapLines()
+                                        }
     
                                         onCheckedChanged: settingsService.setWrapLines(checked)
                                         
@@ -520,7 +533,10 @@ Item {
                                     }
                                     Switch {
                                         id: confirmDeleteSwitch
-                                        checked: true
+
+                                        Component.onCompleted: {
+                                            checked: settingsService.confirmBeforeDelete()
+                                        }
     
                                         onCheckedChanged: settingsService.setConfirmBeforeDelete(checked)
                                         
@@ -553,7 +569,11 @@ Item {
                                         width: 100
                                         height: 25
                                         model: ["2", "4", "8"]
-                                        currentIndex: 1
+
+                                        Component.onCompleted: {
+                                            currentIndex: settingsService.tabSize()
+                                        }
+
                                         contentItem: Text {
                                                 text: tabControl.displayText
                                                 color: "#000000"
@@ -589,7 +609,11 @@ Item {
                                         width: 100
                                         height: 25
                                         model: ["cpp", "py", "cs", "java", "js", "ts"]
-                                        currentIndex: 0
+
+                                        Component.onCompleted: {
+                                            currentIndex: settingsService.defaultLanguage()
+                                        }
+
                                         contentItem: Text {
                                                 text: languageControl.displayText
                                                 color: "#000000"
@@ -646,7 +670,11 @@ Item {
                                         width: 100
                                         height: 25
                                         model: ["Alphabetical", "Last modified", "Last created", "Favorites first"]
-                                        currentIndex: 1
+
+                                        Component.onCompleted: {
+                                            currentIndex: settingsService.defaultSortMethod()
+                                        }
+
                                         contentItem: Text {
                                                 text: defaultSortControl.displayText
                                                 color: "#000000"
@@ -682,7 +710,11 @@ Item {
                                         width: 100
                                         height: 25 
                                         model: ["Folder1", "Folder2", "Another folder", "My folder"]
-                                        currentIndex: 3
+
+                                        Component.onCompleted: {
+                                            currentIndex: settingsService.defaultSnippetFolder()
+                                        }
+
                                         contentItem: Text {
                                                 text: defaultFolderControl.displayText
                                                 color: "#000000"
@@ -738,7 +770,11 @@ Item {
                                     TextField {
                                         id: exportFolderField
                                         placeholderText: "Enter folder path"
-                                        text: ""             // current value
+
+                                        Component.onCompleted: {
+                                            text: settingsService.exportLocation()             // current value
+                                        }
+
                                         width: 300
                                         onEditingFinished: {
                                             console.log("User export folder:", text)
@@ -772,7 +808,11 @@ Item {
                                         width: 100
                                         height: 25
                                         model: [".json", ".txt", ".csv"]
-                                        currentIndex: 0
+
+                                        Component.onCompleted: {
+                                            currentIndex: settingsService.exportFormat()
+                                        }
+
                                         contentItem: Text {
                                             text: exportFormat.displayText
                                             color: "#000000"
@@ -829,7 +869,11 @@ Item {
                                     TextField {
                                         id: importFolderField
                                         placeholderText: "Enter folder path"
-                                        text: ""             // current value
+
+                                        Component.onCompleted: {
+                                            text: settingsService.importLocation()             // current value
+                                        }
+
                                         width: 300
                                         onEditingFinished: {
                                             console.log("User import folder:", text)
@@ -863,7 +907,11 @@ Item {
                                         width: 100
                                         height: 25
                                         model: ["Replace old snippet with incoming", "Keep both / Rename incoming", "Ignore incoming"]
-                                        currentIndex: 1
+
+                                        Component.onCompleted: {
+                                            currentIndex: settingsService.conflictHandling()
+                                        }
+
                                         contentItem: Text {
                                             text: conflictControl.displayText
                                             color: "#000000"
@@ -897,4 +945,11 @@ Item {
         
     }
     
+    Connections {
+        target: settingsService
+        function onSettingsChanged() {
+            console.log("Settings changed")
+        }
+    }
+
 }
