@@ -408,7 +408,12 @@ Page {
                 color: home_button.down ? "#5a2f86" : (home_button.hovered ? '#915fc4' : "#734c91")
             }
             onClicked: {
-                snippetService.loadAll();
+                if (showAllSnippets) {
+                    snippetService.loadAll();
+                }
+                else {
+                    snippetService.loadAnyTags(checkedTags)
+                }
                 snippetService.sortByDateModified(false);
             }
         }
@@ -490,7 +495,10 @@ Page {
                     implicitHeight: 22
                     padding: 0
 
-                    property bool showAllSnippets: root.showAllSnippets
+                    checkable: true
+
+                    checked: root.showAllSnippets
+
                     Text {
                         text: "Show All"
                         anchors.centerIn: parent
@@ -500,19 +508,17 @@ Page {
                     }
                     background: Rectangle {
                         radius: 8
-                        color: (showAllButton.showAllSnippets || showAllButton.down)
-                               ? "#797979"
-                               : (showAllButton.hovered ? "#969696" : "#b4b4b4")
+                        color: showAllButton.checked ? "#797979" : (showAllButton.hovered ? "#969696" : "#b4b4b4")
                     }
 
                     onClicked: {
-                        root.showAllSnippets = !root.showAllSnippets
+                        root.showAllSnippets = checked
 
                         if(root.showAllSnippets){
                             snippetService.loadAll()
                         }
                         else {
-                            //snippetService.loadByAny(root.checkedTags)
+                            snippetService.loadAnyTags(root.checkedTags)
                         }
                     }
                 }
@@ -646,11 +652,11 @@ Page {
                                     id: tagChecked
                                     Layout.preferredWidth: 11
                                     Layout.preferredHeight: 11
-                                    checked: tag.checked
+                                    checked: model.checked
                                     padding: 0
 
                                     onCheckedChanged: {
-                                        tag.checked = checked
+                                        model.checked = checked
                                         if(checked === true) {
                                             root.checkedTags.push(model.id)
 
@@ -661,8 +667,7 @@ Page {
                                                 root.checkedTags.splice(index, 1) //removes tag from list of checked tags
                                             }
                                         }
-                                        //snippetService.loadByAnyTags(root.checkedTags)
-                                        //uncomment this ^^^ once function is added to snippetService 
+                                        snippetService.loadAnyTags(root.checkedTags)
                                         root.showAllSnippets = false
                                     }
                                 }
