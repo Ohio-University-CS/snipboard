@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import SnipBoard 1.0  // for SnippetObject and ClipboardHelper type if needed
-import QtQuick.Controls.Basic as Basic   // <-- add this
+import QtQuick.Controls.Basic as Basic
 
 Item {
     id: settingsRoot
@@ -30,12 +30,13 @@ Item {
             y: 0
             width: 800
             height: 600
-            
+
             Rectangle {
                 id: settingsMenu
                 width: 124
                 height: parent.height
                 color: "#cfcfcf"
+                // color: Colors.surfaceContainer
                 visible: true
                 // Home
                 Basic.Button {
@@ -53,36 +54,36 @@ Item {
                         color: home_button.down ? "#5a2f86" : (home_button.hovered ? '#915fc4' : "#734c91")
                     }
                     onClicked: {
-                        if(settingsRoot.parentLoader) {
-                            settingsRoot.parentLoader.visible = false
-                            settingsRoot.parentLoader.source = null
+                        if (settingsRoot.parentLoader) {
+                            settingsRoot.parentLoader.visible = false;
+                            settingsRoot.parentLoader.source = null;
                         }
                     }
                 }
-                
+
                 ColumnLayout {
                     id: columnLayout
                     x: 10
                     y: 134
                     width: 104
                     height: 320
-                    
+
                     Basic.Button {
                         id: toAppearance
                         text: "Appearance"
                         contentItem: Text {
-                                text: toAppearance.text
-                                color: "#333333"
-                                font.pixelSize: 14
-                                horizontalAlignment: Text.AlignLeft
-                                verticalAlignment: Text.AlignVCenter
+                            text: toAppearance.text
+                            color: "#333333"
+                            font.pixelSize: 14
+                            horizontalAlignment: Text.AlignLeft
+                            verticalAlignment: Text.AlignVCenter
                         }
                         Layout.fillWidth: true
                         height: 25
 
-                        background: Rectangle{
+                        background: Rectangle {
                             radius: 8
-                            color: toAppearance.down ? '#bfbfbf' : (toAppearance.hovered ? '#d0d0d0' : '#c0c0c0')
+                            color: toAppearance.down ? '#bfbfbf' : (toAppearance.hovered ? '#d0d0d0' : '#c0c0c0')                               
                         }
                         onClicked: scroll.contentY = 0
                     }
@@ -90,16 +91,16 @@ Item {
                         id: toEditorAppearance
                         text: "Editor\nAppearance"
                         contentItem: Text {
-                                text: toEditorAppearance.text
-                                color: "#333333"
-                                font.pixelSize: 14
-                                horizontalAlignment: Text.AlignLeft
-                                verticalAlignment: Text.AlignVCenter
+                            text: toEditorAppearance.text
+                            color: "#333333"
+                            font.pixelSize: 14
+                            horizontalAlignment: Text.AlignLeft
+                            verticalAlignment: Text.AlignVCenter
                         }
                         Layout.fillWidth: true
                         height: 25
 
-                        background: Rectangle{
+                        background: Rectangle {
                             radius: 8
                             color: toEditorAppearance.down ? '#bfbfbf' : (toEditorAppearance.hovered ? '#d0d0d0' : '#c0c0c0')
                         }
@@ -109,16 +110,16 @@ Item {
                         id: toSnippetBehavior
                         text: "Snippet\nBehavior"
                         contentItem: Text {
-                                text: toSnippetBehavior.text
-                                color: "#333333"
-                                font.pixelSize: 14
-                                horizontalAlignment: Text.AlignLeft
-                                verticalAlignment: Text.AlignVCenter
+                            text: toSnippetBehavior.text
+                            color: "#333333"
+                            font.pixelSize: 14
+                            horizontalAlignment: Text.AlignLeft
+                            verticalAlignment: Text.AlignVCenter
                         }
                         Layout.fillWidth: true
                         height: 25
 
-                        background: Rectangle{
+                        background: Rectangle {
                             radius: 8
                             color: toSnippetBehavior.down ? '#bfbfbf' : (toSnippetBehavior.hovered ? '#d0d0d0' : '#c0c0c0')
                         }
@@ -128,16 +129,16 @@ Item {
                         id: toSnippetOrganization
                         text: "Snippet\nOrganization"
                         contentItem: Text {
-                                text: toSnippetOrganization.text
-                                color: "#333333"
-                                font.pixelSize: 14
-                                horizontalAlignment: Text.AlignLeft
-                                verticalAlignment: Text.AlignVCenter
+                            text: toSnippetOrganization.text
+                            color: "#333333"
+                            font.pixelSize: 14
+                            horizontalAlignment: Text.AlignLeft
+                            verticalAlignment: Text.AlignVCenter
                         }
                         Layout.fillWidth: true
                         height: 25
 
-                        background: Rectangle{
+                        background: Rectangle {
                             radius: 8
                             color: toSnippetOrganization.down ? '#bfbfbf' : (toSnippetOrganization.hovered ? '#d0d0d0' : '#c0c0c0')
                         }
@@ -147,16 +148,16 @@ Item {
                         id: toExportOptions
                         text: "Export\nOptions"
                         contentItem: Text {
-                                text: toExportOptions.text
-                                color: "#333333"
-                                font.pixelSize: 14
-                                horizontalAlignment: Text.AlignLeft
-                                verticalAlignment: Text.AlignVCenter
+                            text: toExportOptions.text
+                            color: "#333333"
+                            font.pixelSize: 14
+                            horizontalAlignment: Text.AlignLeft
+                            verticalAlignment: Text.AlignVCenter
                         }
                         Layout.fillWidth: true
                         height: 25
 
-                        background: Rectangle{
+                        background: Rectangle {
                             radius: 8
                             color: toExportOptions.down ? '#bfbfbf' : (toExportOptions.hovered ? '#d0d0d0' : '#c0c0c0')
                         }
@@ -166,24 +167,23 @@ Item {
                         id: toImportOptions
                         text: "Import\nOptions"
                         contentItem: Text {
-                                text: toImportOptions.text
-                                color: "#333333"
-                                font.pixelSize: 14
-                                horizontalAlignment: Text.AlignLeft
-                                verticalAlignment: Text.AlignVCenter
+                            text: toImportOptions.text
+                            color: "#333333"
+                            font.pixelSize: 14
+                            horizontalAlignment: Text.AlignLeft
+                            verticalAlignment: Text.AlignVCenter
                         }
                         Layout.fillWidth: true
                         height: 25
 
-                        background: Rectangle{
+                        background: Rectangle {
                             radius: 8
                             color: toImportOptions.down ? '#bfbfbf' : (toImportOptions.hovered ? '#d0d0d0' : '#c0c0c0')
                         }
                         onClicked: scroll.contentY = snippetOrganizationColumn.y - 10
                     }
-                    
                 }
-                
+
                 Image {
                     id: image1
                     x: 25
@@ -193,14 +193,14 @@ Item {
                     source: "qrc:/resources/icons/sb_logo.png"
                     fillMode: Image.PreserveAspectFit
                 }
-                
             }
-            
+
             Rectangle {
                 id: settingsOptions
                 width: parent.width - settingsMenu.width
                 height: parent.height
                 color: "#f4f4f4"
+                // color: Colors.surface
                 visible: true
 
                 Label {
@@ -210,715 +210,711 @@ Item {
                     font.pixelSize: 24
                     font.bold: true
                     color: "#000000"
+                    // color: Colors.surfaceText
                 }
 
-                    Flickable {
-                        id: scroll
-                        x: 31
-                        y: 76
-                        width: 615
-                        height: 487
-                        contentHeight: parentColumn.implicitHeight
-                        contentWidth: width
-                        clip: true
-                        
-                        Rectangle {
-                            id: scrollRectangle
-                            anchors.fill: parent
-                            color: "#ffffff"
-                            radius: 8
+                Flickable {
+                    id: scroll
+                    x: 31
+                    y: 76
+                    width: 615
+                    height: 487
+                    contentHeight: parentColumn.implicitHeight
+                    contentWidth: width
+                    clip: true
+
+                    Rectangle {
+                        id: scrollRectangle
+                        anchors.fill: parent
+                        color: "#ffffff"
+                        // color: Colors.surfaceContainerHigh
+                        radius: 8
+                    }
+                    ColumnLayout {
+                        id: parentColumn
+                        x: 0
+                        y: 0
+                        width: 610
+                        height: 678
+                        Layout.margins: 10
+                        //Layout.fillWidth: true
+
+                        Item {
+                            id: appearanceSpacer
+                            height: 2
+                            Layout.fillWidth: true
                         }
                         ColumnLayout {
-                            id: parentColumn
-                            x: 0
-                            y: 0
-                            width: 610
-                            height: 678
+                            id: appearanceColumn
                             Layout.margins: 10
-                            //Layout.fillWidth: true
-    
-                            Item{
-                                id: appearanceSpacer
-                                height: 2
-                                Layout.fillWidth: true
-                            }
-                            ColumnLayout {
-                                id: appearanceColumn
-                                Layout.margins: 10
-                                Layout.fillWidth: true
+                            Layout.fillWidth: true
 
-                                RowLayout {
-                                    spacing: 8
-                                
+                            RowLayout {
+                                spacing: 8
 
-                                    Label {
-                                        color: "#000000"
-                                        text: "Appearance"
-                                        font.pixelSize: 18
-                                        font.styleName: "Bold"
-                                    }
-                                    
-                                    Rectangle{ 
-                                        id: sectionSeparator
-                                        height: 2
-                                        color: "#212121"
-                                        Layout.fillWidth: true
-                                        Layout.alignment: AlignVCenter
-                                    }
-                                }
-    
-                                RowLayout {
-                                    height: 34
-                                    spacing: 8
-                                    Layout.leftMargin: 10
-                                    Layout.preferredHeight: 40
-                                    
-                                    Label {
-                                        color: "#545454"
-                                        text: "Theme:"
-                                    }
-                                    Item {
-                                        Layout.fillWidth: true
-                                    }
-                                    ComboBox {
-                                        id: themeControl
-                                        width: 100
-                                        height: 25
-                                        model: ["Light", "Dark"]
-                                        Component.onCompleted: currentIndex = settingsService.theme()
-                                        
-                                        contentItem: Text {
-                                                text: themeControl.displayText
-                                                color: "#000000"
-                                                font: themeControl.font
-                                                verticalAlignment: Text.AlignVCenter
-                                        }
-                                        Layout.rightMargin: 50
-
-                                        onCurrentIndexChanged: settingsService.setTheme(currentIndex)
-                                    }
-                                }
                                 Label {
-                                    color: "#979797"
-                                    text: "         Changes the theme of the whole application"
-                                    font.pixelSize: 10
-                                    font.styleName: "Regular Italic"
+                                    color: "#000000"
+                                    // color: Colors.surfaceText
+                                    text: "Appearance"
+                                    font.pixelSize: 18
+                                    font.styleName: "Bold"
+                                }
+
+                                Rectangle {
+                                    id: sectionSeparator
+                                    height: 2
+                                    color: "#212121"
+                                    // color: Colors.outline
+                                    Layout.fillWidth: true
+                                    Layout.alignment: AlignVCenter
                                 }
                             }
-                            ColumnLayout {
-                                id: editorAppearanceColumn
-                                Layout.margins: 10
-                                Layout.fillWidth: true
-                                RowLayout {
-                                    spacing: 8
-                                
-                                    Label {
-                                        color: "#000000"
-                                        text: "Editor Appearance"
-                                        font.pixelSize: 18
-                                        font.styleName: "Bold"
-                                    }
-                                    Rectangle{ 
-                                        id: sectionSeparator2
-                                        height: 2
-                                        color: "#212121"
-                                        Layout.fillWidth: true
-                                        Layout.alignment: AlignVCenter
-                                    }
-                                }
-                                RowLayout {
-                                    height: 34
-                                    spacing: 8
-                                    Layout.leftMargin: 10
-                                    Layout.preferredHeight: 40
-                                    
-                                    Label {
-                                        color: "#545454"
-                                        text: "Editor font size:"
-                                    }
-                                    Item {
-                                        Layout.fillWidth: true
-                                    }
-                                    Slider {
-                                        id: fontSlider
-                                        from: 10
-                                        to: 24
-                                        Component.onCompleted: value = settingsService.editorFontSize()
-                                        
-                                        stepSize: 1
-                                        width: 200
-                                        height: 30
-    
-                                        onValueChanged: settingsService.setEditorFontSize(value)
-                                    }
-                                    
-                                    Label {
-                                        color: "#545454"
-                                        text: Math.round(fontSlider.value) + "px"
-                                        Layout.rightMargin: 60
-                                    }
-                                }
+
+                            RowLayout {
+                                height: 34
+                                spacing: 8
+                                Layout.leftMargin: 10
+                                Layout.preferredHeight: 40
+
                                 Label {
-                                    color: "#979797"
-                                    text: "         Controls font size in the editor"
-                                    font.pixelSize: 10
-                                    font.styleName: "Regular Italic"
+                                    color: "#545454"
+                                    text: "Theme:"
                                 }
-                                RowLayout {
-                                    height: 34
-                                    spacing: 8
-                                    Layout.leftMargin: 10
-                                    Layout.preferredHeight: 40
-    
-                                    Label {
-                                        color: "#545454"
-                                        text: "Editor font family:"
-                                    }
-                                    Item {
-                                        Layout.fillWidth: true
-                                    }
-                                    ComboBox {
-                                        id: fontControl
-                                        width: 100
-                                        height: 25
-                                        model: ["Consolas", "JetBrains Mono", "Fira Code", "Source Code Pro"]
-                                        Component.onCompleted: currentIndex = settingsService.editorFontFamily()
-                                        
-                                        contentItem: Text {
-                                                text: fontControl.displayText
-                                                color: "#000000"
-                                                font: fontControl.font
-                                                verticalAlignment: Text.AlignVCenter
-                                        }
-                                        Layout.rightMargin: 50
+                                Item {
+                                    Layout.fillWidth: true
+                                }
+                                ComboBox {
+                                    id: themeControl
+                                    width: 120
+                                    model: ["Light", "Dark"]
 
-                                        onCurrentIndexChanged: settingsService.setEditorFontFamily(currentIndex)
-                                    }
-                                }
-                                Label {
-                                    color: "#979797"
-                                    text: "         Controls font style in the editor"
-                                    font.pixelSize: 10
-                                    font.styleName: "Regular Italic"
-                                }
-                                RowLayout {
-                                    height: 34
-                                    spacing: 8
-                                    Layout.leftMargin: 10
-                                    Layout.preferredHeight: 40
-                                    
-                                    Label {
-                                        color: "#545454"
-                                        text: "Line numbers:"
-                                    }
-                                    Item {
-                                        Layout.fillWidth: true
-                                    }
-                                    Switch {
-                                        id: lineNumbersSwitch
+                                    // reflect current mode from Colors singleton
+                                    currentIndex: Colors.mode === "dark" ? 1 : 0
 
-                                        Component.onCompleted: checked = settingsService.lineNumbers()
-                                        
-                                        onCheckedChanged: settingsService.setLineNumbers(checked)
-                                        Layout.rightMargin: 50
-                                    }
-                                }
-                                Label {
-                                    color: "#979797"
-                                    text: "         Enables/Disables line numbers in the editor"
-                                    font.pixelSize: 10
-                                    font.styleName: "Regular Italic"
-                                }
-                                RowLayout {
-                                    height: 34
-                                    spacing: 8
-                                    Layout.leftMargin: 10
-                                    Layout.preferredHeight: 40
-    
-                                    Label {
-                                        color: "#545454"
-                                        text: "Syntax highlighting:"
-                                    }
-                                    Item {
-                                        Layout.fillWidth: true
-                                    }
-    
-                                    Switch {
-                                        id: syntaxHighlightingSwitch
-                                        Component.onCompleted: checked = settingsService.syntaxHighlighting()
+                                    // when user picks a mode, update Colors (the singleton does the rest app-wide)
+                                    onActivated: ix => Colors.mode = (ix === 1 ? "dark" : "light")
 
-                                        onCheckedChanged: settingsService.setSyntaxHighlighting(checked)
-
-                                        Layout.rightMargin: 50
+                                    Component.onCompleted: currentIndex = settingsService.theme()
+                                    onCurrentIndexChanged: settingsService.setTheme(currentIndex)
+                                    // keep the text legible against the page background
+                                    contentItem: Text {
+                                        text: themeControl.displayText
+                                        font: themeControl.font
+                                        verticalAlignment: Text.AlignVCenter
+                                        color: Colors.surfaceText
                                     }
-                                }
-                                Label {
-                                    color: "#979797"
-                                    text: "         Enables/Disables syntax highlighting in the editor"
-                                    font.pixelSize: 10
-                                    font.styleName: "Regular Italic"
-                                }
-                                
-                            }
-                            ColumnLayout {
-                                id: snippetBehaviorColumn
-                                Layout.fillWidth: true
-                                Layout.margins: 10
-                                RowLayout {
-                                    spacing: 8
-                                    Label {
-                                        color: "#000000"
-                                        text: "Snippet Behavior"
-                                        font.pixelSize: 18
-                                        font.styleName: "Bold"
-                                    }
-                                    Rectangle{ 
-                                        id: sectionSeparator3
-                                        height: 2
-                                        color: "#212121"
-                                        Layout.fillWidth: true
-                                        Layout.alignment: AlignVCenter
-                                    }
-                                }
-    
-                                RowLayout {
-                                    height: 34
-                                    spacing: 8
-                                    Layout.leftMargin: 10
-                                    Layout.preferredHeight: 40
-    
-                                    Label {
-                                        color: "#545454"
-                                        text: "Wrap lines:"
-                                    }
-                                    Item {
-                                        Layout.fillWidth: true
-                                    }
-                                    Switch {
-                                        id: wrapLinesSwitch
-
-                                        Component.onCompleted: checked = settingsService.wrapLines()
-    
-                                        onCheckedChanged: settingsService.setWrapLines(checked)
-                                        
-                                        Layout.rightMargin: 50
-                                    }
-                                }
-                                Label {
-                                    color: "#979797"
-                                    text: "         When enabled, automatically wrap long lines in the snippet editor"
-                                    font.pixelSize: 10
-                                    font.styleName: "Regular Italic"
-                                }
-                                RowLayout {
-                                    height: 34
-                                    spacing: 8
-                                    Layout.leftMargin: 10
-                                    Layout.preferredHeight: 40
-    
-                                    Label {
-                                        color: "#545454"
-                                        text: "Confirm before delete:"
-                                    }
-                                    Item {
-                                        Layout.fillWidth: true
-                                    }
-                                    Switch {
-                                        id: confirmDeleteSwitch
-
-                                        Component.onCompleted: checked = settingsService.confirmBeforeDelete()
-    
-                                        onCheckedChanged: settingsService.setConfirmBeforeDelete(checked)
-                                        
-                                        Layout.rightMargin: 50
-                                    }
-                                }
-                                Label {
-                                    color: "#979797"
-                                    text: "         When enabled, deleting snippets required confirmation"
-                                    font.pixelSize: 10
-                                    font.styleName: "Regular Italic"
-                                }
-                                
-                                
-                                RowLayout {
-                                    height: 34
-                                    spacing: 8
-                                    Layout.leftMargin: 10
-                                    Layout.preferredHeight: 40
-    
-                                    Label {
-                                        color: "#545454"
-                                        text: "Tab size:"
-                                    }
-                                    Item {
-                                        Layout.fillWidth: true
-                                    }
-                                    ComboBox {
-                                        id: tabControl
-                                        width: 100
-                                        height: 25
-                                        model: ["2", "4", "8"]
-
-                                        Component.onCompleted: currentIndex = settingsService.tabSize()
-
-                                        contentItem: Text {
-                                                text: tabControl.displayText
-                                                color: "#000000"
-                                                font: tabControl.font
-                                                verticalAlignment: Text.AlignVCenter
-                                        }
-                                        Layout.rightMargin: 50
-
-                                        onCurrentIndexChanged: settingsService.setTabSize(currentIndex)
-                                    }
-                                }
-                                Label {
-                                    color: "#979797"
-                                    text: "         Controls size of tabs in the editor"
-                                    font.pixelSize: 10
-                                    font.styleName: "Regular Italic"
-                                }
-                                RowLayout {
-                                    height: 34
-                                    spacing: 8
-                                    Layout.leftMargin: 10
-                                    Layout.preferredHeight: 40
-    
-                                    Label {
-                                        color: "#545454"
-                                        text: "Default language:"
-                                    }
-                                    Item {
-                                        Layout.fillWidth: true
-                                    }
-                                    ComboBox {
-                                        id: languageControl
-                                        width: 100
-                                        height: 25
-                                        model: ["cpp", "py", "cs", "java", "js", "ts"]
-
-                                        Component.onCompleted: currentIndex = languageControl.model.indexOf(settingsService.defaultLanguage())
-
-                                        contentItem: Text {
-                                                text: languageControl.displayText
-                                                color: "#000000"
-                                                font: languageControl.font
-                                                verticalAlignment: Text.AlignVCenter
-                                        }
-                                        Layout.rightMargin: 50
-
-                                        onCurrentIndexChanged: settingsService.setDefaultLanguage(currentText)
-                                    }
-                                }
-                                Label {
-                                    color: "#979797"
-                                    text: "         Controls the default language selected when creating a new snippet"
-                                    font.pixelSize: 10
-                                    font.styleName: "Regular Italic"
+                                    Layout.rightMargin: 50
                                 }
                             }
-                            ColumnLayout {
-                                id: snippetOrganizationColumn
-                                Layout.fillWidth: true
-                                Layout.margins: 10
-                                RowLayout {
-                                    spacing: 8
-                                    Label {
-                                        color: "#000000"
-                                        text: "Snippet Organization"
-                                        font.pixelSize: 18
-                                        font.styleName: "Bold"
-                                    }
-                                    Rectangle{ 
-                                        id: sectionSeparator4
-                                        height: 2
-                                        color: "#212121"
-                                        Layout.fillWidth: true
-                                        Layout.alignment: AlignVCenter
-                                    }
-                                }
-                                RowLayout {
-                                    height: 34
-                                    spacing: 8
-                                    Layout.leftMargin: 10
-                                    Layout.preferredHeight: 40
-    
-                                    Label {
-                                        color: "#545454"
-                                        text: "Default sort method:"
-                                    }
-                                    Item {
-                                        Layout.fillWidth: true
-                                    }
-                                    ComboBox {
-                                        id: defaultSortControl
-                                        width: 100
-                                        height: 25
-                                        model: ["Alphabetical", "Last modified", "Last created", "Favorites first"]
+                            Label {
+                                color: "#979797"
+                                // color: Colors.surfaceTextVariant
+                                text: "         Changes the theme of the whole application"
+                                font.pixelSize: 10
+                                font.styleName: "Regular Italic"
+                            }
+                        }
+                        ColumnLayout {
+                            id: editorAppearanceColumn
+                            Layout.margins: 10
+                            Layout.fillWidth: true
+                            RowLayout {
+                                spacing: 8
 
-                                        //Component.onCompleted: 
-                                        currentIndex: defaultSortControl.model.indexOf(settingsService.defaultSortMethod())
-
-                                        contentItem: Text {
-                                                text: defaultSortControl.displayText
-                                                color: "#000000"
-                                                font: defaultSortControl.font
-                                                verticalAlignment: Text.AlignVCenter
-                                        }
-                                        Layout.rightMargin: 50
-
-                                        onCurrentIndexChanged: settingsService.setDefaultSortMethod(currentText)
-                                    }
-                                }
                                 Label {
-                                    color: "#979797"
-                                    text: "         Controls the default sorting of snippets"
-                                    font.pixelSize: 10
-                                    font.styleName: "Regular Italic"
+                                    color: "#000000"
+                                    text: "Editor Appearance"
+                                    font.pixelSize: 18
+                                    font.styleName: "Bold"
                                 }
-                                RowLayout {
-                                    height: 34
-                                    spacing: 8
-                                    Layout.leftMargin: 10
-                                    Layout.preferredHeight: 40
-    
-                                    Label {
-                                        color: "#545454"
-                                        text: "Default snippet folder:"
-                                    }
-                                    Item {
-                                        Layout.fillWidth: true
-                                    }
-                                    ComboBox {
-                                        id: defaultFolderControl
-                                        width: 100
-                                        height: 25 
-                                        model: ["Folder1", "Folder2", "Another folder", "My folder"]
-
-                                        Component.onCompleted: currentIndex = defaultFolderControl.model.indexOf(settingsService.defaultSnippetFolder())
-
-                                        contentItem: Text {
-                                                text: defaultFolderControl.displayText
-                                                color: "#000000"
-                                                font: defaultFolderControl.font
-                                                verticalAlignment: Text.AlignVCenter
-                                        }
-                                        Layout.rightMargin: 50
-
-                                        onCurrentIndexChanged: settingsService.setDefaultSnippetFolder(currentIndex)
-                                    }
-                                }
-                                Label {
-                                    color: "#979797"
-                                    text: "         Controls the default snippet folder when creating a new snippet"
-                                    font.pixelSize: 10
-                                    font.styleName: "Regular Italic"
+                                Rectangle {
+                                    id: sectionSeparator2
+                                    height: 2
+                                    color: "#212121"
+                                    Layout.fillWidth: true
+                                    Layout.alignment: AlignVCenter
                                 }
                             }
-                            
-                            ColumnLayout {
-                                id: exportOptionsColumn
-                                Layout.fillWidth: true
-                                Layout.margins: 10
-                                RowLayout {
-                                    spacing: 8
-                                    Label {
-                                        color: "#000000"
-                                        text: "Export Options"
-                                        font.pixelSize: 18
-                                        font.styleName: "Bold"
-                                    }
-                                    Rectangle{ 
-                                        id: sectionSeparator5
-                                        height: 2
-                                        color: "#212121"
-                                        Layout.fillWidth: true
-                                        Layout.alignment: AlignVCenter
-                                    }
-                                }
-                                RowLayout {
-                                    height: 34
-                                    spacing: 8
-                                    Layout.leftMargin: 10
-                                    Layout.preferredHeight: 40
-    
-                                    Label {
-                                        color: "#545454"
-                                        text: "Export location:"
-                                    }
-                                    Item {
-                                        Layout.fillWidth: true
-                                    }
-                                    TextField {
-                                        id: exportFolderField
-                                        placeholderText: "Enter folder path"
+                            RowLayout {
+                                height: 34
+                                spacing: 8
+                                Layout.leftMargin: 10
+                                Layout.preferredHeight: 40
 
-                                        Component.onCompleted: text = settingsService.exportLocation()  
-
-                                        width: 300
-                                        onEditingFinished: {
-                                            console.log("User export folder:", text)
-                                        }
-                                        Layout.rightMargin: 50
-
-                                        onTextChanged: settingsService.setExportLocation(text)
-                                    }
-                                }
                                 Label {
-                                    color: "#979797"
-                                    text: "         Controls where on your computer snippets are saved to"
-                                    font.pixelSize: 10
-                                    font.styleName: "Regular Italic"
+                                    color: "#545454"
+                                    text: "Editor font size:"
                                 }
-                                RowLayout {
-                                    height: 34
-                                    spacing: 8
-                                    Layout.leftMargin: 10
-                                    Layout.preferredHeight: 40
-    
-                                    Label {
-                                        color: "#545454"
-                                        text: "Export format:"
-                                    }
-                                    Item {
-                                        Layout.fillWidth: true
-                                    }
-                                    ComboBox {
-                                        id: exportFormat
-                                        width: 100
-                                        height: 25
-                                        model: [".json", ".txt", ".csv"]
+                                Item {
+                                    Layout.fillWidth: true
+                                }
+                                Slider {
+                                    id: fontSlider
+                                    from: 10
+                                    to: 24
+                                    Component.onCompleted: value = settingsService.editorFontSize()
+                                    
+                                    stepSize: 1
+                                    width: 200
+                                    height: 30
 
-                                        currentIndex: exportFormat.model.indexOf(settingsService.exportFormat())
+                                    onValueChanged: settingsService.setEditorFontSize(value)
+                                }
 
-                                        contentItem: Text {
-                                            text: exportFormat.displayText
+                                Label {
+                                    color: "#545454"
+                                    text: Math.round(fontSlider.value) + "px"
+                                    Layout.rightMargin: 60
+                                }
+                            }
+                            Label {
+                                color: "#979797"
+                                text: "         Controls font size in the editor"
+                                font.pixelSize: 10
+                                font.styleName: "Regular Italic"
+                            }
+                            RowLayout {
+                                height: 34
+                                spacing: 8
+                                Layout.leftMargin: 10
+                                Layout.preferredHeight: 40
+
+                                Label {
+                                    color: "#545454"
+                                    text: "Editor font family:"
+                                }
+                                Item {
+                                    Layout.fillWidth: true
+                                }
+                                ComboBox {
+                                    id: fontControl
+                                    width: 100
+                                    height: 25
+                                    model: ["Consolas", "JetBrains Mono", "Fira Code", "Source Code Pro"]
+                                    currentIndex: 0
+                                    contentItem: Text {
+                                        text: fontControl.displayText
+                                        color: "#000000"
+                                        font: fontControl.font
+                                        verticalAlignment: Text.AlignVCenter
+                                    }
+                                    Layout.rightMargin: 50
+                                }
+                            }
+                            Label {
+                                color: "#979797"
+                                text: "         Controls font style in the editor"
+                                font.pixelSize: 10
+                                font.styleName: "Regular Italic"
+                            }
+                            RowLayout {
+                                height: 34
+                                spacing: 8
+                                Layout.leftMargin: 10
+                                Layout.preferredHeight: 40
+
+                                Label {
+                                    color: "#545454"
+                                    text: "Line numbers:"
+                                }
+                                Item {
+                                    Layout.fillWidth: true
+                                }
+                                Switch {
+                                    id: lineNumbersSwitch
+
+                                    Component.onCompleted: checked = settingsService.lineNumbers()
+                                    
+                                    onCheckedChanged: settingsService.setLineNumbers(checked)
+                                    Layout.rightMargin: 50
+                                }
+
+                                
+                            }
+                            Label {
+                                color: "#979797"
+                                text: "         Enables/Disables line numbers in the editor"
+                                font.pixelSize: 10
+                                font.styleName: "Regular Italic"
+                            }
+                            RowLayout {
+                                height: 34
+                                spacing: 8
+                                Layout.leftMargin: 10
+                                Layout.preferredHeight: 40
+
+                                Label {
+                                    color: "#545454"
+                                    text: "Syntax highlighting:"
+                                }
+                                Item {
+                                    Layout.fillWidth: true
+                                }
+
+                                Switch {
+                                    id: syntaxHighlightingSwitch
+                                    Component.onCompleted: checked = settingsService.syntaxHighlighting()
+
+                                    onCheckedChanged: settingsService.setSyntaxHighlighting(checked)
+
+                                    Layout.rightMargin: 50
+                                }
+                            }
+                            Label {
+                                color: "#979797"
+                                text: "         Enables/Disables syntax highlighting in the editor"
+                                font.pixelSize: 10
+                                font.styleName: "Regular Italic"
+                            }
+                        }
+                        ColumnLayout {
+                            id: snippetBehaviorColumn
+                            Layout.fillWidth: true
+                            Layout.margins: 10
+                            RowLayout {
+                                spacing: 8
+                                Label {
+                                    color: "#000000"
+                                    text: "Snippet Behavior"
+                                    font.pixelSize: 18
+                                    font.styleName: "Bold"
+                                }
+                                Rectangle {
+                                    id: sectionSeparator3
+                                    height: 2
+                                    color: "#212121"
+                                    Layout.fillWidth: true
+                                    Layout.alignment: AlignVCenter
+                                }
+                            }
+
+                            RowLayout {
+                                height: 34
+                                spacing: 8
+                                Layout.leftMargin: 10
+                                Layout.preferredHeight: 40
+
+                                Label {
+                                    color: "#545454"
+                                    text: "Wrap lines:"
+                                }
+                                Item {
+                                    Layout.fillWidth: true
+                                }
+                                Switch {
+                                    id: wrapLinesSwitch
+
+                                    Component.onCompleted: checked = settingsService.wrapLines()
+
+                                    onCheckedChanged: settingsService.setWrapLines(checked)
+                                    
+                                    Layout.rightMargin: 50
+                                }
+                            }
+                            Label {
+                                color: "#979797"
+                                text: "         When enabled, automatically wrap long lines in the snippet editor"
+                                font.pixelSize: 10
+                                font.styleName: "Regular Italic"
+                            }
+                            RowLayout {
+                                height: 34
+                                spacing: 8
+                                Layout.leftMargin: 10
+                                Layout.preferredHeight: 40
+
+                                Label {
+                                    color: "#545454"
+                                    text: "Confirm before delete:"
+                                }
+                                Item {
+                                    Layout.fillWidth: true
+                                }
+                                Switch {
+                                    id: confirmDeleteSwitch
+
+                                    Component.onCompleted: checked = settingsService.confirmBeforeDelete()
+
+                                    onCheckedChanged: settingsService.setConfirmBeforeDelete(checked)
+                                    
+                                    Layout.rightMargin: 50
+                                }
+                            }
+                            Label {
+                                color: "#979797"
+                                text: "         When enabled, deleting snippets required confirmation"
+                                font.pixelSize: 10
+                                font.styleName: "Regular Italic"
+                            }
+
+                            RowLayout {
+                                height: 34
+                                spacing: 8
+                                Layout.leftMargin: 10
+                                Layout.preferredHeight: 40
+
+                                Label {
+                                    color: "#545454"
+                                    text: "Tab size:"
+                                }
+                                Item {
+                                    Layout.fillWidth: true
+                                }
+                                ComboBox {
+                                    id: tabControl
+                                    width: 100
+                                    height: 25
+                                    model: ["2", "4", "8"]
+
+                                    Component.onCompleted: currentIndex = settingsService.tabSize()
+
+                                    contentItem: Text {
+                                            text: tabControl.displayText
                                             color: "#000000"
-                                            font: exportFormat.font
+                                            font: tabControl.font
                                             verticalAlignment: Text.AlignVCenter
-                                        }
-                                        Layout.rightMargin: 50
-
-                                        onCurrentIndexChanged: settingsService.setExportFormat(currentText)
-
                                     }
+                                    Layout.rightMargin: 50
+
+                                    onCurrentIndexChanged: settingsService.setTabSize(currentIndex)
                                 }
-                                Label {
-                                    color: "#979797"
-                                    text: "         Controls the export format of snippets"
-                                    font.pixelSize: 10
-                                    font.styleName: "Regular Italic"
-                                }
-                                
                             }
-                            ColumnLayout {
-                                id: importOptionsColumn
-                                Layout.fillWidth: true
-                                Layout.margins: 10
-                                RowLayout {
-                                    spacing: 8
-                                    Label {
-                                        color: "#000000"
-                                        text: "Import Options"
-                                        font.pixelSize: 18
-                                        font.styleName: "Bold"
-                                    }
-                                    Rectangle{ 
-                                        id: sectionSeparator6
-                                        height: 2
-                                        color: "#212121"
-                                        Layout.fillWidth: true
-                                        Layout.alignment: AlignVCenter
-                                    }
-                                }
-                                
-                                RowLayout {
-                                    height: 34
-                                    spacing: 8
-                                    Layout.leftMargin: 10
-                                    Layout.preferredHeight: 40
-    
-                                    Label {
-                                        color: "#545454"
-                                        text: "Import location:"
-                                    }
-                                    Item {
-                                        Layout.fillWidth: true
-                                    }
-                                    TextField {
-                                        id: importFolderField
-                                        placeholderText: "Enter folder path"
+                            Label {
+                                color: "#979797"
+                                text: "         Controls size of tabs in the editor"
+                                font.pixelSize: 10
+                                font.styleName: "Regular Italic"
+                            }
+                            RowLayout {
+                                height: 34
+                                spacing: 8
+                                Layout.leftMargin: 10
+                                Layout.preferredHeight: 40
 
-                                        Component.onCompleted: text = settingsService.importLocation()      
-
-                                        width: 300
-                                        onEditingFinished: {
-                                            console.log("User import folder:", text)
-                                        }
-                                        Layout.rightMargin: 50
-
-                                        onTextChanged: settingsService.setImportLocation(text)
-                                    }
-                                }
                                 Label {
-                                    color: "#979797"
-                                    text: "         Controls where on your computer snippets are loaded from"
-                                    font.pixelSize: 10
-                                    font.styleName: "Regular Italic"
+                                    color: "#545454"
+                                    text: "Default language:"
                                 }
-                                RowLayout {
-                                    height: 34
-                                    spacing: 8
-                                    Layout.leftMargin: 10
-                                    Layout.preferredHeight: 40
-    
-                                    Label {
-                                        color: "#545454"
-                                        text: "Conflict handling:"
-                                    }
-                                    Item {
-                                        Layout.fillWidth: true
-                                    }
-                                    ComboBox {
-                                        id: conflictControl
-                                        width: 100
-                                        height: 25
-                                        model: ["Replace old snippet with incoming", "Keep both / Rename incoming", "Ignore incoming"]
+                                Item {
+                                    Layout.fillWidth: true
+                                }
+                                ComboBox {
+                                    id: languageControl
+                                    width: 100
+                                    height: 25
+                                    model: ["cpp", "py", "cs", "java", "js", "ts"]
 
-                                        Component.onCompleted: currentIndex = conflictControl.model.indexOf(settingsService.conflictHandling())
+                                    Component.onCompleted: currentIndex = languageControl.model.indexOf(settingsService.defaultLanguage())
 
-                                        contentItem: Text {
-                                            text: conflictControl.displayText
+                                    contentItem: Text {
+                                            text: languageControl.displayText
                                             color: "#000000"
-                                            font: conflictControl.font
+                                            font: languageControl.font
                                             verticalAlignment: Text.AlignVCenter
-                                        }
-                                        Layout.rightMargin: 50
-
-                                        onCurrentIndexChanged: settingsService.setConflictHandling(currentText)
                                     }
-                                }
+                                    Layout.rightMargin: 50
+
+                                    onCurrentIndexChanged: settingsService.setDefaultLanguage(currentText)
+                                                }
+                            }
+                            Label {
+                                color: "#979797"
+                                text: "         Controls the default language selected when creating a new snippet"
+                                font.pixelSize: 10
+                                font.styleName: "Regular Italic"
+                            }
+                        }
+                        ColumnLayout {
+                            id: snippetOrganizationColumn
+                            Layout.fillWidth: true
+                            Layout.margins: 10
+                            RowLayout {
+                                spacing: 8
                                 Label {
-                                    color: "#979797"
-                                    text: "         Determines outcome of adding a snippet with an already used ID/Name"
-                                    font.pixelSize: 10
-                                    font.styleName: "Regular Italic"
+                                    color: "#000000"
+                                    text: "Snippet Organization"
+                                    font.pixelSize: 18
+                                    font.styleName: "Bold"
+                                }
+                                Rectangle {
+                                    id: sectionSeparator4
+                                    height: 2
+                                    color: "#212121"
+                                    Layout.fillWidth: true
+                                    Layout.alignment: AlignVCenter
                                 }
                             }
-    
-    
-                            
+                            RowLayout {
+                                height: 34
+                                spacing: 8
+                                Layout.leftMargin: 10
+                                Layout.preferredHeight: 40
+
+                                Label {
+                                    color: "#545454"
+                                    text: "Default sort method:"
+                                }
+                                Item {
+                                    Layout.fillWidth: true
+                                }
+                                ComboBox {
+                                    id: defaultSortControl
+                                    width: 100
+                                    height: 25
+                                    model: ["Alphabetical", "Last modified", "Last created", "Favorites first"]
+
+                                    //Component.onCompleted: 
+                                    currentIndex: defaultSortControl.model.indexOf(settingsService.defaultSortMethod())
+
+                                    contentItem: Text {
+                                            text: defaultSortControl.displayText
+                                            color: "#000000"
+                                            font: defaultSortControl.font
+                                            verticalAlignment: Text.AlignVCenter
+                                    }
+                                    Layout.rightMargin: 50
+
+                                    onCurrentIndexChanged: settingsService.setDefaultSortMethod(currentText)
+                                }
+                            }
+                            Label {
+                                color: "#979797"
+                                text: "         Controls the default sorting of snippets"
+                                font.pixelSize: 10
+                                font.styleName: "Regular Italic"
+                            }
+                            RowLayout {
+                                height: 34
+                                spacing: 8
+                                Layout.leftMargin: 10
+                                Layout.preferredHeight: 40
+
+                                Label {
+                                    color: "#545454"
+                                    text: "Default snippet folder:"
+                                }
+                                Item {
+                                    Layout.fillWidth: true
+                                }
+                                ComboBox {
+                                    id: defaultFolderControl
+                                    width: 100
+                                    height: 25 
+                                    model: ["Folder1", "Folder2", "Another folder", "My folder"]
+
+                                    Component.onCompleted: currentIndex = defaultFolderControl.model.indexOf(settingsService.defaultSnippetFolder())
+
+                                    contentItem: Text {
+                                            text: defaultFolderControl.displayText
+                                            color: "#000000"
+                                            font: defaultFolderControl.font
+                                            verticalAlignment: Text.AlignVCenter
+                                    }
+                                    Layout.rightMargin: 50
+
+                                    onCurrentIndexChanged: settingsService.setDefaultSnippetFolder(currentIndex)
+                                    
+                                }
+                            }
+                            Label {
+                                color: "#979797"
+                                text: "         Controls the default snippet folder when creating a new snippet"
+                                font.pixelSize: 10
+                                font.styleName: "Regular Italic"
+                            }
+                        }
+
+                        ColumnLayout {
+                            id: exportOptionsColumn
+                            Layout.fillWidth: true
+                            Layout.margins: 10
+                            RowLayout {
+                                spacing: 8
+                                Label {
+                                    color: "#000000"
+                                    text: "Export Options"
+                                    font.pixelSize: 18
+                                    font.styleName: "Bold"
+                                }
+                                Rectangle {
+                                    id: sectionSeparator5
+                                    height: 2
+                                    color: "#212121"
+                                    Layout.fillWidth: true
+                                    Layout.alignment: AlignVCenter
+                                }
+                            }
+                            RowLayout {
+                                height: 34
+                                spacing: 8
+                                Layout.leftMargin: 10
+                                Layout.preferredHeight: 40
+
+                                Label {
+                                    color: "#545454"
+                                    text: "Export location:"
+                                }
+                                Item {
+                                    Layout.fillWidth: true
+                                }
+                                TextField {
+                                    id: exportFolderField
+                                    placeholderText: "Enter folder path"
+
+                                    Component.onCompleted: text = settingsService.exportLocation()  
+
+                                    width: 300
+                                    onEditingFinished: {
+                                        console.log("User export folder:", text)
+                                    }
+                                    Layout.rightMargin: 50
+
+                                    onTextChanged: settingsService.setExportLocation(text)
+                                }
+                            }
+                            Label {
+                                color: "#979797"
+                                text: "         Controls where on your computer snippets are saved to"
+                                font.pixelSize: 10
+                                font.styleName: "Regular Italic"
+                            }
+                            RowLayout {
+                                height: 34
+                                spacing: 8
+                                Layout.leftMargin: 10
+                                Layout.preferredHeight: 40
+
+                                Label {
+                                    color: "#545454"
+                                    text: "Export format:"
+                                }
+                                Item {
+                                    Layout.fillWidth: true
+                                }
+                                ComboBox {
+                                    id: exportFormat
+                                    width: 100
+                                    height: 25
+                                    model: [".json", ".txt", ".csv"]
+
+                                    currentIndex: exportFormat.model.indexOf(settingsService.exportFormat())
+
+                                    contentItem: Text {
+                                        text: exportFormat.displayText
+                                        color: "#000000"
+                                        font: exportFormat.font
+                                        verticalAlignment: Text.AlignVCenter
+                                    }
+                                    Layout.rightMargin: 50
+
+                                    onCurrentIndexChanged: settingsService.setExportFormat(currentText)
+                                }
+                            }
+                            Label {
+                                color: "#979797"
+                                text: "         Controls the export format of snippets"
+                                font.pixelSize: 10
+                                font.styleName: "Regular Italic"
+                            }
+                        }
+                        ColumnLayout {
+                            id: importOptionsColumn
+                            Layout.fillWidth: true
+                            Layout.margins: 10
+                            RowLayout {
+                                spacing: 8
+                                Label {
+                                    color: "#000000"
+                                    text: "Import Options"
+                                    font.pixelSize: 18
+                                    font.styleName: "Bold"
+                                }
+                                Rectangle {
+                                    id: sectionSeparator6
+                                    height: 2
+                                    color: "#212121"
+                                    Layout.fillWidth: true
+                                    Layout.alignment: AlignVCenter
+                                }
+                            }
+
+                            RowLayout {
+                                height: 34
+                                spacing: 8
+                                Layout.leftMargin: 10
+                                Layout.preferredHeight: 40
+
+                                Label {
+                                    color: "#545454"
+                                    text: "Import location:"
+                                }
+                                Item {
+                                    Layout.fillWidth: true
+                                }
+                                TextField {
+                                    id: importFolderField
+                                    placeholderText: "Enter folder path"
+
+                                    Component.onCompleted: text = settingsService.importLocation()      
+
+                                    width: 300
+                                    onEditingFinished: {
+                                        console.log("User import folder:", text)
+                                    }
+                                    Layout.rightMargin: 50
+
+                                    onTextChanged: settingsService.setImportLocation(text)
+                                }
+                            }
+                            Label {
+                                color: "#979797"
+                                text: "         Controls where on your computer snippets are loaded from"
+                                font.pixelSize: 10
+                                font.styleName: "Regular Italic"
+                            }
+                            RowLayout {
+                                height: 34
+                                spacing: 8
+                                Layout.leftMargin: 10
+                                Layout.preferredHeight: 40
+
+                                Label {
+                                    color: "#545454"
+                                    text: "Conflict handling:"
+                                }
+                                Item {
+                                    Layout.fillWidth: true
+                                }
+                                ComboBox {
+                                    id: conflictControl
+                                    width: 100
+                                    height: 25
+                                    model: ["Replace old snippet with incoming", "Keep both / Rename incoming", "Ignore incoming"]
+
+                                    Component.onCompleted: currentIndex = conflictControl.model.indexOf(settingsService.conflictHandling())
+
+                                    contentItem: Text {
+                                        text: conflictControl.displayText
+                                        color: "#000000"
+                                        font: conflictControl.font
+                                        verticalAlignment: Text.AlignVCenter
+                                    }
+                                    Layout.rightMargin: 50
+
+                                    onCurrentIndexChanged: settingsService.setConflictHandling(currentText)
+                                }
+                            }
+                            Label {
+                                color: "#979797"
+                                text: "         Determines outcome of adding a snippet with an already used ID/Name"
+                                font.pixelSize: 10
+                                font.styleName: "Regular Italic"
+                            }
                         }
                     }
-                
+                }
             }
-            
-
         }
-        
-        
-        
     }
     
     Connections {
