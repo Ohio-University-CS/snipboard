@@ -35,8 +35,8 @@ Item {
                 id: settingsMenu
                 width: 124
                 height: parent.height
-                // color: "#cfcfcf"
-                color: Colors.surfaceContainer
+                color: "#cfcfcf"
+                // color: Colors.surfaceContainer
                 visible: true
                 // Home
                 Basic.Button {
@@ -199,8 +199,8 @@ Item {
                 id: settingsOptions
                 width: parent.width - settingsMenu.width
                 height: parent.height
-                // color: "#f4f4f4"
-                color: Colors.surface
+                color: "#f4f4f4"
+                // color: Colors.surface
                 visible: true
 
                 Label {
@@ -209,8 +209,8 @@ Item {
                     text: "Settings"
                     font.pixelSize: 24
                     font.bold: true
-                    // color: "#000000"
-                    color: Colors.surfaceText
+                    color: "#000000"
+                    // color: Colors.surfaceText
                 }
 
                 Flickable {
@@ -226,8 +226,8 @@ Item {
                     Rectangle {
                         id: scrollRectangle
                         anchors.fill: parent
-                        // color: "#ffffff"
-                        color: Colors.surfaceContainerHigh
+                        color: "#ffffff"
+                        // color: Colors.surfaceContainerHigh
                         radius: 8
                     }
                     ColumnLayout {
@@ -253,8 +253,8 @@ Item {
                                 spacing: 8
 
                                 Label {
-                                    // color: "#000000"
-                                    color: Colors.surfaceText
+                                    color: "#000000"
+                                    // color: Colors.surfaceText
                                     text: "Appearance"
                                     font.pixelSize: 18
                                     font.styleName: "Bold"
@@ -263,8 +263,8 @@ Item {
                                 Rectangle {
                                     id: sectionSeparator
                                     height: 2
-                                    // color: "#212121"
-                                    color: Colors.outline
+                                    color: "#212121"
+                                    // color: Colors.outline
                                     Layout.fillWidth: true
                                     Layout.alignment: AlignVCenter
                                 }
@@ -304,8 +304,8 @@ Item {
                                 }
                             }
                             Label {
-                                // color: "#979797"
-                                color: Colors.surfaceTextVariant
+                                color: "#979797"
+                                // color: Colors.surfaceTextVariant
                                 text: "         Changes the theme of the whole application"
                                 font.pixelSize: 10
                                 font.styleName: "Regular Italic"
