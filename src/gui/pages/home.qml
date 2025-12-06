@@ -4,7 +4,6 @@ import QtQuick.Layouts
 import SnipBoard 1.0  // for SnippetObject and ClipboardHelper type if needed
 import QtQuick.Controls.Basic as Basic
 
-
 Page {
     id: root
     visible: true
@@ -23,11 +22,11 @@ Page {
     property string editDialogLanguage: ""
     property string editDialogContent: ""
     property bool editDialogFavorite: false
-    
+
     //Properties of delete tag
     property int tagDialogId: -1
     property string tagDialogName: ""
-    
+
     //EDit dialog
     Dialog {
         id: editDialog
@@ -109,7 +108,7 @@ Page {
         }
     }
 
-        //EDit dialog
+    //EDit dialog
     Dialog {
         id: editTagDialog
         title: "Edit Tag Name"
@@ -131,7 +130,6 @@ Page {
 
             // Perform the update
             tagService.updateTag(root.tagDialogId, root.tagDialogName);
-
         }
 
         contentItem: ColumnLayout {
@@ -144,8 +142,6 @@ Page {
                 text: root.tagDialogName
                 onTextChanged: root.tagDialogName = text
             }
-
-
         }
     }
 
@@ -168,7 +164,7 @@ Page {
         }
 
         onAccepted: {
-            tagService.deleteTag(root.tagDialogId)
+            tagService.deleteTag(root.tagDialogId);
         }
     }
 
@@ -184,36 +180,38 @@ Page {
             anchors.fill: parent
             spacing: 12
             anchors.margins: 12
-            anchors.leftMargin: 136
-            anchors.rightMargin: 12
-            anchors.topMargin: 121
+            anchors.leftMargin: 142
+            anchors.rightMargin: 15
+            anchors.topMargin: 112
             anchors.bottomMargin: 79
 
             Label {
                 text: "Snippets"
-                font.pixelSize: 24
+                font.pixelSize: 32
                 font.bold: true
             }
 
-            // --- Snippet List ---
-            ListView {
-                id: snippetList
+            GridView {
+                id: snippetGrid
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                Layout.alignment: Qt.AlignHCenter
                 clip: true
-                spacing: 8
-                model: snippetService.snippets   // Bind directly to SnippetListModel
+                cellWidth: 320
+                cellHeight: 180
+                model: snippetService.snippets
 
                 delegate: Rectangle {
-                    width: parent.width
-                    height: 80
-                    radius: 8
-                    color: hovered ? "#e0e0e0" : "white"
-                    border.color: "#cccccc"
+                    width: snippetGrid.cellWidth - 16  // Add some margin
+                    height: snippetGrid.cellHeight - 16
+                    radius: 12
+                    color: hovered ? '#eaeaea' : '#cfcfcf'
+                    border.color: '#aeaeae'
+                    border.width: 1
 
                     property bool hovered: false
 
-                    //Copies snippet code to clipboard
+                    // Copies snippet code to clipboard
                     MouseArea {
                         z: -1
                         anchors.fill: parent
@@ -227,124 +225,150 @@ Page {
                         }
                     }
 
-                    //Displays snippet in list
-                    RowLayout {
+                    ColumnLayout {
                         anchors.fill: parent
-                        anchors.margins: 10
-                        spacing: 12
+                        anchors.margins: 12
+                        spacing: 8
 
-                        ColumnLayout {
+                        // Header with title and copy icon
+                        RowLayout {
                             Layout.fillWidth: true
-                            spacing: 4
+                            spacing: 8
 
                             Text {
+                                Layout.fillWidth: true
                                 text: name
                                 font.bold: true
                                 font.pixelSize: 16
-                                color: "#333"
+                                color: "#222"
                                 elide: Text.ElideRight
-                            }
-
-                            Text {
-                                text: description
-                                color: "#666"
-                                elide: Text.ElideRight
-                                wrapMode: Text.WordWrap
+                                wrapMode: Text.NoWrap
                             }
                         }
 
-                        // Wrap both buttons in a RowLayout
+                        // Description area
+                        Text {
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            text: description
+                            color: "#444"
+                            font.pixelSize: 12
+                            wrapMode: Text.Wrap
+                            elide: Text.ElideRight
+                            maximumLineCount: 3
+                        }
+
+                        // Spacer to push buttons to bottom
+                        Item {
+                            Layout.fillHeight: true
+                        }
+
+                        // Bottom action buttons
                         RowLayout {
-                            Layout.alignment: Qt.AlignRight
-                            spacing: 4  // Space between the two buttons
+                            Layout.fillWidth: true
+                            Layout.alignment: Qt.AlignBottom
+                            spacing: 6
 
-                            //Edit a snippet
-                            Basic.Button {
-                                id: edit_button
-                                Layout.alignment: Qt.AlignRight
-                                icon.source: "qrc:/resources/icons/edit.png"
-                                icon.height: 14
-                                icon.width: 14
-                                implicitHeight: 28
-                                implicitWidth: 28
-                                padding: 6
-                                background: Rectangle {
-                                    radius: 8
-                                    color: hovered ? '#ffffff' : "#f2f2f2"
-                                    border.color: "#d0d0d0"
-                                }
-
-                                onClicked: {
-                                    // pull roles from this row
-                                    root.editDialogId = model.id;
-                                    root.editDialogName = model.name;
-                                    root.editDialogDescription = model.description;
-                                    root.editDialogLanguage = model.language;
-                                    root.editDialogContent = model.data;
-                                    root.editDialogFavorite = model.favorite;
-                                    editDialog.open();  // <-- open the page-level dialog
-                                }
-                            }
-
-                            //favorite/unfavorite a snippet
+                            // Trash/Delete button (bottom left)
                             Button {
-                                id: favButton
-                                height: 34
-                                width: 28
-                                implicitWidth: width
-                                implicitHeight: height
+                                Layout.preferredWidth: 32
+                                Layout.preferredHeight: 32
                                 padding: 0
+
                                 contentItem: Text {
                                     anchors.centerIn: parent
-                                    text: favorite ? "⭐" : "☆"
-                                    font.pixelSize: favorite ? 16 : 22
-                                    color: "#a7a7a7"
+                                    text: "🗑️"
+                                    font.pixelSize: 16
                                 }
-                                onClicked: {
-                                    snippetService.toggleFavorite(id);
-                                }
-                            }
 
-                            //Delete a snippet
-                            Button {
-                                height: 34
-                                width: 28
-                                implicitWidth: width
-                                implicitHeight: height
-                                Text {
-                                    anchors.centerIn: parent
-                                    text: "❌"
+                                background: Rectangle {
+                                    radius: 6
+                                    color: parent.hovered ? "#c0c0c0" : "#d0d0d0"
+                                    border.color: "#999"
                                 }
-                                padding: 0
-                                //Layout.alignment: Qt.AlignRight
-                                onClicked: {//snippetService.deleteSnippet(id)
-                                    root.snippetDialogId = id;
-                                    root.snippetDialogName = name;
+
+                                onClicked: {
+                                    root.snippetDialogId = model.id;
+                                    root.snippetDialogName = model.name;
                                     deleteDialog.open();
                                 }
 
-                                // --- Delete Snippet Dialog ---
+                                // Delete Dialog
                                 Dialog {
                                     id: deleteDialog
                                     title: "Delete Snippet?"
                                     modal: true
                                     standardButtons: Dialog.Ok | Dialog.Cancel
                                     anchors.centerIn: Overlay.overlay
+
                                     ColumnLayout {
-                                        //anchors.fill: parent
                                         anchors.margins: 20
                                         spacing: 10
 
                                         Label {
                                             text: "Are you sure you want to delete the snippet: " + root.snippetDialogName
                                             wrapMode: Text.WordWrap
-                                            //color: "#000000"
                                         }
                                     }
 
                                     onAccepted: {
                                         snippetService.deleteSnippet(root.snippetDialogId);
                                     }
+                                }
+                            }
+
+                            // Spacer
+                            Item {
+                                Layout.fillWidth: true
+                            }
+
+                            // Edit button
+                            Basic.Button {
+                                Layout.preferredWidth: 32
+                                Layout.preferredHeight: 32
+                                icon.source: "qrc:/resources/icons/edit.png"
+                                icon.height: 16
+                                icon.width: 16
+                                padding: 4
+
+                                background: Rectangle {
+                                    radius: 6
+                                    color: parent.hovered ? '#ffffff' : "#e8e8e8"
+                                    border.color: "#999"
+                                }
+
+                                onClicked: {
+                                    root.editDialogId = model.id;
+                                    root.editDialogName = model.name;
+                                    root.editDialogDescription = model.description;
+                                    root.editDialogLanguage = model.language;
+                                    root.editDialogContent = model.data;
+                                    root.editDialogFavorite = model.favorite;
+                                    editDialog.open();
+                                }
+                            }
+
+                            // Favorite button
+                            Button {
+                                Layout.preferredWidth: 32
+                                Layout.preferredHeight: 32
+                                padding: 0
+
+                                contentItem: Text {
+                                    anchors.centerIn: parent
+                                    text: favorite ? "⭐" : "☆"
+                                    font.pixelSize: 18
+                                    color: "#666"
+                                }
+
+                                background: Rectangle {
+                                    radius: 6
+                                    color: parent.hovered ? '#ffffff' : "#e8e8e8"
+                                    border.color: "#999"
+                                }
+
+                                onClicked: {
+                                    snippetService.toggleFavorite(model.id);
                                 }
                             }
                         }
@@ -431,7 +455,7 @@ Page {
                 }
             }
         }
-        
+
         Image {
             id: image1
             x: 25
@@ -441,7 +465,7 @@ Page {
             source: "qrc:/resources/icons/sb_logo.png"
             fillMode: Image.PreserveAspectFit
         }
-        
+
         //tags column
 
         ColumnLayout {
@@ -471,22 +495,19 @@ Page {
                     }
                     background: Rectangle {
                         radius: 8
-                        color: (checkAllButton.allTagsChecked || checkAllButton.down)
-                               ? "#797979"
-                               : (checkAllButton.hovered ? "#969696" : "#b4b4b4")
+                        color: (checkAllButton.allTagsChecked || checkAllButton.down) ? "#797979" : (checkAllButton.hovered ? "#969696" : "#b4b4b4")
                     }
 
                     onClicked: {
-                        allTagsChecked = !allTagsChecked
+                        allTagsChecked = !allTagsChecked;
 
                         for (let i = 0; i < tagList.count; i++) {
-                            const item = tagList.itemAtIndex(i)
+                            const item = tagList.itemAtIndex(i);
                             if (item) {
-                                item.checkbox.checked = allTagsChecked
+                                item.checkbox.checked = allTagsChecked;
                             }
                         }
                     }
-                    
                 }
             }
 
@@ -499,7 +520,7 @@ Page {
                 clip: true
 
                 layer.enabled: true
-            
+
                 // -- TAG LIST --
                 ListView {
                     id: tagList
@@ -511,7 +532,7 @@ Page {
                     width: 83
                     height: 154
                     model: tagService.tags
-                    
+
                     delegate: Rectangle {
                         id: tagBackground
                         width: parent.width - 5
@@ -520,10 +541,10 @@ Page {
                         color: hovered ? "#e0e0e0" : "white"
                         border.color: "#cccccc"
                         anchors.horizontalCenter: parent.horizontalCenter
-                        
+
                         property alias checkbox: tagChecked
                         property bool hovered: false
-    
+
                         //Copies tag to clipboard
                         MouseArea {
                             z: -1
@@ -532,10 +553,10 @@ Page {
                             onEntered: parent.hovered = true
                             onExited: parent.hovered = false
                             onClicked: {
-                                tagChecked.checked = !tagChecked.checked
+                                tagChecked.checked = !tagChecked.checked;
                             }
                         }
-                        
+
                         // tags
                         RowLayout {
                             id: tagRow
@@ -544,11 +565,11 @@ Page {
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.margins: 5
                             spacing: 8
-    
+
                             Item {
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: tagText.implicitHeight
-                            
+
                                 Text {
                                     id: tagText
                                     text: name
@@ -559,7 +580,6 @@ Page {
                                     width: parent.width
                                 }
                             }
-    
 
                             ColumnLayout {
                                 spacing: 2
@@ -578,22 +598,21 @@ Page {
                                         width: parent.width
                                         height: parent.height
                                         radius: 1
-                                        color: "#e5e5e5"    
+                                        color: "#e5e5e5"
                                         border.color: "#bcbcbc"
                                     }
                                     //Layout.alignment: Qt.AlignRight
                                     onClicked: {//snippetService.deleteSnippet(id)
-                                        root.tagDialogId = model.id
-                                        root.tagDialogName = model.name
-                                        deleteTagDialog.open()
-                                    } 
-
+                                        root.tagDialogId = model.id;
+                                        root.tagDialogName = model.name;
+                                        deleteTagDialog.open();
+                                    }
                                 }
 
                                 Basic.Button {
                                     id: edit_tag_button
                                     Layout.alignment: Qt.AlignRight
-                                    icon.source: "qrc:/resources/icons/edit.png" 
+                                    icon.source: "qrc:/resources/icons/edit.png"
                                     icon.height: 6
                                     icon.width: 6
                                     implicitHeight: 11
@@ -616,28 +635,21 @@ Page {
                                 }
 
                                 CheckBox {
+                                    id: tagChecked
                                     Layout.preferredWidth: 11
                                     Layout.preferredHeight: 11
-                                    id: tagChecked
                                     checked: tag.checked
                                     padding: 0
-                                    
+
                                     onCheckedChanged: {
                                         tag.checked = checked;
-                                        if(tagChecked.checked === false) {
-                                            checkAllButton.allTagsChecked = false
+                                        if (tagChecked.checked === false) {
+                                            checkAllButton.allTagsChecked = false;
                                         }
                                     }
                                 }
-
-
-                            
-
                             }
                         }
-                        
-                        
-    
                     }
                 }
             }
@@ -653,7 +665,7 @@ Page {
                     Text {
                         text: "New tag"
                         anchors.centerIn: parent
-                        font.pixelSize: 10     
+                        font.pixelSize: 10
                         color: "#222"
                         elide: Text.ElideRight
                     }
@@ -662,7 +674,7 @@ Page {
                         color: newTagButton.down ? '#797979' : (newTagButton.hovered ? '#969696' : '#b4b4b4')
                     }
                     onClicked: newTagDialog.open()
-            
+
                     Dialog {
                         id: newTagDialog
                         title: "New Tag"
@@ -671,16 +683,16 @@ Page {
                         implicitWidth: 520
                         anchors.centerIn: Overlay.overlay       // center over the whole window
                         standardButtons: Dialog.Ok | Dialog.Cancel
-            
+
                         // simple model of the form's values
                         property string fTitle: ""
-            
+
                         // reset when opened/closed
                         onOpened: {
                             fTitle = "";
                             tagTitleField.forceActiveFocus();
                         }
-            
+
                         // validate + submit
                         onAccepted: {
                             if (!fTitle.trim()) {
@@ -695,10 +707,10 @@ Page {
                             // If you set a context property:  snippetService.createSnippet(...)
                             (typeof TagService !== "undefined" ? TagService : tagService).createTag(fTitle);
                         }
-            
+
                         contentItem: ColumnLayout {
                             spacing: 10
-            
+
                             Label {
                                 id: tagError
                                 text: "Title is required."
@@ -706,7 +718,7 @@ Page {
                                 visible: false
                                 Layout.fillWidth: true
                             }
-            
+
                             // Title
                             Basic.TextField {
                                 id: tagTitleField
@@ -721,13 +733,11 @@ Page {
                             }
                         }
                     }
-
-                    
                 }
                 Item { //spacer
-                        Layout.fillWidth: true
-                    }
-                
+                    Layout.fillWidth: true
+                }
+
                 Basic.Button {
                     id: reloadTagButton
                     implicitWidth: 45
@@ -745,19 +755,17 @@ Page {
                         color: reloadTagButton.down ? '#797979' : (reloadTagButton.hovered ? '#969696' : '#b4b4b4')
                     }
                     onClicked: tagService.reload()
-                    
                 }
-                
             }
         }
     }
 
     Rectangle {
         id: search_rect
-        x: 136
-        y: 15
-        width: 652
-        height: 82
+        x: 139
+        y: 18
+        width: 649
+        height: 79
         radius: 12          // <- round the corners
         clip: true          // keeps children clipped to the rounded shape
         color: "#cfcfcf"
@@ -814,7 +822,7 @@ Page {
                 height: 82
                 anchors.fill: input
                 anchors.leftMargin: -6
-                anchors.rightMargin: 0
+                anchors.rightMargin: 27
                 anchors.topMargin: 0
                 anchors.bottomMargin: 0
                 z: 1
@@ -840,9 +848,9 @@ Page {
         Basic.Button {
             id: search_button
             x: 17
-            y: 17
+            y: 16
             width: 42
-            height: 38
+            height: 39
             display: AbstractButton.IconOnly
             padding: 0   // so the image centers nicely
 
@@ -850,12 +858,13 @@ Page {
             contentItem: Item {
                 anchors.fill: parent
                 Image {
+                    id: search_icon
                     anchors.centerIn: parent
                     source: "qrc:/resources/icons/search.png"
-                    anchors.verticalCenterOffset: -1
+                    anchors.verticalCenterOffset: 0
                     anchors.horizontalCenterOffset: 1
-                    width: 28
-                    height: 28
+                    width: 38
+                    height: 32
                     opacity: search_button.enabled ? (search_button.down ? 0.55 : (search_button.hovered ? 0.25 : .40)) : 0.35
                     Behavior on opacity {
                         NumberAnimation {
@@ -875,9 +884,9 @@ Page {
 
         Basic.Button {
             id: clearBtn
-            x: 620
+            x: 609
             y: 29
-            width: 24
+            width: 26
             height: 26
             // shows only an "x"
             Accessible.name: "Clear search"
@@ -901,11 +910,13 @@ Page {
         }
 
         Label {
-            x: 17
-            y: 58
-            width: 44
-            height: 16
-            text: `${snippetList.count} results`
+            x: 8
+            y: 56
+            width: 61
+            height: 18
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter  
+            text: `${snippetGrid.count} results`
         }
     }
 
@@ -974,7 +985,7 @@ Page {
 
     Basic.Button {
         id: reload_button
-        x: 246
+        x: 253
         y: 540
         width: 90
         height: 40
@@ -992,7 +1003,7 @@ Page {
 
     Basic.Button {
         id: addSnippetBtn
-        x: 142
+        x: 149
         y: 540
         width: 90
         height: 40
