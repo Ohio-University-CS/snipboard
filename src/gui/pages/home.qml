@@ -625,7 +625,7 @@ Page {
                                     Layout.preferredWidth: 10
                                     Layout.preferredHeight: 10
                                     id: tagChecked
-                                    checked: false
+                                    checked: tag.checked
                                     padding: 0
                                     
                                     onCheckedChanged: {

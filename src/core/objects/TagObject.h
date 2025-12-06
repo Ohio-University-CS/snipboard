@@ -51,5 +51,5 @@ class TagObject : public QObject {
     int m_id = -1;
     QString m_name;
     bool m_showDate = true;
-    bool m_checked = true;
+    bool m_checked = false;
 };
