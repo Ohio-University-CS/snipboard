@@ -258,6 +258,36 @@ void SnippetService::loadFavoriteSnippets() {
     m_snippetModelFiltered.setSnippets(objs);
 }
 
+void SnippetService::loadAnyTags(const QVector<int>& tagIds) {
+    // Get all snippets
+    auto all = m_repo->loadByAnyTags(tagIds);
+    QVector<SnippetObject*> objs;
+    objs.reserve(all.size());
+
+    // Create new SnippetObjects from Snippets returned from repo
+    for (const Snippet& s : all) {
+        objs.append(new SnippetObject(s));
+    }
+
+    m_snippetModel.setSnippets(objs);
+    m_snippetModelFiltered.setSnippets(objs);
+}
+
+void SnippetService::loadAllTags(const QVector<int>& tagIds) {
+    // Get all snippets
+    auto all = m_repo->loadByAllTags(tagIds);
+    QVector<SnippetObject*> objs;
+    objs.reserve(all.size());
+
+    // Create new SnippetObjects from Snippets returned from repo
+    for (const Snippet& s : all) {
+        objs.append(new SnippetObject(s));
+    }
+
+    m_snippetModel.setSnippets(objs);
+    m_snippetModelFiltered.setSnippets(objs);
+}
+
 void SnippetService::addTagToSnippet(int id, const QString& tagName) {
     // call repo function
     int tagId = m_tagRepo->findIdByName(tagName);
