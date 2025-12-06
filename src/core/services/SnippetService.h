@@ -40,6 +40,8 @@ class SnippetService : public QObject {
     Q_INVOKABLE void reload();
     Q_INVOKABLE void loadAll();
     Q_INVOKABLE void loadFavoriteSnippets();
+    Q_INVOKABLE void loadAnyTags(const QVector<int>& tagIds);
+    Q_INVOKABLE void loadAllTags(const QVector<int>& tagIds);
 
     // Searching functions
     Q_INVOKABLE void search(const QString& phrase = "");
