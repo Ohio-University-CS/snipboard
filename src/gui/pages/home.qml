@@ -30,6 +30,7 @@ Page {
 
     //checked tag ID list
     property var checkedTags: []
+    property bool showAllSnippets: true
     
     //EDit dialog
     Dialog {
@@ -448,9 +449,9 @@ Page {
         //tags column
 
         ColumnLayout {
-            y: 288
+            y: 271
             width: 112
-            height: 210
+            height: 227
             anchors.horizontalCenter: parent.horizontalCenter
             RowLayout {
 
@@ -460,45 +461,34 @@ Page {
                     font.bold: true
                 }
                 Basic.Button {
-                    id: checkAllButton
+                    id: showAllButton
                     implicitWidth: 55
                     implicitHeight: 22
-                    property bool allTagsChecked: true
                     padding: 0
+
+                    property bool showAllSnippets: root.showAllSnippets
                     Text {
-                        text: "Check All"
+                        text: "Show All"
                         anchors.centerIn: parent
-                        font.pixelSize: 10     // <-- CHANGE TEXT SIZE HERE
+                        font.pixelSize: 10 
                         color: "#222"
                         elide: Text.ElideRight
                     }
                     background: Rectangle {
                         radius: 8
-                        color: (checkAllButton.allTagsChecked || checkAllButton.down)
+                        color: (showAllButton.showAllSnippets || showAllButton.down)
                                ? "#797979"
-                               : (checkAllButton.hovered ? "#969696" : "#b4b4b4")
+                               : (showAllButton.hovered ? "#969696" : "#b4b4b4")
                     }
 
                     onClicked: {
-                        allTagsChecked = !allTagsChecked
+                        root.showAllSnippets = !root.showAllSnippets
 
-                        for (let i = 0; i < tagList.count; i++) {
-                            const item = tagList.itemAtIndex(i)
-
-                            var index = checkedTags.indexOf(item.model.id)
-                            if (index === -1) {
-                                checkedTags.push(item.model.id)
-                            }
-
-                            if (item) {
-                                item.checkbox.checked = allTagsChecked
-                            }
-                        }
-                        if(allTagsChecked) {
+                        if(root.showAllSnippets){
                             snippetService.loadAll()
                         }
                         else {
-                            snippetService.loadByAny(checkedTags)
+                            snippetService.loadByAny(root.checkedTags)
                         }
                     }
                     
@@ -632,28 +622,26 @@ Page {
                                 }
 
                                 CheckBox {
-                                    Layout.preferredWidth: 11
-                                    Layout.preferredHeight: 11
+                                    Layout.preferredWidth: 10
+                                    Layout.preferredHeight: 10
                                     id: tagChecked
-                                    checked: tag.checked
+                                    checked: false
                                     padding: 0
                                     
                                     onCheckedChanged: {
-                                        tag.checked = checked;
-                                        if(tagChecked.checked === false) {
-                                            checkAllButton.allTagsChecked = false
+                                        if(checked === true) {
+                                            root.checkedTags.push(model.id)
 
-                                            var index = checkedTags.indexOf(model.id)
-                                            if (index !== -1) {
-                                                checkedTags.splice(index, 1) // removes 1 element at position index
+                                        }
+                                        else { //checked === false
+                                            var index = root.checkedTags.indexOf(model.id)
+                                            if(index !== -1) {
+                                                root.checkedTags.splice(index, 1) //removes tag from list of checked tags
                                             }
                                         }
-                                        else {
-                                            if (checkedTags.indexOf(model.id) === -1) {
-                                                checkedTags.push(model.id)
-                                            }
-                                        }
-                                        snippetService.loadByAny(checkedTags)
+
+                                        snippetService.loadByAny(root.checkedTags)
+                                        root.showAllSnippets = false
                                     }
                                 }
 
