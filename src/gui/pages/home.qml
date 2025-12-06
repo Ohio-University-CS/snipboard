@@ -488,7 +488,7 @@ Page {
                             snippetService.loadAll()
                         }
                         else {
-                            snippetService.loadByAny(root.checkedTags)
+                            //snippetService.loadByAny(root.checkedTags)
                         }
                     }
                     
@@ -639,8 +639,8 @@ Page {
                                                 root.checkedTags.splice(index, 1) //removes tag from list of checked tags
                                             }
                                         }
-
-                                        snippetService.loadByAny(root.checkedTags)
+                                        //snippetService.loadByAnyTags(root.checkedTags)
+                                        //uncomment this ^^^ once function is added to snippetService 
                                         root.showAllSnippets = false
                                     }
                                 }
