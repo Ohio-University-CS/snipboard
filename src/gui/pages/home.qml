@@ -180,7 +180,7 @@ Page {
             anchors.fill: parent
             spacing: 12
             anchors.margins: 12
-            anchors.leftMargin: 142
+            anchors.leftMargin: 145
             anchors.rightMargin: 15
             anchors.topMargin: 112
             anchors.bottomMargin: 79
@@ -800,7 +800,7 @@ Page {
         id: search_rect
         x: 139
         y: 18
-        width: 649
+        width: 642
         height: 79
         radius: 12          // <- round the corners
         clip: true          // keeps children clipped to the rounded shape
@@ -809,7 +809,7 @@ Page {
         FocusScope {
             x: 58
             y: 0
-            width: 594
+            width: 584
             height: 82
 
             // Debounce timer so we don't call search on every keystroke immediately
@@ -860,7 +860,7 @@ Page {
                 anchors.leftMargin: -6
                 anchors.rightMargin: 27
                 anchors.topMargin: 0
-                anchors.bottomMargin: 0
+                anchors.bottomMargin: 8
                 z: 1
                 verticalAlignment: Text.AlignVCenter
                 color: "#767676"
@@ -920,9 +920,9 @@ Page {
 
         Basic.Button {
             id: clearBtn
-            x: 609
+            x: 599
             y: 29
-            width: 26
+            width: 36
             height: 26
             // shows only an "x"
             Accessible.name: "Clear search"
@@ -958,7 +958,7 @@ Page {
 
     Rectangle {
         id: sort_rect
-        x: 548
+        x: 541
         y: search_rect.y + search_rect.height + 8
         width: 240  // Increased width to fit both dropdowns
         height: 45
