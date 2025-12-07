@@ -201,6 +201,13 @@ Page {
                 cellHeight: 180
                 model: snippetService.snippets
 
+                property int columns: Math.floor(width / cellWidth)
+                property int totalContentWidth: columns * cellWidth
+                property int sidePadding: Math.max(0, (width - totalContentWidth) / 2)
+
+                leftMargin: sidePadding
+                rightMargin: sidePadding
+
                 delegate: Rectangle {
                     width: snippetGrid.cellWidth - 16  // Add some margin
                     height: snippetGrid.cellHeight - 16
@@ -211,17 +218,29 @@ Page {
 
                     property bool hovered: false
 
+                    Behavior on color {
+                        ColorAnimation {
+                            duration: 150
+                        }
+                    }
+                    Behavior on border.color {
+                        ColorAnimation {
+                            duration: 150
+                        }
+                    }
+
                     // Copies snippet code to clipboard
                     MouseArea {
                         z: -1
                         anchors.fill: parent
                         hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
                         onEntered: parent.hovered = true
                         onExited: parent.hovered = false
                         onClicked: {
                             snippetService.incrementCopiedSnippet(model.id);
                             Clipboard.copyText(String(model.data));
-                            ToolTip.show("Code copied", 1200, root);
+                            ToolTip.show("Code copied to clipboard!", 1200, root);
                         }
                     }
 
@@ -243,6 +262,22 @@ Page {
                                 color: "#222"
                                 elide: Text.ElideRight
                                 wrapMode: Text.NoWrap
+                            }
+                        }
+
+                        //Selected language display
+                        Rectangle {
+                            Layout.preferredWidth: 30
+                            Layout.preferredHeight: 20
+                            radius: 4
+                            color: "#734c91"
+
+                            Text {
+                                anchors.centerIn: parent
+                                text: language
+                                font.pixelSize: 10
+                                font.bold: true
+                                color: "white"
                             }
                         }
 
@@ -354,12 +389,13 @@ Page {
                                 Layout.preferredHeight: 32
                                 padding: 0
 
-                                contentItem: Text {
-                                    anchors.centerIn: parent
-                                    text: favorite ? "⭐" : "☆"
-                                    font.pixelSize: 18
-                                    color: "#666"
-                                }
+                                display: AbstractButton.IconOnly
+
+                                icon.source: favorite ? "qrc:/resources/icons/gold_star.png" : "qrc:/resources/icons/star.png"
+                                icon.width: 20
+                                icon.height: 20
+
+                                icon.color: "transparent"
 
                                 background: Rectangle {
                                     radius: 6
@@ -422,7 +458,7 @@ Page {
             icon.height: 30
             background: Rectangle {
                 radius: 12
-                color: fav_button.down ? '#958235' : (fav_button.hovered ? '#c7af4b' : '#b19b3b')
+                color: fav_button.down ? '#b0962f' : (fav_button.hovered ? '#d4b435' : '#ae962b')
             }
             onClicked: {
                 snippetService.loadFavoriteSnippets();
@@ -915,7 +951,7 @@ Page {
             width: 61
             height: 18
             horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter  
+            verticalAlignment: Text.AlignVCenter
             text: `${snippetGrid.count} results`
         }
     }
