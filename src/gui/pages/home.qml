@@ -222,6 +222,15 @@ Page {
                     border.width: 1
 
                     property bool hovered: false
+                    property var tagNames: model.tags
+                    property string tagsAsString: ""
+
+                    Component.onCompleted: {
+                        for (var name of tagNames) {
+                            tagsAsString += name + ", "
+                        }
+                    }
+
 
                     // Copies snippet code to clipboard
                     MouseArea {
@@ -258,6 +267,7 @@ Page {
                             }
                         }
 
+
                         // Description area
                         Text {
                             Layout.fillWidth: true
@@ -270,6 +280,15 @@ Page {
                             maximumLineCount: 3
                         }
 
+                        Text {
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            text: tagsAsString
+                            color: "#222"
+                            font.pixelSize: 9
+                            wrapMode: Text.Wrap
+                            elide: Text.ElideRight
+                        }
                         // Spacer to push buttons to bottom
                         Item {
                             Layout.fillHeight: true
@@ -416,7 +435,7 @@ Page {
                 color: home_button.down ? "#5a2f86" : (home_button.hovered ? '#915fc4' : "#734c91")
             }
             onClicked: {
-                if (showAllSnippets) {
+                if (root.showAllSnippets) {
                     snippetService.loadAll();
                 }
                 else {
@@ -554,7 +573,7 @@ Page {
                     width: 83
                     height: 154
                     model: tagService.tags
-                    cacheBuffer: 20000
+                    cacheBuffer: 2000
                     reuseItems: false
 
                     delegate: Rectangle {
@@ -626,7 +645,7 @@ Page {
                                         border.color: "#bcbcbc"
                                     }
                                     //Layout.alignment: Qt.AlignRight
-                                    onClicked: {//snippetService.deleteSnippet(id)
+                                    onClicked: {
                                         root.tagDialogId = model.id;
                                         root.tagDialogName = model.name;
                                         deleteTagDialog.open();
@@ -662,7 +681,7 @@ Page {
                                     id: tagChecked
                                     Layout.preferredWidth: 11
                                     Layout.preferredHeight: 11
-                                    checked: model.checked
+                                    checked: false
                                     padding: 0
 
                                     onCheckedChanged: {
@@ -677,8 +696,9 @@ Page {
                                                 root.checkedTags.splice(index, 1) //removes tag from list of checked tags
                                             }
                                         }
-                                        snippetService.loadAnyTags(root.checkedTags)
-                                        root.showAllSnippets = false
+                                        if(!showAllSnippets){
+                                            snippetService.loadAnyTags(root.checkedTags)
+                                        }
                                     }
                                 }
                             }
@@ -726,20 +746,6 @@ Page {
                             tagTitleField.forceActiveFocus();
                         }
 
-                        // validate + submit
-                        // onAccepted: {
-                        //     if (!fTitle.trim()) {
-                        //         // keep dialog open and show error
-                        //         tagError.visible = true;
-                        //         // prevent Dialog from auto-closing
-                        //         newTagDialog.open();
-                        //         return;
-                        //     }
-                        //     // Call whichever API you exposed:
-                        //     // If you registered a singleton: SnippetService.createSnippet(...)
-                        //     // If you set a context property:  snippetService.createSnippet(...)
-                        //     (typeof TagService !== "undefined" ? TagService : tagService).createTag(fTitle);
-                        // }
                         onAccepted: {
                             let clean = fTitle.trim();
 
@@ -1193,85 +1199,97 @@ Page {
                         }
                     }
                 }
-                GridView {
-                    id: tagGrid
-                    Layout.preferredWidth: 250
+
+                ColumnLayout {
+                    spacing: 10
                     Layout.fillHeight: true
-                    clip: true
-                    cellWidth: 115
-                    cellHeight: 50
-                    model: tagService.tags
-                    cacheBuffer: 20000
-                    reuseItems: false
+                    Layout.preferredWidth: 250
 
-                    delegate: Rectangle {
-                        id: listBackground
-                        width: tagGrid.cellWidth - 8
-                        height: tagGrid.cellHeight - 8
-                        radius: 4
-                        color: hovered ? "#e0e0e0" : "white"
-                        border.color: "#cccccc"
+                    Label {
+                        text: " Tags"
+                        font.pixelSize: 20
+                        font.bold: true
+                    }
 
-                        property alias selected: tagSelected
-                        property bool hovered: false
+                    GridView {
+                        id: tagGrid
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        clip: true
+                        cellWidth: 115
+                        cellHeight: 50
+                        model: tagService.tags
+                        cacheBuffer: 20000
+                        reuseItems: false
 
-                        MouseArea {
-                            z: -1
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            onEntered: parent.hovered = true
-                            onExited: parent.hovered = false
-                            onClicked: {
-                                selected.checked = !selected.checked;
-                            }
-                        }
+                        delegate: Rectangle {
+                            id: listBackground
+                            width: tagGrid.cellWidth - 8
+                            height: tagGrid.cellHeight - 8
+                            radius: 4
+                            color: hovered ? "#e0e0e0" : "white"
+                            border.color: "#cccccc"
 
-                        // tags
-                        RowLayout {
-                            id: selectionTagRow
-                            anchors.left: parent.left
-                            anchors.right: parent.right
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.margins: 5
-                            spacing: 8
+                            property alias selected: tagSelected
+                            property bool hovered: false
 
-                            Item {
-                                Layout.fillWidth: true
-                                Layout.preferredHeight: tagName.implicitHeight
-
-                                Text {
-                                    id: tagName
-                                    text: model.name
-                                    wrapMode: Text.Wrap
-                                    font.bold: true
-                                    font.pixelSize: 10
-                                    color: "#333"
-                                    width: parent.width
+                            MouseArea {
+                                z: -1
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                onEntered: parent.hovered = true
+                                onExited: parent.hovered = false
+                                onClicked: {
+                                    selected.checked = !selected.checked;
                                 }
                             }
 
-                            CheckBox {
-                                id: tagSelected
-                                Layout.preferredWidth: 11
-                                Layout.preferredHeight: 11
-                                checked: false
-                                padding: 0
+                            // tags
+                            RowLayout {
+                                id: selectionTagRow
+                                anchors.left: parent.left
+                                anchors.right: parent.right
+                                anchors.verticalCenter: parent.verticalCenter
+                                anchors.margins: 5
+                                spacing: 8
 
-                                onCheckedChanged: {
-                                    //updates selectedTag list when checked/unchecked
-                                    if (checked) {
-                                        if (!newSnippetDialog.selectedTags.includes(model.name))
-                                            newSnippetDialog.selectedTags.push(model.name)
-                                    } else {
-                                        const i = newSnippetDialog.selectedTags.indexOf(model.name)
-                                        if (i !== -1) newSnippetDialog.selectedTags.splice(i, 1)
+                                Item {
+                                    Layout.fillWidth: true
+                                    Layout.preferredHeight: tagName.implicitHeight
+
+                                    Text {
+                                        id: tagName
+                                        text: model.name
+                                        wrapMode: Text.Wrap
+                                        font.bold: true
+                                        font.pixelSize: 10
+                                        color: "#333"
+                                        width: parent.width
+                                    }
+                                }
+
+                                CheckBox {
+                                    id: tagSelected
+                                    Layout.preferredWidth: 11
+                                    Layout.preferredHeight: 11
+                                    checked: false
+                                    padding: 0
+
+                                    onCheckedChanged: {
+                                        //updates selectedTag list when checked/unchecked
+                                        if (checked) {
+                                            if (!newSnippetDialog.selectedTags.includes(model.name))
+                                                newSnippetDialog.selectedTags.push(model.name)
+                                        } else {
+                                            const i = newSnippetDialog.selectedTags.indexOf(model.name)
+                                            if (i !== -1) newSnippetDialog.selectedTags.splice(i, 1)
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
-
             }
         }
     }
