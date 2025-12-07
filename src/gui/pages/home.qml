@@ -112,7 +112,7 @@ Page {
         }
     }
 
-    //EDit dialog
+    //Edit tag dialog
     Dialog {
         id: editTagDialog
         title: "Edit Tag Name"
@@ -123,17 +123,25 @@ Page {
         standardButtons: Dialog.Ok | Dialog.Cancel
 
         onAccepted: {
-            // Trim and validate
-            const trimmedName = root.tagDialogName.trim();
+            const newName = root.tagDialogName.trim();
+            const tagId = root.tagDialogId;
 
-            if (!trimmedName) {
-                // Show error and prevent dialog from closing
-                console.log("Validation failed: missing required fields");
+            if (!newName) {
+                console.log("Validation failed: Tag name cannot be empty");
                 return;
             }
 
-            // Perform the update
-            tagService.updateTag(root.tagDialogId, root.tagDialogName);
+            //no duplicates
+            const exists = tagService.tags.some(t =>
+                t.id !== tagId && t.name.toLowerCase() === newName.toLowerCase()
+            );
+
+            if (exists) {
+                console.log("Duplicate tag name not allowed");
+                return;
+            }
+
+            tagService.updateTag(tagId, newName);
         }
 
         contentItem: ColumnLayout {
@@ -546,6 +554,8 @@ Page {
                     width: 83
                     height: 154
                     model: tagService.tags
+                    cacheBuffer: 20000
+                    reuseItems: false
 
                     delegate: Rectangle {
                         id: tagBackground
@@ -717,18 +727,43 @@ Page {
                         }
 
                         // validate + submit
+                        // onAccepted: {
+                        //     if (!fTitle.trim()) {
+                        //         // keep dialog open and show error
+                        //         tagError.visible = true;
+                        //         // prevent Dialog from auto-closing
+                        //         newTagDialog.open();
+                        //         return;
+                        //     }
+                        //     // Call whichever API you exposed:
+                        //     // If you registered a singleton: SnippetService.createSnippet(...)
+                        //     // If you set a context property:  snippetService.createSnippet(...)
+                        //     (typeof TagService !== "undefined" ? TagService : tagService).createTag(fTitle);
+                        // }
                         onAccepted: {
-                            if (!fTitle.trim()) {
-                                // keep dialog open and show error
+                            let clean = fTitle.trim();
+
+                            //name required
+                            if (!clean) {
+                                tagError.text = "Title is required.";
                                 tagError.visible = true;
-                                // prevent Dialog from auto-closing
-                                newTagDialog.open();
+                                newTagDialog.open();   // keep it open
                                 return;
                             }
-                            // Call whichever API you exposed:
-                            // If you registered a singleton: SnippetService.createSnippet(...)
-                            // If you set a context property:  snippetService.createSnippet(...)
-                            (typeof TagService !== "undefined" ? TagService : tagService).createTag(fTitle);
+
+                            //prevents duplicates
+                            let exists = tagService.tags.some(t =>
+                                t.name.toLowerCase() === clean.toLowerCase()
+                            );
+
+                            if (exists) {
+                                tagError.text = "That tag already exists.";
+                                tagError.visible = true;
+                                newTagDialog.open();   // keep dialog open
+                                return;
+                            }
+
+                            (typeof TagService !== "undefined" ? TagService : tagService).createTag(clean);
                         }
 
                         contentItem: ColumnLayout {
@@ -1043,7 +1078,7 @@ Page {
             title: "New Snippet"
             modal: true
             focus: true
-            implicitWidth: 520
+            implicitWidth: 600
             anchors.centerIn: Overlay.overlay       // center over the whole window
             standardButtons: Dialog.Ok | Dialog.Cancel
 
@@ -1053,12 +1088,16 @@ Page {
             property string fLang: ""
             property string fCode: ""
 
+            //stores tags
+            property var selectedTags: []
+
             // reset when opened/closed
             onOpened: {
                 fTitle = "";
                 fDesc = "";
                 fLang = "";
                 fCode = "";
+                selectedTags = [];
                 titleField.forceActiveFocus();
             }
 
@@ -1074,78 +1113,165 @@ Page {
                 // Call whichever API you exposed:
                 // If you registered a singleton: SnippetService.createSnippet(...)
                 // If you set a context property:  snippetService.createSnippet(...)
-                (typeof SnippetService !== "undefined" ? SnippetService : snippetService).createSnippet(fTitle, fDesc, fLang.length ? fLang : "txt", fCode, 0      // folderId (adjust as needed)
+                var newId = (typeof SnippetService !== "undefined" ? SnippetService : snippetService).createSnippet(fTitle, fDesc, fLang.length ? fLang : "txt", fCode, 0      // folderId (adjust as needed)
                 , false   // favorite flag
                 );
+
+                for (let i = 0; i < selectedTags.length; i++) {
+                    tagService.addTagToSnippet(newId, selectedTags[i]);
+                }
             }
+            contentItem: RowLayout {
+                spacing: 5
 
-            contentItem: ColumnLayout {
-                spacing: 10
-
-                Label {
-                    id: err
-                    text: "Title and Code are required."
-                    color: "#b00020"
-                    visible: false
-                    Layout.fillWidth: true
-                }
-
-                // Title
-                Basic.TextField {
-                    id: titleField
-                    Layout.fillWidth: true
-                    placeholderText: "Title *"
-                    text: newSnippetDialog.fTitle
-                    onTextChanged: {
-                        newSnippetDialog.fTitle = text;
-                        err.visible = false;
-                    }
-                }
-
-                // Description
-                Basic.TextField {
-                    Layout.fillWidth: true
-                    placeholderText: "Short description"
-                    text: newSnippetDialog.fDesc
-                    onTextChanged: newSnippetDialog.fDesc = text
-                }
-
-                // Language
-                Basic.ComboBox {
-                    Layout.fillWidth: true
-                    model: ["cpp", "qml", "py", "js", "txt"]
-                    currentIndex: 0
-                    onCurrentTextChanged: newSnippetDialog.fLang = currentText
-                }
-
-                //Code editor
                 ColumnLayout {
+                    spacing: 10
                     Layout.fillWidth: true
-                    spacing: 6
 
                     Label {
-                        text: "Code *"
+                        id: err
+                        text: "Title and Code are required."
+                        color: "#b00020"
+                        visible: false
+                        Layout.fillWidth: true
                     }
 
-                    Frame {
+                    // Title
+                    Basic.TextField {
+                        id: titleField
                         Layout.fillWidth: true
-                        Layout.preferredHeight: 220
-                        background: Rectangle {
-                            radius: 8
-                            color: "white"
-                            border.color: "#ddd"
+                        placeholderText: "Title *"
+                        text: newSnippetDialog.fTitle
+                        onTextChanged: {
+                            newSnippetDialog.fTitle = text;
+                            err.visible = false;
+                        }
+                    }
+
+                    // Description
+                    Basic.TextField {
+                        Layout.fillWidth: true
+                        placeholderText: "Short description"
+                        text: newSnippetDialog.fDesc
+                        onTextChanged: newSnippetDialog.fDesc = text
+                    }
+
+                    // Language
+                    Basic.ComboBox {
+                        Layout.fillWidth: true
+                        model: ["cpp", "qml", "py", "js", "txt"]
+                        currentIndex: 0
+                        onCurrentTextChanged: newSnippetDialog.fLang = currentText
+                    }
+
+                    //Code editor
+                    ColumnLayout {
+                        Layout.fillWidth: true
+                        spacing: 6
+
+                        Label {
+                            text: "Code *"
                         }
 
-                        Basic.TextArea {
-                            anchors.fill: parent
-                            anchors.margins: 12
-                            wrapMode: TextArea.Wrap
-                            placeholderText: "// Paste or type your snippet here"
-                            text: newSnippetDialog.fCode
-                            onTextChanged: newSnippetDialog.fCode = text
+                        Frame {
+                            Layout.fillWidth: true
+                            Layout.preferredHeight: 220
+                            background: Rectangle {
+                                radius: 8
+                                color: "white"
+                                border.color: "#ddd"
+                            }
+
+                            Basic.TextArea {
+                                anchors.fill: parent
+                                anchors.margins: 12
+                                wrapMode: TextArea.Wrap
+                                placeholderText: "// Paste or type your snippet here"
+                                text: newSnippetDialog.fCode
+                                onTextChanged: newSnippetDialog.fCode = text
+                            }
                         }
                     }
                 }
+                GridView {
+                    id: tagGrid
+                    Layout.preferredWidth: 250
+                    Layout.fillHeight: true
+                    clip: true
+                    cellWidth: 115
+                    cellHeight: 50
+                    model: tagService.tags
+                    cacheBuffer: 20000
+                    reuseItems: false
+
+                    delegate: Rectangle {
+                        id: listBackground
+                        width: tagGrid.cellWidth - 8
+                        height: tagGrid.cellHeight - 8
+                        radius: 4
+                        color: hovered ? "#e0e0e0" : "white"
+                        border.color: "#cccccc"
+
+                        property alias selected: tagSelected
+                        property bool hovered: false
+
+                        MouseArea {
+                            z: -1
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            onEntered: parent.hovered = true
+                            onExited: parent.hovered = false
+                            onClicked: {
+                                selected.checked = !selected.checked;
+                            }
+                        }
+
+                        // tags
+                        RowLayout {
+                            id: selectionTagRow
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.margins: 5
+                            spacing: 8
+
+                            Item {
+                                Layout.fillWidth: true
+                                Layout.preferredHeight: tagName.implicitHeight
+
+                                Text {
+                                    id: tagName
+                                    text: model.name
+                                    wrapMode: Text.Wrap
+                                    font.bold: true
+                                    font.pixelSize: 10
+                                    color: "#333"
+                                    width: parent.width
+                                }
+                            }
+
+                            CheckBox {
+                                id: tagSelected
+                                Layout.preferredWidth: 11
+                                Layout.preferredHeight: 11
+                                checked: false
+                                padding: 0
+
+                                onCheckedChanged: {
+                                    //updates selectedTag list when checked/unchecked
+                                    if (checked) {
+                                        if (!newSnippetDialog.selectedTags.includes(model.name))
+                                            newSnippetDialog.selectedTags.push(model.name)
+                                    } else {
+                                        const i = newSnippetDialog.selectedTags.indexOf(model.name)
+                                        if (i !== -1) newSnippetDialog.selectedTags.splice(i, 1)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
             }
         }
     }
