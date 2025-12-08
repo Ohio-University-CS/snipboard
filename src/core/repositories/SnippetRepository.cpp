@@ -34,9 +34,26 @@ QVector<Snippet> SnippetRepository::loadAll() {
         s.folder = query.value(7).toInt();
         s.favorite = query.value(8).toBool();
         s.timesCopied = query.value(9).toInt();
+        
+        QSqlQuery tagIdQuery(m_db);
+        if (!query.exec("SELECT tagId FROM SnippetTagLink WHERE snippetId = " + QString::number(s.id))) {
+            qWarning() << "Failed to load from SnippetTagLink: " << query.lastError();
+            return result;
+        }
+
+        while (tagIdQuery.next()) {
+            QSqlQuery tagNameQuery(m_db);
+            if (!query.exec("SELECT name FROM Tag WHERE tagId = " + tagIdQuery.value(0).toString())) {
+                qWarning() << "Failed to load tag name: " << query.lastError();
+                return result;
+            }
+
+            while (tagNameQuery.next()){
+                s.tagNames.push_back(query.value(0).toString());
+            }
+        }
         result.append(s);
     }
-
     return result;
 }
 
