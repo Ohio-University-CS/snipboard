@@ -229,21 +229,12 @@ Page {
                     border.width: 1
 
                     property bool hovered: false
-                    // property var tagNames: model.tagNames
-                    // // // property string tagsAsString: ""
-                    // property string tagsAsString: tagNames ? tagNames.join(", ") : ""
-
-                    // // // Component.onCompleted: {
-                    // // //     for (var i = 0; i < tagNames.length; i++) {
-                    // // //         tagsAsString += tagNames[i]
-                    // // //         if (i < tagNames.length - 1) { tagsAsString += ", " }
-                    // // //     }
-                    // // // }
-
-                    // readonly property string tagsAsString: {
-                    //     if (!model.tagNames) return "";
-                    //     return model.tagNames.join(", ");
-                    // }
+                    
+                    Component.onCompleted: {
+                        if (model.tagNames) {
+                            model.tagNames = model.tagNames.slice();
+                        }
+                    }
 
 
                     Behavior on color {
@@ -1154,7 +1145,7 @@ Page {
                 fCode = "";
                 selectedTags = [];
 
-                tagGrid.forceLayout(); 
+                tagGrid.model = [];
                 tagGrid.model = tagService.tags;
 
                 titleField.forceActiveFocus();
