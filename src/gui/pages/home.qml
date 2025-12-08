@@ -11,6 +11,10 @@ Page {
     height: 600
     title: "The home screen of SnipBoard"
 
+    Component.onCompleted: {
+        sort_rect.applyCurrentSort();
+    }
+
     //Properties of delete dialog
     property int snippetDialogId: -1
     property string snippetDialogName: ""
@@ -1107,7 +1111,7 @@ Page {
                 , false   // favorite flag
                 );
 
-                snippetService.reload();
+                sort_rect.applyCurrentSort();
             }
 
             contentItem: ColumnLayout {
