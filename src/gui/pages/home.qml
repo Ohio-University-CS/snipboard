@@ -21,6 +21,9 @@ Page {
     property string editDialogDescription: ""
     property string editDialogLanguage: ""
     property string editDialogContent: ""
+    property var editDialogTags: []
+    property var tagsToAdd: []                // tags the user checked
+    property var tagsToRemove: []              //tags user unchecked
     property bool editDialogFavorite: false
 
     //Properties of delete tag
@@ -37,9 +40,16 @@ Page {
         title: "Edit Snippet"
         modal: true
         focus: true
-        implicitWidth: 520
+        implicitWidth: 580
         anchors.centerIn: Overlay.overlay
         standardButtons: Dialog.Ok | Dialog.Cancel
+
+        onOpened: {
+            editTagGrid.forceLayout();
+            editTagGrid.model = null;
+            editTagGrid.model = tagService.tags;
+        }
+
 
         onAccepted: {
             // Trim and validate
@@ -55,58 +65,182 @@ Page {
             // Perform the update
             snippetService.updateSnippet(root.editDialogId, trimmedName, root.editDialogDescription.trim(), (root.editDialogLanguage && root.editDialogLanguage.length) ? root.editDialogLanguage : "txt", trimmedContent, 0     // folderId for now
             , root.editDialogFavorite);
+
+            //update tags
+            for (let i = 0; i < root.tagsToAdd.length; i++) {
+                snippetService.addTagToSnippet(root.editDialogId, root.tagsToAdd[i]);
+            }
+            for (let i = 0; i < root.tagsToRemove.length; i++) {
+                snippetService.removeTagFromSnippet(root.editDialogId, root.tagsToRemove[i]);
+            }
         }
 
-        contentItem: ColumnLayout {
-            spacing: 10
+        contentItem: RowLayout {
+            spacing: 5
+        
+            ColumnLayout {
+                spacing: 10
 
-            Basic.TextField {
-                id: editTitleField
-                Layout.fillWidth: true
-                placeholderText: "Title *"
-                text: root.editDialogName
-                onTextChanged: root.editDialogName = text
-            }
-
-            Basic.TextField {
-                Layout.fillWidth: true
-                placeholderText: "Short description"
-                text: root.editDialogDescription
-                onTextChanged: root.editDialogDescription = text
-            }
-
-            // Keep ComboBox in sync with current language
-            Basic.ComboBox {
-                Layout.fillWidth: true
-                model: ["cpp", "qml", "py", "js", "txt"]
-                currentIndex: {
-                    const list = ["cpp", "qml", "py", "js", "txt"];
-                    const cur = root.editDialogLanguage || "txt";
-                    const idx = list.indexOf(cur);
-                    return idx >= 0 ? idx : 0;
-                }
-                onCurrentTextChanged: root.editDialogLanguage = currentText
-            }
-
-            Label {
-                text: "Code *"
-            }
-
-            Frame {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 220
-                background: Rectangle {
-                    radius: 8
-                    color: "white"
-                    border.color: "#ddd"
+                Basic.TextField {
+                    id: editTitleField
+                    Layout.fillWidth: true
+                    placeholderText: "Title *"
+                    text: root.editDialogName
+                    onTextChanged: root.editDialogName = text
                 }
 
-                Basic.TextArea {
-                    anchors.fill: parent
-                    anchors.margins: 12
-                    wrapMode: TextArea.Wrap
-                    text: root.editDialogContent
-                    onTextChanged: root.editDialogContent = text
+                Basic.TextField {
+                    Layout.fillWidth: true
+                    placeholderText: "Short description"
+                    text: root.editDialogDescription
+                    onTextChanged: root.editDialogDescription = text
+                }
+
+                // Keep ComboBox in sync with current language
+                Basic.ComboBox {
+                    Layout.fillWidth: true
+                    model: ["cpp", "qml", "py", "js", "txt"]
+                    currentIndex: {
+                        const list = ["cpp", "qml", "py", "js", "txt"];
+                        const cur = root.editDialogLanguage || "txt";
+                        const idx = list.indexOf(cur);
+                        return idx >= 0 ? idx : 0;
+                    }
+                    onCurrentTextChanged: root.editDialogLanguage = currentText
+                }
+
+                Label {
+                    text: "Code *"
+                }
+
+                Frame {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 220
+                    background: Rectangle {
+                        radius: 8
+                        color: "white"
+                        border.color: "#ddd"
+                    }
+
+                    Basic.TextArea {
+                        anchors.fill: parent
+                        anchors.margins: 12
+                        wrapMode: TextArea.Wrap
+                        text: root.editDialogContent
+                        onTextChanged: root.editDialogContent = text
+                    }
+                }
+            }
+
+            //tag column
+            ColumnLayout {
+                spacing: 10
+                Layout.fillHeight: true
+                Layout.preferredWidth: 230
+
+                Label {
+                    text: " Tags"
+                    font.pixelSize: 20
+                    font.bold: true
+                }
+
+                GridView {
+                    id: editTagGrid
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    clip: true
+                    cellWidth: 115
+                    cellHeight: 50
+                    model: tagService.tags
+                    reuseItems: false
+
+                    delegate: Rectangle {
+                        id: editListBackground
+                        width: editTagGrid.cellWidth - 8
+                        height: editTagGrid.cellHeight - 8
+                        radius: 4
+                        color: hovered ? "#e0e0e0" : "white"
+                        border.color: "#cccccc"
+
+                        property bool hovered: false
+
+                        MouseArea {
+                            z: -1
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            onEntered: parent.hovered = true
+                            onExited: parent.hovered = false
+                            onClicked: {
+                                editTagSelected.checked = !editTagSelected.checked;
+                            }
+                        }
+
+                        // tags
+                        RowLayout {
+                            id: editTagRow
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.margins: 5
+                            spacing: 8
+
+                            Item {
+                                Layout.fillWidth: true
+                                Layout.preferredHeight: editTagName.implicitHeight
+
+                                Text {
+                                    id: editTagName
+                                    text: model.name
+                                    wrapMode: Text.Wrap
+                                    font.bold: true
+                                    font.pixelSize: 10
+                                    color: "#333"
+                                    width: parent.width
+                                }
+                            }
+
+                            CheckBox {
+                                id: editTagSelected
+                                Layout.preferredWidth: 11
+                                Layout.preferredHeight: 11
+                                checked: root.editDialogTags.includes(model.name)
+                                padding: 0
+
+                                onCheckedChanged: {
+                                    //updates selectedTag list when checked/unchecked
+                                    // if (checked) {
+                                    //     if (!root.editDialogTags.includes(model.name))
+                                    //         root.editDialogTags.push(model.name)
+                                    // } else {
+                                    //     const i = root.editDialogTags.indexOf(model.name)
+                                    //     if (i !== -1) root.editDialogTags.splice(i, 1)
+                                    // }
+
+                                    if (checked) {
+                                        if (!root.editDialogTags.includes(model.name))
+                                            root.editDialogTags.push(model.name)
+
+                                        if (!root.tagsToAdd.includes(model.name))
+                                            root.tagsToAdd.push(model.name)
+
+                                        const idx = root.tagsToRemove.indexOf(model.name)
+                                        if (idx !== -1) root.tagsToRemove.splice(idx, 1)
+
+                                    } else {
+                                        const idx = root.editDialogTags.indexOf(model.name)
+                                        if (idx !== -1) root.editDialogTags.splice(idx, 1)
+
+                                        if (!root.tagsToRemove.includes(model.name))
+                                            root.tagsToRemove.push(model.name)
+
+                                        const id2 = root.tagsToAdd.indexOf(model.name)
+                                        if (id2 !== -1) root.tagsToAdd.splice(id2, 1)
+                                    }
+
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -229,13 +363,6 @@ Page {
                     border.width: 1
 
                     property bool hovered: false
-                    
-                    Component.onCompleted: {
-                        if (model.tagNames) {
-                            model.tagNames = model.tagNames.slice();
-                        }
-                    }
-
 
                     Behavior on color {
                         ColorAnimation {
@@ -315,19 +442,20 @@ Page {
                         Text {
                             Layout.fillWidth: true
                             Layout.preferredHeight: 30
-                            //text: "Tags:  " + tagsAsString
-                            //text: "Tags: " + (model.tagNames ? model.tagNames.join(", ") : "")
-                            // text: {
-                            //     if (!model || !model.tagNames || model.tagNames.length === 0)
-                            //         return "Tags: ";
-                            //     return "Tags: " + model.tagNames.join(", ");
-                            // }
+
+                            // readonly property var jsTags: model.tagNames ? model.tagNames.toVariant() : []
+
+                            // text: jsTags.length > 0 ? "Tags: " + jsTags.join(", ") : "NO TAGS FOUND"
+
+
 
                             text: model.tagNames && model.tagNames.length > 0 ? "Tags: " + model.tagNames.join(", ") : "NO TAGS FOUND"
+
                             color: "#222"
                             font.pixelSize: 9
                             wrapMode: Text.Wrap
                             elide: Text.ElideRight
+
                         }
                         // Spacer to push buttons to bottom
                         Item {
@@ -415,6 +543,16 @@ Page {
                                     root.editDialogLanguage = model.language;
                                     root.editDialogContent = model.data;
                                     root.editDialogFavorite = model.favorite;
+                                    root.editDialogTags = [];
+                                    root.tagsToAdd = [];
+                                    root.tagsToRemove = [];
+
+                                    if (model.tagNames && model.tagNames.length > 0) {
+                                        for (let i = 0; i < model.tagNames.length; i++) {
+                                            root.editDialogTags.push(model.tagNames[i]);
+                                        }
+                                    }
+
                                     editDialog.open();
                                 }
                             }
@@ -1101,6 +1239,8 @@ Page {
         }
         onClicked: {
             snippetService.reload();
+            if (root.showAllSnippets) { snippetService.loadAll(); }
+            else { snippetService.loadAnyTags(root.checkedTags); }
             sort_rect.applyCurrentSort(); //reapplies that previous sorting method
         }
     }
@@ -1124,7 +1264,7 @@ Page {
             title: "New Snippet"
             modal: true
             focus: true
-            implicitWidth: 600
+            implicitWidth: 580
             anchors.centerIn: Overlay.overlay       // center over the whole window
             standardButtons: Dialog.Ok | Dialog.Cancel
 
@@ -1170,9 +1310,8 @@ Page {
                 for (let i = 0; i < selectedTags.length; i++) {
                     snippetService.addTagToSnippet(newId, selectedTags[i]);
                 }
-
-                snippetService.snippets = snippetService.snippets.slice();
             }
+
             contentItem: RowLayout {
                 spacing: 5
 
@@ -1246,10 +1385,11 @@ Page {
                     }
                 }
 
+                //tag column
                 ColumnLayout {
                     spacing: 10
                     Layout.fillHeight: true
-                    Layout.preferredWidth: 250
+                    Layout.preferredWidth: 230
 
                     Label {
                         text: " Tags"
