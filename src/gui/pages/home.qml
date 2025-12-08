@@ -228,6 +228,7 @@ Page {
                     Component.onCompleted: {
                         for (var name of tagNames) {
                             tagsAsString += name + ", "
+                            console.log(tagsAsString)
                         }
                     }
 
@@ -380,7 +381,7 @@ Page {
                             }
 
                             // Favorite button
-                            Button {
+                            Basic.Button {
                                 Layout.preferredWidth: 32
                                 Layout.preferredHeight: 32
                                 padding: 0
