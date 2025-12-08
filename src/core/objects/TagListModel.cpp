@@ -33,6 +33,8 @@ QVariant TagListModel::data(const QModelIndex& index, int role) const {
             return tag->name();
         case ShowDateRole:
             return tag->showDate();
+        case CheckedRole:
+            return tag->checked();
     }
 
     return {};
@@ -43,7 +45,8 @@ QHash<int, QByteArray> TagListModel::roleNames() const {
     return {
         {IdRole, "id"},
         {NameRole, "name"},
-        {ShowDateRole, "showDate"}};
+        {ShowDateRole, "showDate"},
+        {CheckedRole, "checked"}};
 }
 
 void TagListModel::setTags(const QList<TagObject*>& tags) {

@@ -13,7 +13,10 @@
 // #include "src/core/models"
 #include "src/core/objects/SnippetObject.h"
 #include "src/core/objects/SnippetListModel.h"
+#include "src/core/objects/TagListModel.h"
+#include "src/core/objects/TagObject.h"
 #include "src/core/services/SnippetService.h"
+#include "src/core/services/TagService.h"
 #include "src/core/utils/ClipboardHelper.h"
 #include "src/core/services/SettingsService.h"
 
@@ -44,9 +47,12 @@ int main(int argc, char* argv[]) {
     SnippetService snippetService;
     engine.rootContext()->setContextProperty("snippetService", &snippetService);
 
+    TagService tagService;
+    engine.rootContext()->setContextProperty("tagService", &tagService);
+    
     // SettingsService
     SettingsService settingsService;
-    engine.rootContext()->setContextProperty("SettingsService", &settingsService);
+    engine.rootContext()->setContextProperty("settingsService", &settingsService);
     
     // Update this function with any new .qml paths
     loadModules(engine);

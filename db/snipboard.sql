@@ -1,7 +1,7 @@
 --schema
 create table Tag(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
+    name TEXT NOT NULL UNIQUE,
     dateCreated DATE DEFAULT CURRENT_TIMESTAMP,
     dateModified DATE DEFAULT CURRENT_TIMESTAMP,
     userCreated BOOLEAN DEAFULT TRUE 

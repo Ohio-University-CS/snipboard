@@ -15,7 +15,7 @@ TagRepository::TagRepository(QSqlDatabase db) : m_db(std::move(db)) {}
 QVector<Tag> TagRepository::loadAll() {
     QVector<Tag> result;
     QSqlQuery query(m_db);
-    if(!query.exec("SELECT id, name, dateCreated, dateModified, showDate FROM Tag")) {
+    if(!query.exec("SELECT id, name, dateCreated, dateModified, userCreated FROM Tag")) {
         qWarning() << "Failed to load tags: " << query.lastError();
         return result;
     }

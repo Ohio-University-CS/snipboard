@@ -85,19 +85,11 @@ qt_add_qml_module(SnipBoard
     RESOURCE_PREFIX "/qt/qml"
     QML_FILES
         src/gui/main.qml
-        src/gui/mainsettings.qml
-        src/gui/Scaling.qml
-        src/gui/Font.qml
-        src/gui/colors.qml
+        src/gui/theme/Scaling.qml
+        src/gui/theme/Font.qml
+        src/gui/theme/Colors.qml
         src/gui/pages/home.qml
-        src/gui/pages/new_snippet.qml
         src/gui/pages/settings.qml
-        src/gui/Settings/appearanceSettings.qml
-        src/gui/Settings/editorSettings.qml
-        src/gui/Settings/exportImportSettings.qml
-        src/gui/Settings/generalSettings.qml
-        src/gui/Settings/snippetManagementSettings.qml
-        src/gui/snippetServiceTest.qml
 )
 
 #Resources for UI
@@ -110,13 +102,15 @@ qt_add_resources(${PROJECT_NAME} snipboard_resources
         resources/icons/star.png
         resources/icons/home.png
         resources/icons/sb_logo.png
+        resources/icons/edit.png
+        resources/icons/gold_star.png
 )
 
 # ADDED: Set singleton properties
 set_source_files_properties(
-    src/gui/Colors.qml
-    src/gui/Font.qml
-    src/gui/Scaling.qml
+    src/gui/theme/Colors.qml
+    src/gui/theme/Font.qml
+    src/gui/theme/Scaling.qml
     PROPERTIES
         QT_QML_SINGLETON_TYPE TRUE
 )

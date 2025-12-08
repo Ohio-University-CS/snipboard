@@ -226,7 +226,7 @@ bool SnippetRepository::insert(Snippet& snippet) {
 bool SnippetRepository::update(Snippet& snippet) {
     // Create query
     QSqlQuery query(m_db);
-    query.prepare("UPDATE snippets SET name=?, description=?, language=?, contents=?, folder=?, favorite=?, timesCopied=?, dateModified=? WHERE id=?");
+    query.prepare("UPDATE Snippet SET name=?, description=?, language=?, contents=?, folder=?, favorite=?, timesCopied=?, dateModified=? WHERE id=?");
     query.addBindValue(snippet.name);
     query.addBindValue(snippet.description);
     query.addBindValue(snippet.language);
