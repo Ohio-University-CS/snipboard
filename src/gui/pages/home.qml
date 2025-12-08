@@ -427,6 +427,20 @@ Page {
                             }
                         }
 
+                        //tag area
+                        Text {
+                            Layout.fillWidth: true
+                            Layout.preferredHeight: 30
+
+                            text: model.tagNames && model.tagNames.length > 0 ? "Tags: " + model.tagNames.join(", ") : "NO TAGS FOUND"
+
+                            color: "#222"
+                            font.pixelSize: 9
+                            wrapMode: Text.Wrap
+                            elide: Text.ElideRight
+
+                        }
+
                         // Description area
                         Text {
                             Layout.fillWidth: true
@@ -439,24 +453,7 @@ Page {
                             maximumLineCount: 3
                         }
 
-                        Text {
-                            Layout.fillWidth: true
-                            Layout.preferredHeight: 30
 
-                            // readonly property var jsTags: model.tagNames ? model.tagNames.toVariant() : []
-
-                            // text: jsTags.length > 0 ? "Tags: " + jsTags.join(", ") : "NO TAGS FOUND"
-
-
-
-                            text: model.tagNames && model.tagNames.length > 0 ? "Tags: " + model.tagNames.join(", ") : "NO TAGS FOUND"
-
-                            color: "#222"
-                            font.pixelSize: 9
-                            wrapMode: Text.Wrap
-                            elide: Text.ElideRight
-
-                        }
                         // Spacer to push buttons to bottom
                         Item {
                             Layout.fillHeight: true
@@ -1313,7 +1310,11 @@ Page {
             }
 
             contentItem: RowLayout {
-                spacing: 5
+                spacing: 30
+
+                Item {
+                    width: 10
+                }
 
                 ColumnLayout {
                     spacing: 10
@@ -1409,7 +1410,7 @@ Page {
 
                         delegate: Rectangle {
                             id: listBackground
-                            width: tagGrid.cellWidth - 8
+                            width: tagGrid.cellWidth - 5
                             height: tagGrid.cellHeight - 8
                             radius: 4
                             color: hovered ? "#e0e0e0" : "white"
