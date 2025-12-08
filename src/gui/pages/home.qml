@@ -229,15 +229,21 @@ Page {
                     border.width: 1
 
                     property bool hovered: false
-                    property var tagNames: model.tags
-                    property string tagsAsString: ""
+                    // property var tagNames: model.tagNames
+                    // // // property string tagsAsString: ""
+                    // property string tagsAsString: tagNames ? tagNames.join(", ") : ""
 
-                    Component.onCompleted: {
-                        for (var name of tagNames) {
-                            tagsAsString += name + ", "
-                            console.log(tagsAsString)
-                        }
-                    }
+                    // // // Component.onCompleted: {
+                    // // //     for (var i = 0; i < tagNames.length; i++) {
+                    // // //         tagsAsString += tagNames[i]
+                    // // //         if (i < tagNames.length - 1) { tagsAsString += ", " }
+                    // // //     }
+                    // // // }
+
+                    // readonly property string tagsAsString: {
+                    //     if (!model.tagNames) return "";
+                    //     return model.tagNames.join(", ");
+                    // }
 
 
                     Behavior on color {
@@ -317,8 +323,16 @@ Page {
 
                         Text {
                             Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            text: tagsAsString
+                            Layout.preferredHeight: 30
+                            //text: "Tags:  " + tagsAsString
+                            //text: "Tags: " + (model.tagNames ? model.tagNames.join(", ") : "")
+                            // text: {
+                            //     if (!model || !model.tagNames || model.tagNames.length === 0)
+                            //         return "Tags: ";
+                            //     return "Tags: " + model.tagNames.join(", ");
+                            // }
+
+                            text: model.tagNames && model.tagNames.length > 0 ? "Tags: " + model.tagNames.join(", ") : "NO TAGS FOUND"
                             color: "#222"
                             font.pixelSize: 9
                             wrapMode: Text.Wrap
@@ -336,7 +350,7 @@ Page {
                             spacing: 6
 
                             // Trash/Delete button (bottom left)
-                            Button {
+                            Basic.Button {
                                 Layout.preferredWidth: 32
                                 Layout.preferredHeight: 32
                                 padding: 0
@@ -609,17 +623,16 @@ Page {
                     width: 83
                     height: 154
                     model: tagService.tags
-                    cacheBuffer: 2000
                     reuseItems: false
 
                     delegate: Rectangle {
                         id: tagBackground
-                        width: parent.width - 5
+                        width: tagList.width - 5
                         height: tagRow.implicitHeight + 10
                         radius: 4
                         color: hovered ? "#e0e0e0" : "white"
                         border.color: "#cccccc"
-                        anchors.horizontalCenter: parent.horizontalCenter
+                        Layout.alignment: Qt.AlignHCenter
 
                         property alias checkbox: tagChecked
                         property bool hovered: false
@@ -663,7 +676,7 @@ Page {
                             ColumnLayout {
                                 spacing: 2
 
-                                Button {
+                                Basic.Button {
                                     id: deleteTagButton
                                     Layout.preferredHeight: 11
                                     Layout.preferredWidth: 11
@@ -717,7 +730,7 @@ Page {
                                     id: tagChecked
                                     Layout.preferredWidth: 11
                                     Layout.preferredHeight: 11
-                                    checked: false
+                                    checked: checkedTags.indexOf(model.id) !== -1
                                     padding: 0
 
                                     onCheckedChanged: {
@@ -1140,6 +1153,10 @@ Page {
                 fLang = "";
                 fCode = "";
                 selectedTags = [];
+
+                tagGrid.forceLayout(); 
+                tagGrid.model = tagService.tags;
+
                 titleField.forceActiveFocus();
             }
 
@@ -1160,8 +1177,10 @@ Page {
                 );
 
                 for (let i = 0; i < selectedTags.length; i++) {
-                    tagService.addTagToSnippet(newId, selectedTags[i]);
+                    snippetService.addTagToSnippet(newId, selectedTags[i]);
                 }
+
+                snippetService.snippets = snippetService.snippets.slice();
             }
             contentItem: RowLayout {
                 spacing: 5
@@ -1255,7 +1274,6 @@ Page {
                         cellWidth: 115
                         cellHeight: 50
                         model: tagService.tags
-                        cacheBuffer: 20000
                         reuseItems: false
 
                         delegate: Rectangle {
@@ -1266,7 +1284,6 @@ Page {
                             color: hovered ? "#e0e0e0" : "white"
                             border.color: "#cccccc"
 
-                            property alias selected: tagSelected
                             property bool hovered: false
 
                             MouseArea {
@@ -1276,7 +1293,7 @@ Page {
                                 onEntered: parent.hovered = true
                                 onExited: parent.hovered = false
                                 onClicked: {
-                                    selected.checked = !selected.checked;
+                                    tagSelected.checked = !tagSelected.checked;
                                 }
                             }
 
@@ -1308,7 +1325,7 @@ Page {
                                     id: tagSelected
                                     Layout.preferredWidth: 11
                                     Layout.preferredHeight: 11
-                                    checked: false
+                                    checked: newSnippetDialog.selectedTags.includes(model.name)
                                     padding: 0
 
                                     onCheckedChanged: {
