@@ -10,6 +10,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <iostream>
+#include <QIcon>
 // #include "src/core/models"
 #include "src/core/objects/SnippetObject.h"
 #include "src/core/objects/SnippetListModel.h"
@@ -38,6 +39,8 @@ int main(int argc, char* argv[]) {
     QQmlApplicationEngine engine;
 
     qmlRegisterType<SnippetObject>("SnipBoard", 1, 0, "SnippetObject");
+
+    app.setWindowIcon(QIcon(":/resources/icons/sb_logo.png"));
 
     // Register the singleton (Qt 6+)
     static ClipboardHelper clipboardSingleton; // must outlive the engine
