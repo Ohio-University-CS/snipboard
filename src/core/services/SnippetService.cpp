@@ -37,7 +37,7 @@ void SnippetService::loadSnippetsFromDb() {
     m_snippetModelFiltered.setSnippets(objs);
 }
 
-void SnippetService::createSnippet(const QString& name, const QString& description, const QString& language, const QString& contents, int folder, bool favorite) {
+int SnippetService::createSnippet(const QString& name, const QString& description, const QString& language, const QString& contents, int folder, bool favorite) {
     // Create snippet
     Snippet s;
     s.name = name;
@@ -52,7 +52,14 @@ void SnippetService::createSnippet(const QString& name, const QString& descripti
         auto* obj = new SnippetObject(s);
         m_snippetModel.onSnippetAdded(obj);
         m_snippetModelFiltered.onSnippetAdded(obj);
+
+        //returns id of snippet inserted
+        return s.id;
     }
+    else {
+        return -1;
+    }
+
 }
 
 void SnippetService::deleteSnippet(int id) {
