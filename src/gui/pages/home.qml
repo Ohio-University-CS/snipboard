@@ -76,7 +76,11 @@ Page {
         }
 
         contentItem: RowLayout {
-            spacing: 5
+            spacing: 30
+
+            Item {
+                    width: 10
+            }
         
             ColumnLayout {
                 spacing: 10
