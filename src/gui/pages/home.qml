@@ -78,9 +78,9 @@ Page {
             // Keep ComboBox in sync with current language
             Basic.ComboBox {
                 Layout.fillWidth: true
-                model: ["cpp", "qml", "py", "js", "txt"]
+                model: ["txt", "qml", "py", "js", "cpp"]
                 currentIndex: {
-                    const list = ["cpp", "qml", "py", "js", "txt"];
+                    const list = ["txt", "qml", "py", "js", "cpp"];
                     const cur = root.editDialogLanguage || "txt";
                     const idx = list.indexOf(cur);
                     return idx >= 0 ? idx : 0;
@@ -1102,12 +1102,12 @@ Page {
                     newSnippetDialog.open();
                     return;
                 }
-                // Call whichever API you exposed:
-                // If you registered a singleton: SnippetService.createSnippet(...)
-                // If you set a context property:  snippetService.createSnippet(...)
+
                 (typeof SnippetService !== "undefined" ? SnippetService : snippetService).createSnippet(fTitle, fDesc, fLang.length ? fLang : "txt", fCode, 0      // folderId (adjust as needed)
                 , false   // favorite flag
                 );
+
+                snippetService.reload();
             }
 
             contentItem: ColumnLayout {
@@ -1144,7 +1144,7 @@ Page {
                 // Language
                 Basic.ComboBox {
                     Layout.fillWidth: true
-                    model: ["cpp", "qml", "py", "js", "txt"]
+                    model: ["txt", "qml", "py", "js", "cpp"]
                     currentIndex: 0
                     onCurrentTextChanged: newSnippetDialog.fLang = currentText
                 }
