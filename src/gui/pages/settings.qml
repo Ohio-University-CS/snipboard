@@ -661,7 +661,7 @@ Item {
                                     id: defaultSortControl
                                     width: 100
                                     height: 25
-                                    model: ["Alphabetical", "Last modified", "Last created", "Favorites first"]
+                                    model: ["Last Edited (Newest)", "Last Edited (Oldest)", "Most Popular", "Least Popular", "Name (A-Z)", "Name (Z-A)"]
 
                                     //Component.onCompleted: 
                                     currentIndex: defaultSortControl.model.indexOf(settingsService.defaultSortMethod())

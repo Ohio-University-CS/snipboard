@@ -11,8 +11,24 @@ Page {
     height: 600
     title: "The home screen of SnipBoard"
 
+    function updateSortComboFromSettings() {
+        var method = settingsService.defaultSortMethod();
+        var idx = sortCombo.model.indexOf(method);
+        sortCombo.currentIndex = idx >= 0 ? idx : 0;
+    }
+
     Component.onCompleted: {
-        sort_rect.applyCurrentSort();
+        updateSortComboFromSettings();  
+        sort_rect.applyCurrentSort();  
+    }
+
+    Connections {
+        target: settingsService
+
+        function onSettingsChanged() {
+            updateSortComboFromSettings();
+            sort_rect.applyCurrentSort();
+        }
     }
 
     //Properties of delete dialog
@@ -34,7 +50,7 @@ Page {
     //checked tag ID list
     property var checkedTags: []
     property bool showAllSnippets: true
-    
+
     //EDit dialog
     Dialog {
         id: editDialog
@@ -333,7 +349,13 @@ Page {
                                 onClicked: {
                                     root.snippetDialogId = model.id;
                                     root.snippetDialogName = model.name;
-                                    deleteDialog.open();
+
+                                    if (settingsService.confirmBeforeDelete()) {
+                                        deleteDialog.open();
+                                    } else {
+                                        // delete immediately with no dialog
+                                        snippetService.deleteSnippet(root.snippetDialogId);
+                                    }
                                 }
 
                                 // Delete Dialog
@@ -449,7 +471,7 @@ Page {
             }
             onClicked: {
                 snippetService.loadAll();
-                snippetService.sortByDateModified(false);
+                sort_rect.applyCurrentSort();
             }
         }
 
@@ -470,7 +492,7 @@ Page {
             }
             onClicked: {
                 snippetService.loadFavoriteSnippets();
-                snippetService.sortByDateModified(false);
+                sort_rect.applyCurrentSort();
             }
         }
 
@@ -534,24 +556,21 @@ Page {
                     Text {
                         text: "Show All"
                         anchors.centerIn: parent
-                        font.pixelSize: 10 
+                        font.pixelSize: 10
                         color: "#222"
                         elide: Text.ElideRight
                     }
                     background: Rectangle {
                         radius: 8
-                        color: (showAllButton.showAllSnippets || showAllButton.down)
-                               ? "#797979"
-                               : (showAllButton.hovered ? "#969696" : "#b4b4b4")
+                        color: (showAllButton.showAllSnippets || showAllButton.down) ? "#797979" : (showAllButton.hovered ? "#969696" : "#b4b4b4")
                     }
 
                     onClicked: {
-                        root.showAllSnippets = !root.showAllSnippets
+                        root.showAllSnippets = !root.showAllSnippets;
 
-                        if(root.showAllSnippets){
-                            snippetService.loadAll()
-                        }
-                        else {
+                        if (root.showAllSnippets) {
+                            snippetService.loadAll();
+                        } else {
                             //snippetService.loadByAny(root.checkedTags)
                         }
                     }
@@ -569,7 +588,7 @@ Page {
                 layer.enabled: true
 
                 // -- TAG LIST --
-                
+
                 ListView {
                     id: tagList
                     anchors.fill: parent
@@ -690,20 +709,18 @@ Page {
                                     padding: 0
 
                                     onCheckedChanged: {
-                                        tag.checked = checked
-                                        if(checked === true) {
-                                            root.checkedTags.push(model.id)
-
-                                        }
-                                        else { //checked === false
-                                            var index = root.checkedTags.indexOf(model.id)
-                                            if(index !== -1) {
-                                                root.checkedTags.splice(index, 1) //removes tag from list of checked tags
+                                        tag.checked = checked;
+                                        if (checked === true) {
+                                            root.checkedTags.push(model.id);
+                                        } else { //checked === false
+                                            var index = root.checkedTags.indexOf(model.id);
+                                            if (index !== -1) {
+                                                root.checkedTags.splice(index, 1); //removes tag from list of checked tags
                                             }
                                         }
                                         //snippetService.loadByAnyTags(root.checkedTags)
-                                        //uncomment this ^^^ once function is added to snippetService 
-                                        root.showAllSnippets = false
+                                        //uncomment this ^^^ once function is added to snippetService
+                                        root.showAllSnippets = false;
                                     }
                                 }
                             }
@@ -839,7 +856,10 @@ Page {
                 id: debounceSearch
                 interval: 200
                 repeat: false
-                onTriggered: snippetService.search(input.text.trim())
+                onTriggered: {
+                    snippetService.search(input.text.trim());
+                    sort_rect.applyCurrentSort();
+                }
             }
 
             TextEdit {
@@ -937,7 +957,10 @@ Page {
                 color: search_button.down ? '#cdcdcd' : (search_button.hovered ? '#d7d7d7' : "#cfcfcf")
             }
 
-            onClicked: snippetService.search(input.text.trim())
+            onClicked: {
+                snippetService.search(input.text.trim());
+                sort_rect.applyCurrentSort();
+            }
         }
 
         Basic.Button {
@@ -964,6 +987,7 @@ Page {
             onClicked: {
                 input.text = "";
                 snippetService.search("");
+                sort_rect.applyCurrentSort();
             }
         }
 
@@ -1149,7 +1173,12 @@ Page {
                 Basic.ComboBox {
                     Layout.fillWidth: true
                     model: ["txt", "qml", "py", "js", "cpp"]
-                    currentIndex: 0
+
+                    Component.onCompleted: {
+                        const idx = model.indexOf(settingsService.defaultLanguage());
+                        currentIndex = idx >= 0 ? idx : 0;
+                    }
+
                     onCurrentTextChanged: newSnippetDialog.fLang = currentText
                 }
 
