@@ -482,7 +482,7 @@ Page {
                             spacing: 6
 
                             // Trash/Delete button (bottom left)
-                            Basic.Button {
+                            Button {
                                 Layout.preferredWidth: 32
                                 Layout.preferredHeight: 32
                                 padding: 0
