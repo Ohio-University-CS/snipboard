@@ -279,9 +279,14 @@ Page {
             }
 
             //no duplicates
-            const exists = tagService.tags.some(t =>
-                t.id !== tagId && t.name.toLowerCase() === newName.toLowerCase()
-            );
+            const exists = false;
+            for (let i = 0; i < tagService.tags.count; i++) {
+                const t = tagService.tags.get(i);
+                if (t.name.toLowerCase() === newName.toLowerCase()) {
+                    exists = true;
+                    break;
+                }
+            }
 
             if (exists) {
                 console.log("Duplicate tag name not allowed");
@@ -958,9 +963,14 @@ Page {
                             }
 
                             //prevents duplicates
-                            let exists = tagService.tags.some(t =>
-                                t.name.toLowerCase() === clean.toLowerCase()
-                            );
+                            let exists = false;
+                            for (let i = 0; i < tagService.tags.count; i++) {
+                                const t = tagService.tags.get(i);
+                                if (t.name.toLowerCase() === clean.toLowerCase()) {
+                                    exists = true;
+                                    break;
+                                }
+                            }
 
                             if (exists) {
                                 tagError.text = "That tag already exists.";
@@ -969,7 +979,7 @@ Page {
                                 return;
                             }
 
-                            (typeof TagService !== "undefined" ? TagService : tagService).createTag(clean);
+                            (typeof TagService !== "undefined" ? TagService : tagService).createTag(fTitle);
                         }
 
                         contentItem: ColumnLayout {
