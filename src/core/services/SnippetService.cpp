@@ -18,6 +18,7 @@ SnippetService::SnippetService(QObject* parent) : QObject(parent) {
     // Create repository and load all snippets
     /* WE PROBABLY WANT TO UPDATE THIS TO JUST LOAD ALL SNIPPETS THAT BELONG TO HOME FOLDER */
     m_repo = new SnippetRepository(m_db);
+    m_tagRepo = new TagRepository(m_db);  
     loadSnippetsFromDb();
 }
 
@@ -36,7 +37,7 @@ void SnippetService::loadSnippetsFromDb() {
     m_snippetModelFiltered.setSnippets(objs);
 }
 
-void SnippetService::createSnippet(const QString& name, const QString& description, const QString& language, const QString& contents, int folder, bool favorite) {
+int SnippetService::createSnippet(const QString& name, const QString& description, const QString& language, const QString& contents, int folder, bool favorite) {
     // Create snippet
     Snippet s;
     s.name = name;
@@ -51,7 +52,14 @@ void SnippetService::createSnippet(const QString& name, const QString& descripti
         auto* obj = new SnippetObject(s);
         m_snippetModel.onSnippetAdded(obj);
         m_snippetModelFiltered.onSnippetAdded(obj);
+
+        //returns id of snippet inserted
+        return s.id;
     }
+    else {
+        return -1;
+    }
+
 }
 
 void SnippetService::deleteSnippet(int id) {
@@ -245,6 +253,36 @@ void SnippetService::loadAll() {
 void SnippetService::loadFavoriteSnippets() {
     // Get all snippets
     auto all = m_repo->loadAllFavorites();
+    QVector<SnippetObject*> objs;
+    objs.reserve(all.size());
+
+    // Create new SnippetObjects from Snippets returned from repo
+    for (const Snippet& s : all) {
+        objs.append(new SnippetObject(s));
+    }
+
+    m_snippetModel.setSnippets(objs);
+    m_snippetModelFiltered.setSnippets(objs);
+}
+
+void SnippetService::loadAnyTags(const QVector<int>& tagIds) {
+    // Get all snippets
+    auto all = m_repo->loadByAnyTags(tagIds);
+    QVector<SnippetObject*> objs;
+    objs.reserve(all.size());
+
+    // Create new SnippetObjects from Snippets returned from repo
+    for (const Snippet& s : all) {
+        objs.append(new SnippetObject(s));
+    }
+
+    m_snippetModel.setSnippets(objs);
+    m_snippetModelFiltered.setSnippets(objs);
+}
+
+void SnippetService::loadAllTags(const QVector<int>& tagIds) {
+    // Get all snippets
+    auto all = m_repo->loadByAllTags(tagIds);
     QVector<SnippetObject*> objs;
     objs.reserve(all.size());
 

@@ -24,6 +24,8 @@ This project is a work in progress and is being made as a semester long project 
 3) Setting Icon - <a href="https://www.flaticon.com/free-icons/settings" title="settings icons">Settings icons created by Ilham Fitrotul Hayat - Flaticon</a>
 4) Folder Icon - <a href="https://www.flaticon.com/free-icons/folder" title="folder icons">Folder icons created by dmitri13 - Flaticon</a>
 5) Home Icon - <a href="https://www.flaticon.com/free-icons/home-button" title="home button icons">Home button icons created by Freepik - Flaticon</a>
+6) Gold Star Icon - <a href="https://www.flaticon.com/free-icons/star" title="star icons">Star icons created by Pixel perfect - Flaticon</a>
+
 
 
 
