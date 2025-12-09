@@ -135,9 +135,9 @@ Page {
                 // Keep ComboBox in sync with current language
                 Basic.ComboBox {
                     Layout.fillWidth: true
-                    model: ["cpp", "qml", "py", "js", "txt"]
+                    model: ["txt", "qml", "py", "js", "cpp"]
                     currentIndex: {
-                        const list = ["cpp", "qml", "py", "js", "txt"];
+                        const list = ["txt", "qml", "py", "js", "cpp"];
                         const cur = root.editDialogLanguage || "txt";
                         const idx = list.indexOf(cur);
                         return idx >= 0 ? idx : 0;
@@ -1384,7 +1384,7 @@ Page {
                     // Language
                     Basic.ComboBox {
                         Layout.fillWidth: true
-                        model: ["cpp", "qml", "py", "js", "txt"]
+                        model: ["txt", "qml", "py", "js", "cpp"]
                         currentIndex: 0
                         onCurrentTextChanged: newSnippetDialog.fLang = currentText
                     }
