@@ -18,8 +18,8 @@ Page {
     }
 
     Component.onCompleted: {
-        updateSortComboFromSettings();  
-        sort_rect.applyCurrentSort();  
+        updateSortComboFromSettings();
+        sort_rect.applyCurrentSort();
     }
 
     Connections {
@@ -65,8 +65,9 @@ Page {
 
         onOpened: {
             editTagGrid.forceLayout();
+            //editTagGrid.model = null;
+            //editTagGrid.model = tagService.tags;
         }
-
 
         onAccepted: {
             // Trim and validate
@@ -88,19 +89,22 @@ Page {
 
             for (let i = 0; i < newTags.length; i++) {
                 if (!originalTags.includes(newTags[i])) {
-                    snippetService.addTagToSnippet(root.editDialogId, newTags[i])
+                    snippetService.addTagToSnippet(root.editDialogId, newTags[i]);
                 }
             }
 
             for (let i = 0; i < originalTags.length; i++) {
                 if (!newTags.includes(originalTags[i])) {
-                    snippetService.removeTagFromSnippet(root.editDialogId, originalTags[i])
+                    snippetService.removeTagFromSnippet(root.editDialogId, originalTags[i]);
                 }
             }
 
             snippetService.reload();
-            if (root.showAllSnippets) { snippetService.loadAll(); }
-            else { snippetService.loadAnyTags(root.checkedTags); }
+            if (root.showAllSnippets) {
+                snippetService.loadAll();
+            } else {
+                snippetService.loadAnyTags(root.checkedTags);
+            }
             sort_rect.applyCurrentSort();
         }
 
@@ -108,9 +112,9 @@ Page {
             spacing: 30
 
             Item {
-                    width: 6
+                width: 8
             }
-        
+
             ColumnLayout {
                 spacing: 10
 
@@ -128,7 +132,6 @@ Page {
                     text: root.editDialogDescription
                     onTextChanged: root.editDialogDescription = text
                 }
-
 
                 // Keep ComboBox in sync with current language
                 Basic.ComboBox {
@@ -155,7 +158,7 @@ Page {
                         color: "white"
                         border.color: "#ddd"
                     }
-
+    
                     Basic.TextArea {
                         anchors.fill: parent
                         anchors.margins: 12
@@ -239,16 +242,19 @@ Page {
                                 Layout.preferredHeight: 11
                                 padding: 0
 
-                                checked: { root.editDialogTags.includes(model.name) }
+                                //property bool isChecked: root.editDialogTags.includes(model.name)
+                                checked: {
+                                    root.editDialogTags.includes(model.name);
+                                }
 
                                 onCheckedChanged: {
                                     if (checked) {
                                         if (!root.editDialogTags.includes(model.name))
-                                            root.editDialogTags.push(model.name)
+                                            root.editDialogTags.push(model.name);
                                     } else {
-                                        const idx = root.editDialogTags.indexOf(model.name)
+                                        const idx = root.editDialogTags.indexOf(model.name);
                                         if (idx !== -1)
-                                            root.editDialogTags.splice(idx, 1)
+                                            root.editDialogTags.splice(idx, 1);
                                     }
                                 }
                             }
@@ -279,9 +285,7 @@ Page {
             }
 
             //no duplicates
-            const exists = tagService.tags.some(t =>
-                t.id !== tagId && t.name.toLowerCase() === newName.toLowerCase()
-            );
+            const exists = tagService.tags.some(t => t.id !== tagId && t.name.toLowerCase() === newName.toLowerCase());
 
             if (exists) {
                 console.log("Duplicate tag name not allowed");
@@ -357,7 +361,7 @@ Page {
                 Layout.alignment: Qt.AlignHCenter
                 clip: true
                 cellWidth: 320
-                cellHeight: 215
+                cellHeight: 180
                 model: snippetService.snippets
 
                 property int columns: Math.floor(width / cellWidth)
@@ -445,27 +449,25 @@ Page {
                             Layout.fillWidth: true
                             Layout.preferredHeight: 30
 
-                            text: model.tagNames && model.tagNames.length > 0 ? "Tags: " + model.tagNames.join(", ") : " "
+                            text: model.tagNames && model.tagNames.length > 0 ? "Tags: " + model.tagNames.join(", ") : "NO TAGS FOUND"
 
                             color: "#222"
                             font.pixelSize: 9
                             wrapMode: Text.Wrap
                             elide: Text.ElideRight
-
                         }
 
                         // Description area
                         Text {
                             Layout.fillWidth: true
-                            //Layout.fillHeight: true
+                            Layout.fillHeight: true
                             text: description
                             color: "#444"
                             font.pixelSize: 12
                             wrapMode: Text.Wrap
-                            //elide: Text.ElideRight
+                            elide: Text.ElideRight
                             maximumLineCount: 3
                         }
-
 
                         // Spacer to push buttons to bottom
                         Item {
@@ -598,8 +600,11 @@ Page {
                                     snippetService.toggleFavorite(model.id);
 
                                     snippetService.reload();
-                                    if (root.showAllSnippets) { snippetService.loadAll(); }
-                                    else { snippetService.loadAnyTags(root.checkedTags); }
+                                    if (root.showAllSnippets) {
+                                        snippetService.loadAll();
+                                    } else {
+                                        snippetService.loadAnyTags(root.checkedTags);
+                                    }
                                     sort_rect.applyCurrentSort(); //reapplies that previous sorting method
                                 }
                             }
@@ -638,9 +643,8 @@ Page {
             onClicked: {
                 if (root.showAllSnippets) {
                     snippetService.loadAll();
-                }
-                else {
-                    snippetService.loadAnyTags(checkedTags)
+                } else {
+                    snippetService.loadAnyTags(checkedTags);
                 }
                 snippetService.sortByDateModified(false);
             }
@@ -740,13 +744,12 @@ Page {
                     }
 
                     onClicked: {
-                        root.showAllSnippets = checked
+                        root.showAllSnippets = checked;
 
-                        if(root.showAllSnippets){
-                            snippetService.loadAll()
-                        }
-                        else {
-                            snippetService.loadAnyTags(root.checkedTags)
+                        if (root.showAllSnippets) {
+                            snippetService.loadAll();
+                        } else {
+                            snippetService.loadAnyTags(root.checkedTags);
                         }
                     }
                 }
@@ -885,19 +888,17 @@ Page {
                                     padding: 0
 
                                     onCheckedChanged: {
-                                        model.checked = checked
-                                        if(checked === true) {
-                                            root.checkedTags.push(model.id)
-
-                                        }
-                                        else { //checked === false
-                                            var index = root.checkedTags.indexOf(model.id)
-                                            if(index !== -1) {
-                                                root.checkedTags.splice(index, 1) //removes tag from list of checked tags
+                                        model.checked = checked;
+                                        if (checked === true) {
+                                            root.checkedTags.push(model.id);
+                                        } else { //checked === false
+                                            var index = root.checkedTags.indexOf(model.id);
+                                            if (index !== -1) {
+                                                root.checkedTags.splice(index, 1); //removes tag from list of checked tags
                                             }
                                         }
-                                        if(!showAllSnippets){
-                                            snippetService.loadAnyTags(root.checkedTags)
+                                        if (!showAllSnippets) {
+                                            snippetService.loadAnyTags(root.checkedTags);
                                         }
                                     }
                                 }
@@ -958,9 +959,7 @@ Page {
                             }
 
                             //prevents duplicates
-                            let exists = tagService.tags.some(t =>
-                                t.name.toLowerCase() === clean.toLowerCase()
-                            );
+                            let exists = tagService.tags.some(t => t.name.toLowerCase() === clean.toLowerCase());
 
                             if (exists) {
                                 tagError.text = "That tag already exists.";
@@ -1010,7 +1009,7 @@ Page {
                     Text {
                         text: "Reload"
                         anchors.centerIn: parent
-                        font.pixelSize: 10    
+                        font.pixelSize: 10
                         color: "#222"
                         elide: Text.ElideRight
                     }
@@ -1030,8 +1029,8 @@ Page {
         y: 18
         width: 642
         height: 79
-        radius: 12     
-        clip: true         
+        radius: 12
+        clip: true
         color: "#cfcfcf"
 
         FocusScope {
@@ -1159,8 +1158,8 @@ Page {
             // shows only an "x"
             Accessible.name: "Clear search"
             padding: 6
-            background: null             
-            focusPolicy: Qt.NoFocus   
+            background: null
+            focusPolicy: Qt.NoFocus
             contentItem: Text {
                 text: "✕"
                 font.pixelSize: 18
@@ -1193,7 +1192,7 @@ Page {
         id: sort_rect
         x: 541
         y: search_rect.y + search_rect.height + 8
-        width: 240 
+        width: 240
         height: 45
         radius: 8
         color: "#cfcfcf"
@@ -1266,8 +1265,11 @@ Page {
         }
         onClicked: {
             snippetService.reload();
-            if (root.showAllSnippets) { snippetService.loadAll(); }
-            else { snippetService.loadAnyTags(root.checkedTags); }
+            if (root.showAllSnippets) {
+                snippetService.loadAll();
+            } else {
+                snippetService.loadAnyTags(root.checkedTags);
+            }
             sort_rect.applyCurrentSort(); //reapplies that previous sorting method
         }
     }
@@ -1312,12 +1314,7 @@ Page {
                 fCode = "";
                 selectedTags = [];
 
-                tagGrid.model = [];
-                tagGrid.model = tagService.tags; // recreates delegates
-
-
-                //tagGrid.model = tagService.tags;
-                tagGrid.forceLayout();
+                tagGrid.model = tagService.tags;
 
                 titleField.forceActiveFocus();
             }
@@ -1332,7 +1329,8 @@ Page {
                     return;
                 }
                 // Call whichever API you exposed:
-
+                // If you registered a singleton: SnippetService.createSnippet(...)
+                // If you set a context property:  snippetService.createSnippet(...)
                 var newId = (typeof SnippetService !== "undefined" ? SnippetService : snippetService).createSnippet(fTitle, fDesc, fLang.length ? fLang : "txt", fCode, 0      // folderId (adjust as needed)
                 , false   // favorite flag
                 );
@@ -1341,15 +1339,13 @@ Page {
                     //console.log("creating snippet(" + root.editDialogId + ")  --" + root.tagsToAdd[i]); //logging tag to console
                     snippetService.addTagToSnippet(newId, selectedTags[i]);
                 }
-
-                selectedTags = [];
             }
 
             contentItem: RowLayout {
                 spacing: 30
 
                 Item {
-                    width: 6
+                    width: 8
                 }
 
                 ColumnLayout {
@@ -1493,18 +1489,18 @@ Page {
                                     id: tagSelected
                                     Layout.preferredWidth: 11
                                     Layout.preferredHeight: 11
-                                    checked: { newSnippetDialog.selectedTags.includes(model.name) }
-
+                                    checked: newSnippetDialog.selectedTags.includes(model.name)
                                     padding: 0
 
                                     onCheckedChanged: {
                                         //updates selectedTag list when checked/unchecked
                                         if (checked) {
                                             if (!newSnippetDialog.selectedTags.includes(model.name))
-                                                newSnippetDialog.selectedTags.push(model.name)
+                                                newSnippetDialog.selectedTags.push(model.name);
                                         } else {
-                                            const i = newSnippetDialog.selectedTags.indexOf(model.name)
-                                            if (i !== -1) newSnippetDialog.selectedTags.splice(i, 1)
+                                            const i = newSnippetDialog.selectedTags.indexOf(model.name);
+                                            if (i !== -1)
+                                                newSnippetDialog.selectedTags.splice(i, 1);
                                         }
                                     }
                                 }
