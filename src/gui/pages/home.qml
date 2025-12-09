@@ -49,8 +49,6 @@ Page {
 
         onOpened: {
             editTagGrid.forceLayout();
-            //editTagGrid.model = null;
-            //editTagGrid.model = tagService.tags;
         }
 
 
@@ -94,7 +92,7 @@ Page {
             spacing: 30
 
             Item {
-                    width: 8
+                    width: 6
             }
         
             ColumnLayout {
@@ -225,7 +223,6 @@ Page {
                                 Layout.preferredHeight: 11
                                 padding: 0
 
-                                //property bool isChecked: root.editDialogTags.includes(model.name)
                                 checked: { root.editDialogTags.includes(model.name) }
 
                                 onCheckedChanged: {
@@ -344,7 +341,7 @@ Page {
                 Layout.alignment: Qt.AlignHCenter
                 clip: true
                 cellWidth: 320
-                cellHeight: 180
+                cellHeight: 215
                 model: snippetService.snippets
 
                 property int columns: Math.floor(width / cellWidth)
@@ -432,7 +429,7 @@ Page {
                             Layout.fillWidth: true
                             Layout.preferredHeight: 30
 
-                            text: model.tagNames && model.tagNames.length > 0 ? "Tags: " + model.tagNames.join(", ") : "NO TAGS FOUND"
+                            text: model.tagNames && model.tagNames.length > 0 ? "Tags: " + model.tagNames.join(", ") : " "
 
                             color: "#222"
                             font.pixelSize: 9
@@ -444,12 +441,12 @@ Page {
                         // Description area
                         Text {
                             Layout.fillWidth: true
-                            Layout.fillHeight: true
+                            //Layout.fillHeight: true
                             text: description
                             color: "#444"
                             font.pixelSize: 12
                             wrapMode: Text.Wrap
-                            elide: Text.ElideRight
+                            //elide: Text.ElideRight
                             maximumLineCount: 3
                         }
 
@@ -1286,7 +1283,12 @@ Page {
                 fCode = "";
                 selectedTags = [];
 
-                tagGrid.model = tagService.tags;
+                tagGrid.model = [];
+                tagGrid.model = tagService.tags; // recreates delegates
+
+
+                //tagGrid.model = tagService.tags;
+                tagGrid.forceLayout();
 
                 titleField.forceActiveFocus();
             }
@@ -1301,8 +1303,7 @@ Page {
                     return;
                 }
                 // Call whichever API you exposed:
-                // If you registered a singleton: SnippetService.createSnippet(...)
-                // If you set a context property:  snippetService.createSnippet(...)
+
                 var newId = (typeof SnippetService !== "undefined" ? SnippetService : snippetService).createSnippet(fTitle, fDesc, fLang.length ? fLang : "txt", fCode, 0      // folderId (adjust as needed)
                 , false   // favorite flag
                 );
@@ -1311,13 +1312,15 @@ Page {
                     //console.log("creating snippet(" + root.editDialogId + ")  --" + root.tagsToAdd[i]); //logging tag to console
                     snippetService.addTagToSnippet(newId, selectedTags[i]);
                 }
+
+                selectedTags = [];
             }
 
             contentItem: RowLayout {
                 spacing: 30
 
                 Item {
-                    width: 8
+                    width: 6
                 }
 
                 ColumnLayout {
@@ -1461,7 +1464,8 @@ Page {
                                     id: tagSelected
                                     Layout.preferredWidth: 11
                                     Layout.preferredHeight: 11
-                                    checked: newSnippetDialog.selectedTags.includes(model.name)
+                                    checked: { newSnippetDialog.selectedTags.includes(model.name) }
+
                                     padding: 0
 
                                     onCheckedChanged: {
