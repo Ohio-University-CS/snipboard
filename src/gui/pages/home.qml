@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import SnipBoard 1.0  // for SnippetObject and ClipboardHelper type if needed
 import QtQuick.Controls.Basic as Basic
 
+
 Page {
     id: root
     visible: true
@@ -17,11 +18,13 @@ Page {
         sortCombo.currentIndex = idx >= 0 ? idx : 0;
     }
 
+    //As soon as the application is loaded, apply these settings
     Component.onCompleted: {
         updateSortComboFromSettings();
         sort_rect.applyCurrentSort();
     }
 
+    //Connection to settings.qml
     Connections {
         target: settingsService
 
