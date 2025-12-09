@@ -41,6 +41,8 @@ Page {
     property string editDialogDescription: ""
     property string editDialogLanguage: ""
     property string editDialogContent: ""
+    property var editDialogTags: []
+    property var originalTags: []
     property bool editDialogFavorite: false
 
     //Properties of delete tag
@@ -57,9 +59,16 @@ Page {
         title: "Edit Snippet"
         modal: true
         focus: true
-        implicitWidth: 520
+        implicitWidth: 580
         anchors.centerIn: Overlay.overlay
         standardButtons: Dialog.Ok | Dialog.Cancel
+
+        onOpened: {
+            editTagGrid.forceLayout();
+            //editTagGrid.model = null;
+            //editTagGrid.model = tagService.tags;
+        }
+
 
         onAccepted: {
             // Trim and validate
@@ -75,64 +84,185 @@ Page {
             // Perform the update
             snippetService.updateSnippet(root.editDialogId, trimmedName, root.editDialogDescription.trim(), (root.editDialogLanguage && root.editDialogLanguage.length) ? root.editDialogLanguage : "txt", trimmedContent, 0     // folderId for now
             , root.editDialogFavorite);
+
+            const oldTags = root.originalTags;
+            const newTags = root.editDialogTags;
+
+            for (let i = 0; i < newTags.length; i++) {
+                if (!originalTags.includes(newTags[i])) {
+                    snippetService.addTagToSnippet(root.editDialogId, newTags[i])
+                }
+            }
+
+            for (let i = 0; i < originalTags.length; i++) {
+                if (!newTags.includes(originalTags[i])) {
+                    snippetService.removeTagFromSnippet(root.editDialogId, originalTags[i])
+                }
+            }
+
+            snippetService.reload();
+            if (root.showAllSnippets) { snippetService.loadAll(); }
+            else { snippetService.loadAnyTags(root.checkedTags); }
+            sort_rect.applyCurrentSort();
         }
 
-        contentItem: ColumnLayout {
-            spacing: 10
+        contentItem: RowLayout {
+            spacing: 30
 
-            Basic.TextField {
-                id: editTitleField
-                Layout.fillWidth: true
-                placeholderText: "Title *"
-                text: root.editDialogName
-                onTextChanged: root.editDialogName = text
+            Item {
+                    width: 8
             }
+        
+            ColumnLayout {
+                spacing: 10
 
-            Basic.TextField {
-                Layout.fillWidth: true
-                placeholderText: "Short description"
-                text: root.editDialogDescription
-                onTextChanged: root.editDialogDescription = text
-            }
-
-            // Keep ComboBox in sync with current language
-            Basic.ComboBox {
-                Layout.fillWidth: true
-                model: ["txt", "qml", "py", "js", "cpp"]
-                currentIndex: {
-                    const list = ["txt", "qml", "py", "js", "cpp"];
-                    const cur = root.editDialogLanguage || "txt";
-                    const idx = list.indexOf(cur);
-                    return idx >= 0 ? idx : 0;
-                }
-                onCurrentTextChanged: root.editDialogLanguage = currentText
-            }
-
-            Label {
-                text: "Code *"
-            }
-
-            Frame {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 220
-                background: Rectangle {
-                    radius: 8
-                    color: "white"
-                    border.color: "#ddd"
+                Basic.TextField {
+                    id: editTitleField
+                    Layout.fillWidth: true
+                    placeholderText: "Title *"
+                    text: root.editDialogName
+                    onTextChanged: root.editDialogName = text
                 }
 
-                Basic.TextArea {
-                    anchors.fill: parent
-                    anchors.margins: 12
-                    wrapMode: TextArea.Wrap
-                    text: root.editDialogContent
-                    onTextChanged: root.editDialogContent = text
+                Basic.TextField {
+                    Layout.fillWidth: true
+                    placeholderText: "Short description"
+                    text: root.editDialogDescription
+                    onTextChanged: root.editDialogDescription = text
+                }
+
+
+                // Keep ComboBox in sync with current language
+                Basic.ComboBox {
+                    Layout.fillWidth: true
+                    model: ["cpp", "qml", "py", "js", "txt"]
+                    currentIndex: {
+                        const list = ["cpp", "qml", "py", "js", "txt"];
+                        const cur = root.editDialogLanguage || "txt";
+                        const idx = list.indexOf(cur);
+                        return idx >= 0 ? idx : 0;
+                    }
+                    onCurrentTextChanged: root.editDialogLanguage = currentText
+                }
+
+                Label {
+                    text: "Code *"
+                }
+
+                Frame {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 220
+                    background: Rectangle {
+                        radius: 8
+                        color: "white"
+                        border.color: "#ddd"
+                    }
+
+                    Basic.TextArea {
+                        anchors.fill: parent
+                        anchors.margins: 12
+                        wrapMode: TextArea.Wrap
+                        text: root.editDialogContent
+                        onTextChanged: root.editDialogContent = text
+                    }
+                }
+            }
+
+            //tag column
+            ColumnLayout {
+                spacing: 10
+                Layout.fillHeight: true
+                Layout.preferredWidth: 230
+
+                Label {
+                    text: " Tags"
+                    font.pixelSize: 20
+                    font.bold: true
+                }
+
+                GridView {
+                    id: editTagGrid
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    clip: true
+                    cellWidth: 115
+                    cellHeight: 50
+                    model: tagService.tags
+                    reuseItems: false
+
+                    delegate: Rectangle {
+                        id: editListBackground
+                        width: editTagGrid.cellWidth - 8
+                        height: editTagGrid.cellHeight - 8
+                        radius: 4
+                        color: hovered ? "#e0e0e0" : "white"
+                        border.color: "#cccccc"
+
+                        property bool hovered: false
+
+                        MouseArea {
+                            z: -1
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            onEntered: parent.hovered = true
+                            onExited: parent.hovered = false
+                            onClicked: {
+                                editTagSelected.checked = !editTagSelected.checked;
+                            }
+                        }
+
+                        // tags
+                        RowLayout {
+                            id: editTagRow
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.margins: 5
+                            spacing: 8
+
+                            Item {
+                                Layout.fillWidth: true
+                                Layout.preferredHeight: editTagName.implicitHeight
+
+                                Text {
+                                    id: editTagName
+                                    text: model.name
+                                    wrapMode: Text.Wrap
+                                    font.bold: true
+                                    font.pixelSize: 10
+                                    color: "#333"
+                                    width: parent.width
+                                }
+                            }
+
+                            CheckBox {
+                                id: editTagSelected
+                                Layout.preferredWidth: 11
+                                Layout.preferredHeight: 11
+                                padding: 0
+
+                                //property bool isChecked: root.editDialogTags.includes(model.name)
+                                checked: { root.editDialogTags.includes(model.name) }
+
+                                onCheckedChanged: {
+                                    if (checked) {
+                                        if (!root.editDialogTags.includes(model.name))
+                                            root.editDialogTags.push(model.name)
+                                    } else {
+                                        const idx = root.editDialogTags.indexOf(model.name)
+                                        if (idx !== -1)
+                                            root.editDialogTags.splice(idx, 1)
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
     }
 
-    //EDit dialog
+    //Edit tag dialog
     Dialog {
         id: editTagDialog
         title: "Edit Tag Name"
@@ -143,17 +273,25 @@ Page {
         standardButtons: Dialog.Ok | Dialog.Cancel
 
         onAccepted: {
-            // Trim and validate
-            const trimmedName = root.tagDialogName.trim();
+            const newName = root.tagDialogName.trim();
+            const tagId = root.tagDialogId;
 
-            if (!trimmedName) {
-                // Show error and prevent dialog from closing
-                console.log("Validation failed: missing required fields");
+            if (!newName) {
+                console.log("Validation failed: Tag name cannot be empty");
                 return;
             }
 
-            // Perform the update
-            tagService.updateTag(root.tagDialogId, root.tagDialogName);
+            //no duplicates
+            const exists = tagService.tags.some(t =>
+                t.id !== tagId && t.name.toLowerCase() === newName.toLowerCase()
+            );
+
+            if (exists) {
+                console.log("Duplicate tag name not allowed");
+                return;
+            }
+
+            tagService.updateTag(tagId, newName);
         }
 
         contentItem: ColumnLayout {
@@ -305,6 +443,20 @@ Page {
                             }
                         }
 
+                        //tag area
+                        Text {
+                            Layout.fillWidth: true
+                            Layout.preferredHeight: 30
+
+                            text: model.tagNames && model.tagNames.length > 0 ? "Tags: " + model.tagNames.join(", ") : "NO TAGS FOUND"
+
+                            color: "#222"
+                            font.pixelSize: 9
+                            wrapMode: Text.Wrap
+                            elide: Text.ElideRight
+
+                        }
+
                         // Description area
                         Text {
                             Layout.fillWidth: true
@@ -316,6 +468,7 @@ Page {
                             elide: Text.ElideRight
                             maximumLineCount: 3
                         }
+
 
                         // Spacer to push buttons to bottom
                         Item {
@@ -329,7 +482,7 @@ Page {
                             spacing: 6
 
                             // Trash/Delete button (bottom left)
-                            Button {
+                            Basic.Button {
                                 Layout.preferredWidth: 32
                                 Layout.preferredHeight: 32
                                 padding: 0
@@ -409,12 +562,23 @@ Page {
                                     root.editDialogLanguage = model.language;
                                     root.editDialogContent = model.data;
                                     root.editDialogFavorite = model.favorite;
+                                    root.editDialogTags = [];
+                                    root.originalTags = [];
+
+                                    if (model.tagNames && model.tagNames.length > 0) {
+                                        for (let i = 0; i < model.tagNames.length; i++) {
+                                            root.editDialogTags.push(model.tagNames[i]);
+                                            root.originalTags.push(model.tagNames[i]);
+                                        }
+                                    }
+
+                                    root.editDialogTags = root.editDialogTags.slice();
                                     editDialog.open();
                                 }
                             }
 
                             // Favorite button
-                            Button {
+                            Basic.Button {
                                 Layout.preferredWidth: 32
                                 Layout.preferredHeight: 32
                                 padding: 0
@@ -435,6 +599,11 @@ Page {
 
                                 onClicked: {
                                     snippetService.toggleFavorite(model.id);
+
+                                    snippetService.reload();
+                                    if (root.showAllSnippets) { snippetService.loadAll(); }
+                                    else { snippetService.loadAnyTags(root.checkedTags); }
+                                    sort_rect.applyCurrentSort(); //reapplies that previous sorting method
                                 }
                             }
                         }
@@ -470,8 +639,13 @@ Page {
                 color: home_button.down ? "#5a2f86" : (home_button.hovered ? '#915fc4' : "#734c91")
             }
             onClicked: {
-                snippetService.loadAll();
-                sort_rect.applyCurrentSort();
+                if (root.showAllSnippets) {
+                    snippetService.loadAll();
+                }
+                else {
+                    snippetService.loadAnyTags(checkedTags)
+                }
+                snippetService.sortByDateModified(false);
             }
         }
 
@@ -552,7 +726,10 @@ Page {
                     implicitHeight: 22
                     padding: 0
 
-                    property bool showAllSnippets: root.showAllSnippets
+                    checkable: true
+
+                    checked: root.showAllSnippets
+
                     Text {
                         text: "Show All"
                         anchors.centerIn: parent
@@ -562,16 +739,17 @@ Page {
                     }
                     background: Rectangle {
                         radius: 8
-                        color: (showAllButton.showAllSnippets || showAllButton.down) ? "#797979" : (showAllButton.hovered ? "#969696" : "#b4b4b4")
+                        color: showAllButton.checked ? "#797979" : (showAllButton.hovered ? "#969696" : "#b4b4b4")
                     }
 
                     onClicked: {
-                        root.showAllSnippets = !root.showAllSnippets;
+                        root.showAllSnippets = checked
 
-                        if (root.showAllSnippets) {
-                            snippetService.loadAll();
-                        } else {
-                            //snippetService.loadByAny(root.checkedTags)
+                        if(root.showAllSnippets){
+                            snippetService.loadAll()
+                        }
+                        else {
+                            snippetService.loadAnyTags(root.checkedTags)
                         }
                     }
                 }
@@ -599,15 +777,16 @@ Page {
                     width: 83
                     height: 154
                     model: tagService.tags
+                    reuseItems: false
 
                     delegate: Rectangle {
                         id: tagBackground
-                        width: parent.width - 5
+                        width: tagList.width - 5
                         height: tagRow.implicitHeight + 10
                         radius: 4
                         color: hovered ? "#e0e0e0" : "white"
                         border.color: "#cccccc"
-                        anchors.horizontalCenter: parent.horizontalCenter
+                        Layout.alignment: Qt.AlignHCenter
 
                         property alias checkbox: tagChecked
                         property bool hovered: false
@@ -651,7 +830,7 @@ Page {
                             ColumnLayout {
                                 spacing: 2
 
-                                Button {
+                                Basic.Button {
                                     id: deleteTagButton
                                     Layout.preferredHeight: 11
                                     Layout.preferredWidth: 11
@@ -669,7 +848,7 @@ Page {
                                         border.color: "#bcbcbc"
                                     }
                                     //Layout.alignment: Qt.AlignRight
-                                    onClicked: {//snippetService.deleteSnippet(id)
+                                    onClicked: {
                                         root.tagDialogId = model.id;
                                         root.tagDialogName = model.name;
                                         deleteTagDialog.open();
@@ -705,22 +884,24 @@ Page {
                                     id: tagChecked
                                     Layout.preferredWidth: 11
                                     Layout.preferredHeight: 11
-                                    checked: tag.checked
+                                    checked: checkedTags.indexOf(model.id) !== -1
                                     padding: 0
 
                                     onCheckedChanged: {
-                                        tag.checked = checked;
-                                        if (checked === true) {
-                                            root.checkedTags.push(model.id);
-                                        } else { //checked === false
-                                            var index = root.checkedTags.indexOf(model.id);
-                                            if (index !== -1) {
-                                                root.checkedTags.splice(index, 1); //removes tag from list of checked tags
+                                        model.checked = checked
+                                        if(checked === true) {
+                                            root.checkedTags.push(model.id)
+
+                                        }
+                                        else { //checked === false
+                                            var index = root.checkedTags.indexOf(model.id)
+                                            if(index !== -1) {
+                                                root.checkedTags.splice(index, 1) //removes tag from list of checked tags
                                             }
                                         }
-                                        //snippetService.loadByAnyTags(root.checkedTags)
-                                        //uncomment this ^^^ once function is added to snippetService
-                                        root.showAllSnippets = false;
+                                        if(!showAllSnippets){
+                                            snippetService.loadAnyTags(root.checkedTags)
+                                        }
                                     }
                                 }
                             }
@@ -768,19 +949,30 @@ Page {
                             tagTitleField.forceActiveFocus();
                         }
 
-                        // validate + submit
                         onAccepted: {
-                            if (!fTitle.trim()) {
-                                // keep dialog open and show error
+                            let clean = fTitle.trim();
+
+                            //name required
+                            if (!clean) {
+                                tagError.text = "Title is required.";
                                 tagError.visible = true;
-                                // prevent Dialog from auto-closing
-                                newTagDialog.open();
+                                newTagDialog.open();   // keep it open
                                 return;
                             }
-                            // Call whichever API you exposed:
-                            // If you registered a singleton: SnippetService.createSnippet(...)
-                            // If you set a context property:  snippetService.createSnippet(...)
-                            (typeof TagService !== "undefined" ? TagService : tagService).createTag(fTitle);
+
+                            //prevents duplicates
+                            let exists = tagService.tags.some(t =>
+                                t.name.toLowerCase() === clean.toLowerCase()
+                            );
+
+                            if (exists) {
+                                tagError.text = "That tag already exists.";
+                                tagError.visible = true;
+                                newTagDialog.open();   // keep dialog open
+                                return;
+                            }
+
+                            (typeof TagService !== "undefined" ? TagService : tagService).createTag(clean);
                         }
 
                         contentItem: ColumnLayout {
@@ -821,7 +1013,7 @@ Page {
                     Text {
                         text: "Reload"
                         anchors.centerIn: parent
-                        font.pixelSize: 10     // <-- CHANGE TEXT SIZE HERE
+                        font.pixelSize: 10    
                         color: "#222"
                         elide: Text.ElideRight
                     }
@@ -841,8 +1033,8 @@ Page {
         y: 18
         width: 642
         height: 79
-        radius: 12          // <- round the corners
-        clip: true          // keeps children clipped to the rounded shape
+        radius: 12     
+        clip: true         
         color: "#cfcfcf"
 
         FocusScope {
@@ -873,9 +1065,7 @@ Page {
                 font.pointSize: 30
                 textFormat: TextEdit.PlainText
                 cursorVisible: activeFocus   // shows only when focused
-                // Optional styling to look like a field
                 padding: 8
-                // ... your existing props ...
                 onTextChanged: debounceSearch.restart()
 
                 // Enter = search now, Esc = clear
@@ -972,8 +1162,8 @@ Page {
             // shows only an "x"
             Accessible.name: "Clear search"
             padding: 6
-            background: null                 // <- no background at all
-            focusPolicy: Qt.NoFocus          // avoid focus ring if any
+            background: null             
+            focusPolicy: Qt.NoFocus   
             contentItem: Text {
                 text: "✕"
                 font.pixelSize: 18
@@ -1006,7 +1196,7 @@ Page {
         id: sort_rect
         x: 541
         y: search_rect.y + search_rect.height + 8
-        width: 240  // Increased width to fit both dropdowns
+        width: 240 
         height: 45
         radius: 8
         color: "#cfcfcf"
@@ -1079,6 +1269,8 @@ Page {
         }
         onClicked: {
             snippetService.reload();
+            if (root.showAllSnippets) { snippetService.loadAll(); }
+            else { snippetService.loadAnyTags(root.checkedTags); }
             sort_rect.applyCurrentSort(); //reapplies that previous sorting method
         }
     }
@@ -1102,7 +1294,7 @@ Page {
             title: "New Snippet"
             modal: true
             focus: true
-            implicitWidth: 520
+            implicitWidth: 580
             anchors.centerIn: Overlay.overlay       // center over the whole window
             standardButtons: Dialog.Ok | Dialog.Cancel
 
@@ -1112,12 +1304,19 @@ Page {
             property string fLang: ""
             property string fCode: ""
 
+            //stores tags
+            property var selectedTags: []
+
             // reset when opened/closed
             onOpened: {
                 fTitle = "";
                 fDesc = "";
                 fLang = "";
                 fCode = "";
+                selectedTags = [];
+
+                tagGrid.model = tagService.tags;
+
                 titleField.forceActiveFocus();
             }
 
@@ -1130,83 +1329,182 @@ Page {
                     newSnippetDialog.open();
                     return;
                 }
-
-                (typeof SnippetService !== "undefined" ? SnippetService : snippetService).createSnippet(fTitle, fDesc, fLang.length ? fLang : "txt", fCode, 0      // folderId (adjust as needed)
+                // Call whichever API you exposed:
+                // If you registered a singleton: SnippetService.createSnippet(...)
+                // If you set a context property:  snippetService.createSnippet(...)
+                var newId = (typeof SnippetService !== "undefined" ? SnippetService : snippetService).createSnippet(fTitle, fDesc, fLang.length ? fLang : "txt", fCode, 0      // folderId (adjust as needed)
                 , false   // favorite flag
                 );
 
-                sort_rect.applyCurrentSort();
+                for (let i = 0; i < selectedTags.length; i++) {
+                    //console.log("creating snippet(" + root.editDialogId + ")  --" + root.tagsToAdd[i]); //logging tag to console
+                    snippetService.addTagToSnippet(newId, selectedTags[i]);
+                }
             }
 
-            contentItem: ColumnLayout {
-                spacing: 10
+            contentItem: RowLayout {
+                spacing: 30
 
-                Label {
-                    id: err
-                    text: "Title and Code are required."
-                    color: "#b00020"
-                    visible: false
-                    Layout.fillWidth: true
+                Item {
+                    width: 8
                 }
 
-                // Title
-                Basic.TextField {
-                    id: titleField
-                    Layout.fillWidth: true
-                    placeholderText: "Title *"
-                    text: newSnippetDialog.fTitle
-                    onTextChanged: {
-                        newSnippetDialog.fTitle = text;
-                        err.visible = false;
-                    }
-                }
-
-                // Description
-                Basic.TextField {
-                    Layout.fillWidth: true
-                    placeholderText: "Short description"
-                    text: newSnippetDialog.fDesc
-                    onTextChanged: newSnippetDialog.fDesc = text
-                }
-
-                // Language
-                Basic.ComboBox {
-                    Layout.fillWidth: true
-                    model: ["txt", "qml", "py", "js", "cpp"]
-
-                    Component.onCompleted: {
-                        const idx = model.indexOf(settingsService.defaultLanguage());
-                        currentIndex = idx >= 0 ? idx : 0;
-                    }
-
-                    onCurrentTextChanged: newSnippetDialog.fLang = currentText
-                }
-
-                //Code editor
                 ColumnLayout {
+                    spacing: 10
                     Layout.fillWidth: true
-                    spacing: 6
 
                     Label {
-                        text: "Code *"
+                        id: err
+                        text: "Title and Code are required."
+                        color: "#b00020"
+                        visible: false
+                        Layout.fillWidth: true
                     }
 
-                    Frame {
+                    // Title
+                    Basic.TextField {
+                        id: titleField
                         Layout.fillWidth: true
-                        Layout.preferredHeight: 220
-                        background: Rectangle {
-                            radius: 8
-                            color: "white"
-                            border.color: "#ddd"
+                        placeholderText: "Title *"
+                        text: newSnippetDialog.fTitle
+                        onTextChanged: {
+                            newSnippetDialog.fTitle = text;
+                            err.visible = false;
+                        }
+                    }
+
+                    // Description
+                    Basic.TextField {
+                        Layout.fillWidth: true
+                        placeholderText: "Short description"
+                        text: newSnippetDialog.fDesc
+                        onTextChanged: newSnippetDialog.fDesc = text
+                    }
+
+                    // Language
+                    Basic.ComboBox {
+                        Layout.fillWidth: true
+                        model: ["cpp", "qml", "py", "js", "txt"]
+                        currentIndex: 0
+                        onCurrentTextChanged: newSnippetDialog.fLang = currentText
+                    }
+
+                    //Code editor
+                    ColumnLayout {
+                        Layout.fillWidth: true
+                        spacing: 6
+
+                        Label {
+                            text: "Code *"
                         }
 
-                        Basic.TextArea {
-                            anchors.fill: parent
-                            anchors.margins: 12
-                            wrapMode: TextArea.Wrap
-                            placeholderText: "// Paste or type your snippet here"
-                            text: newSnippetDialog.fCode
-                            onTextChanged: newSnippetDialog.fCode = text
+                        Frame {
+                            Layout.fillWidth: true
+                            Layout.preferredHeight: 220
+                            background: Rectangle {
+                                radius: 8
+                                color: "white"
+                                border.color: "#ddd"
+                            }
+
+                            Basic.TextArea {
+                                anchors.fill: parent
+                                anchors.margins: 12
+                                wrapMode: TextArea.Wrap
+                                placeholderText: "// Paste or type your snippet here"
+                                text: newSnippetDialog.fCode
+                                onTextChanged: newSnippetDialog.fCode = text
+                            }
+                        }
+                    }
+                }
+
+                //tag column
+                ColumnLayout {
+                    spacing: 10
+                    Layout.fillHeight: true
+                    Layout.preferredWidth: 230
+
+                    Label {
+                        text: " Tags"
+                        font.pixelSize: 20
+                        font.bold: true
+                    }
+
+                    GridView {
+                        id: tagGrid
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        clip: true
+                        cellWidth: 115
+                        cellHeight: 50
+                        model: tagService.tags
+                        reuseItems: false
+
+                        delegate: Rectangle {
+                            id: listBackground
+                            width: tagGrid.cellWidth - 5
+                            height: tagGrid.cellHeight - 8
+                            radius: 4
+                            color: hovered ? "#e0e0e0" : "white"
+                            border.color: "#cccccc"
+
+                            property bool hovered: false
+
+                            MouseArea {
+                                z: -1
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                onEntered: parent.hovered = true
+                                onExited: parent.hovered = false
+                                onClicked: {
+                                    tagSelected.checked = !tagSelected.checked;
+                                }
+                            }
+
+                            // tags
+                            RowLayout {
+                                id: selectionTagRow
+                                anchors.left: parent.left
+                                anchors.right: parent.right
+                                anchors.verticalCenter: parent.verticalCenter
+                                anchors.margins: 5
+                                spacing: 8
+
+                                Item {
+                                    Layout.fillWidth: true
+                                    Layout.preferredHeight: tagName.implicitHeight
+
+                                    Text {
+                                        id: tagName
+                                        text: model.name
+                                        wrapMode: Text.Wrap
+                                        font.bold: true
+                                        font.pixelSize: 10
+                                        color: "#333"
+                                        width: parent.width
+                                    }
+                                }
+
+                                CheckBox {
+                                    id: tagSelected
+                                    Layout.preferredWidth: 11
+                                    Layout.preferredHeight: 11
+                                    checked: newSnippetDialog.selectedTags.includes(model.name)
+                                    padding: 0
+
+                                    onCheckedChanged: {
+                                        //updates selectedTag list when checked/unchecked
+                                        if (checked) {
+                                            if (!newSnippetDialog.selectedTags.includes(model.name))
+                                                newSnippetDialog.selectedTags.push(model.name)
+                                        } else {
+                                            const i = newSnippetDialog.selectedTags.indexOf(model.name)
+                                            if (i !== -1) newSnippetDialog.selectedTags.splice(i, 1)
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }

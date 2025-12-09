@@ -28,7 +28,7 @@ class SnippetService : public QObject {
     
     // QML methods
     SnippetListModel* snippets() { return &m_snippetModelFiltered; }
-    Q_INVOKABLE void createSnippet(const QString& name, const QString& description, const QString& language, const QString& contents, int folder, bool favorite);
+    Q_INVOKABLE int createSnippet(const QString& name, const QString& description, const QString& language, const QString& contents, int folder, bool favorite); //returns id created
     Q_INVOKABLE void deleteSnippet(int id);
     Q_INVOKABLE void updateSnippet(int id, const QString& name, const QString& description, const QString& language, const QString& contents, int folder, bool favorite);
     Q_INVOKABLE void incrementCopiedSnippet(int id);
