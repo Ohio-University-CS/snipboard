@@ -6,24 +6,11 @@ struct Settings {
 
     int theme = 1;
 
-    int editorFontSize = 10;
-    int editorFontFamily = 1;
-    bool lineNumbers = true;
-    bool syntaxHighlighting = true;
-
-    bool wrapLines = true;
     bool confirmBeforeDelete = true;
-    int tabSize = 4;
     QString defaultLanguage = "cpp";
 
-    QString defaultSortMethod = "dateModified";
-    int defaultSnippetFolder = 1;
+    QString defaultSortMethod = "Last Edited (Newest)";
 
-    QString exportLocation = "./";
-    QString exportFormat = "txt";
-
-    QString importLocation = "./";
-    QString conflictHandling = "ask";
 
     Settings() {}
 
@@ -31,25 +18,9 @@ struct Settings {
     QJsonObject toJson() const {
         QJsonObject obj;
         obj["theme"] = theme;
-
-        obj["editorFontSize"] = editorFontSize;
-        obj["editorFontFamily"] = editorFontFamily;
-        obj["lineNumbers"] = lineNumbers;
-        obj["syntaxHighlighting"] = syntaxHighlighting;
-
-        obj["wrapLines"] = wrapLines;
         obj["confirmBeforeDelete"] = confirmBeforeDelete;
-        obj["tabSize"] = tabSize;
         obj["defaultLanguage"] = defaultLanguage;
-
         obj["defaultSortMethod"] = defaultSortMethod;
-        obj["defaultSnippetFolder"] = defaultSnippetFolder;
-
-        obj["exportLocation"] = exportLocation;
-        obj["exportFormat"] = exportFormat;
-
-        obj["importLocation"] = importLocation;
-        obj["conflictHandling"] = conflictHandling;
 
         return obj;
     }
@@ -58,25 +29,9 @@ struct Settings {
     static Settings fromJson(const QJsonObject &obj) {
         Settings s;
         s.theme = obj["theme"].toInt();
-
-        s.editorFontSize = obj["editorFontSize"].toInt();
-        s.editorFontFamily = obj["editorFontFamily"].toInt();
-        s.lineNumbers = obj["lineNumbers"].toBool();
-        s.syntaxHighlighting = obj["syntaxHighlighting"].toBool();
-
-        s.wrapLines = obj["wrapLines"].toBool();
         s.confirmBeforeDelete = obj["confirmBeforeDelete"].toBool();
-        s.tabSize = obj["tabSize"].toInt();
         s.defaultLanguage = obj["defaultLanguage"].toString();
-
         s.defaultSortMethod = obj["defaultSortMethod"].toString();
-        s.defaultSnippetFolder = obj["defaultSnippetFolder"].toInt();
-
-        s.exportLocation = obj["exportLocation"].toString();
-        s.exportFormat = obj["exportFormat"].toString();
-
-        s.importLocation = obj["importLocation"].toString();
-        s.conflictHandling = obj["conflictHandling"].toString();
 
         return s;
     }

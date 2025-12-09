@@ -72,44 +72,8 @@ void SettingsService::setTheme(int value) {
     emit settingsChanged();
 }
 
-void SettingsService::setEditorFontSize(int value) {
-    m_settings.editorFontSize = value;
-    save();
-    emit settingsChanged();
-}
-
-void SettingsService::setEditorFontFamily(int value) {
-    m_settings.editorFontFamily = value;
-    save();
-    emit settingsChanged();
-}
-
-void SettingsService::setLineNumbers(bool value) {
-    m_settings.lineNumbers = value;
-    save();
-    emit settingsChanged();
-}
-
-void SettingsService::setSyntaxHighlighting(bool value) {
-    m_settings.syntaxHighlighting = value;
-    save();
-    emit settingsChanged();
-}
-
-void SettingsService::setWrapLines(bool value) {
-    m_settings.wrapLines = value;
-    save();
-    emit settingsChanged();
-}
-
 void SettingsService::setConfirmBeforeDelete(bool value) {
     m_settings.confirmBeforeDelete = value;
-    save();
-    emit settingsChanged();
-}
-
-void SettingsService::setTabSize(int value) {
-    m_settings.tabSize = value;
     save();
     emit settingsChanged();
 }
@@ -122,36 +86,6 @@ void SettingsService::setDefaultLanguage(QString value) {
 
 void SettingsService::setDefaultSortMethod(QString value) {
     m_settings.defaultSortMethod = value;
-    save();
-    emit settingsChanged();
-}
-
-void SettingsService::setDefaultSnippetFolder(int value) {
-    m_settings.defaultSnippetFolder = value;
-    save();
-    emit settingsChanged();
-}
-
-void SettingsService::setExportLocation(QString value) {
-    m_settings.exportLocation = value;
-    save();
-    emit settingsChanged();
-}
-
-void SettingsService::setExportFormat(QString value) {
-    m_settings.exportFormat = value;
-    save();
-    emit settingsChanged();
-}
-
-void SettingsService::setImportLocation(QString value) {
-    m_settings.importLocation = value;
-    save();
-    emit settingsChanged();
-}
-
-void SettingsService::setConflictHandling(QString value) {
-    m_settings.conflictHandling = value;
     save();
     emit settingsChanged();
 }

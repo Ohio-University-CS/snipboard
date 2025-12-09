@@ -11,8 +11,24 @@ Page {
     height: 600
     title: "The home screen of SnipBoard"
 
+    function updateSortComboFromSettings() {
+        var method = settingsService.defaultSortMethod();
+        var idx = sortCombo.model.indexOf(method);
+        sortCombo.currentIndex = idx >= 0 ? idx : 0;
+    }
+
     Component.onCompleted: {
-        sort_rect.applyCurrentSort();
+        updateSortComboFromSettings();  
+        sort_rect.applyCurrentSort();  
+    }
+
+    Connections {
+        target: settingsService
+
+        function onSettingsChanged() {
+            updateSortComboFromSettings();
+            sort_rect.applyCurrentSort();
+        }
     }
 
     //Properties of delete dialog
@@ -36,7 +52,7 @@ Page {
     //checked tag ID list
     property var checkedTags: []
     property bool showAllSnippets: true
-    
+
     //EDit dialog
     Dialog {
         id: editDialog
@@ -463,7 +479,7 @@ Page {
                             spacing: 6
 
                             // Trash/Delete button (bottom left)
-                            Basic.Button {
+                            Button {
                                 Layout.preferredWidth: 32
                                 Layout.preferredHeight: 32
                                 padding: 0
@@ -483,7 +499,13 @@ Page {
                                 onClicked: {
                                     root.snippetDialogId = model.id;
                                     root.snippetDialogName = model.name;
-                                    deleteDialog.open();
+
+                                    if (settingsService.confirmBeforeDelete()) {
+                                        deleteDialog.open();
+                                    } else {
+                                        // delete immediately with no dialog
+                                        snippetService.deleteSnippet(root.snippetDialogId);
+                                    }
                                 }
 
                                 // Delete Dialog
@@ -641,7 +663,7 @@ Page {
             }
             onClicked: {
                 snippetService.loadFavoriteSnippets();
-                snippetService.sortByDateModified(false);
+                sort_rect.applyCurrentSort();
             }
         }
 
@@ -708,7 +730,7 @@ Page {
                     Text {
                         text: "Show All"
                         anchors.centerIn: parent
-                        font.pixelSize: 10 
+                        font.pixelSize: 10
                         color: "#222"
                         elide: Text.ElideRight
                     }
@@ -741,7 +763,7 @@ Page {
                 layer.enabled: true
 
                 // -- TAG LIST --
-                
+
                 ListView {
                     id: tagList
                     anchors.fill: parent
@@ -1023,7 +1045,10 @@ Page {
                 id: debounceSearch
                 interval: 200
                 repeat: false
-                onTriggered: snippetService.search(input.text.trim())
+                onTriggered: {
+                    snippetService.search(input.text.trim());
+                    sort_rect.applyCurrentSort();
+                }
             }
 
             TextEdit {
@@ -1119,7 +1144,10 @@ Page {
                 color: search_button.down ? '#cdcdcd' : (search_button.hovered ? '#d7d7d7' : "#cfcfcf")
             }
 
-            onClicked: snippetService.search(input.text.trim())
+            onClicked: {
+                snippetService.search(input.text.trim());
+                sort_rect.applyCurrentSort();
+            }
         }
 
         Basic.Button {
@@ -1146,6 +1174,7 @@ Page {
             onClicked: {
                 input.text = "";
                 snippetService.search("");
+                sort_rect.applyCurrentSort();
             }
         }
 
