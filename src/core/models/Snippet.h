@@ -20,6 +20,7 @@ struct Snippet {
     QString contents;
     QString language;
     QVector<int> tags;
+    QVector<QString> tagNames; 
     int folder = 0;  // default to home
     bool favorite = false;
     quint64 timesCopied = 0;

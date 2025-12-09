@@ -28,7 +28,7 @@ class SnippetService : public QObject {
     
     // QML methods
     SnippetListModel* snippets() { return &m_snippetModelFiltered; }
-    Q_INVOKABLE void createSnippet(const QString& name, const QString& description, const QString& language, const QString& contents, int folder, bool favorite);
+    Q_INVOKABLE int createSnippet(const QString& name, const QString& description, const QString& language, const QString& contents, int folder, bool favorite); //returns id created
     Q_INVOKABLE void deleteSnippet(int id);
     Q_INVOKABLE void updateSnippet(int id, const QString& name, const QString& description, const QString& language, const QString& contents, int folder, bool favorite);
     Q_INVOKABLE void incrementCopiedSnippet(int id);
@@ -40,6 +40,8 @@ class SnippetService : public QObject {
     Q_INVOKABLE void reload();
     Q_INVOKABLE void loadAll();
     Q_INVOKABLE void loadFavoriteSnippets();
+    Q_INVOKABLE void loadAnyTags(const QVector<int>& tagIds);
+    Q_INVOKABLE void loadAllTags(const QVector<int>& tagIds);
 
     // Searching functions
     Q_INVOKABLE void search(const QString& phrase = "");

@@ -3,15 +3,15 @@ create table Tag(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL UNIQUE,
     dateCreated DATE DEFAULT CURRENT_TIMESTAMP,
-    dateModified DATE DEFAULT 0,
-    userCreated BOOLEAN DEFAULT TRUE 
+    dateModified DATE DEFAULT CURRENT_TIMESTAMP,
+    userCreated BOOLEAN DEAFULT TRUE 
 );
 
 create table Folder(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     dateCreated DATE DEFAULT CURRENT_TIMESTAMP,
-    dateModified DATE DEFAULT 0,
+    dateModified DATE DEFAULT CURRENT_TIMESTAMP,
     parentFolder INTEGER, --only parent is needed because children can be found by searching folders where the parentFolderID is equal to the parent folder
     FOREIGN KEY (parentFolder) REFERENCES Folder(ID)
 );
@@ -20,7 +20,7 @@ create table Snippet(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     dateCreated DATE DEFAULT CURRENT_TIMESTAMP,
-    dateModified DATE DEFAULT 0,
+    dateModified DATE DEFAULT CURRENT_TIMESTAMP,
     description TEXT,
     language TEXT,
     contents TEXT,

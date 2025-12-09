@@ -22,7 +22,8 @@ class TagListModel : public QAbstractListModel {
     enum Roles {
         IdRole = Qt::UserRole + 1,
         NameRole,
-        ShowDateRole
+        ShowDateRole,
+        CheckedRole
     };
     Q_ENUM(Roles)
 

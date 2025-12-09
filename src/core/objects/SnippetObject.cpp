@@ -18,7 +18,7 @@ SnippetObject::SnippetObject(const Snippet& snippetModel, const QVector<QString>
     m_folder = snippetModel.folder;
     m_favorite = snippetModel.favorite;
     m_timesCopied = snippetModel.timesCopied;
-    m_tagNames = tagNames;
+    m_tagNames = tagNames.size() ? tagNames : snippetModel.tagNames;
     m_dateCreated = snippetModel.dateCreated;
     m_dateModified = snippetModel.dateModified;
 }

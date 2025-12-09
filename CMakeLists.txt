@@ -38,6 +38,7 @@ set(HEADERS
     src/core/models/Folder.h
     src/core/models/Snippet.h
     src/core/models/Tag.h
+    src/core/models/Settings.h
     src/core/objects/SnippetObject.h
     src/core/objects/TagObject.h
     src/core/objects/FolderObject.h
@@ -51,6 +52,7 @@ set(HEADERS
     src/core/services/TagService.h
     src/core/repositories/FolderRepository.h
     src/core/services/FolderService.h
+    src/core/services/SettingsService.h
 )
 
 # Add c++ to be compiled
@@ -71,6 +73,7 @@ qt_add_executable(SnipBoard
     src/core/services/TagService.cpp
     src/core/repositories/FolderRepository.cpp
     src/core/services/FolderService.cpp
+    src/core/services/SettingsService.cpp
     # Add other c++ files here
 )
 
@@ -82,13 +85,11 @@ qt_add_qml_module(SnipBoard
     RESOURCE_PREFIX "/qt/qml"
     QML_FILES
         src/gui/main.qml
-        src/gui/Scaling.qml
-        src/gui/Font.qml
-        src/gui/colors.qml
+        src/gui/theme/Scaling.qml
+        src/gui/theme/Font.qml
+        src/gui/theme/Colors.qml
         src/gui/pages/home.qml
-        src/gui/pages/new_snippet.qml
         src/gui/pages/settings.qml
-        src/gui/snippetServiceTest.qml
 )
 
 #Resources for UI
@@ -102,13 +103,14 @@ qt_add_resources(${PROJECT_NAME} snipboard_resources
         resources/icons/home.png
         resources/icons/sb_logo.png
         resources/icons/edit.png
+        resources/icons/gold_star.png
 )
 
 # ADDED: Set singleton properties
 set_source_files_properties(
-    src/gui/Colors.qml
-    src/gui/Font.qml
-    src/gui/Scaling.qml
+    src/gui/theme/Colors.qml
+    src/gui/theme/Font.qml
+    src/gui/theme/Scaling.qml
     PROPERTIES
         QT_QML_SINGLETON_TYPE TRUE
 )
