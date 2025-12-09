@@ -85,6 +85,25 @@ QVector<Snippet> SnippetRepository::loadAllFavorites() {
         result.append(s);
     }
 
+    //tags
+    for (Snippet &s : result) {
+        QSqlQuery tagQuery(m_db);
+        tagQuery.prepare(
+            "SELECT t.name FROM Tag t "
+            "INNER JOIN SnippetTagLink stl ON t.id = stl.tagId "
+            "WHERE stl.snippetId = ?");
+        tagQuery.addBindValue(s.id);
+
+        if (!tagQuery.exec()) {
+            qWarning() << "Failed to load tags: " << tagQuery.lastError();
+            return result;
+        }
+
+        while (tagQuery.next()) {
+            s.tagNames.push_back(tagQuery.value(0).toString());
+        }
+    }
+
     return result;
 }
 
@@ -134,6 +153,25 @@ QVector<Snippet> SnippetRepository::loadByAnyTags(const QVector<int>& tagIds) {
         s.favorite = query.value(8).toBool();
         s.timesCopied = query.value(9).toInt();
         result.append(s);
+    }
+
+    //tags
+    for (Snippet &s : result) {
+        QSqlQuery tagQuery(m_db);
+        tagQuery.prepare(
+            "SELECT t.name FROM Tag t "
+            "INNER JOIN SnippetTagLink stl ON t.id = stl.tagId "
+            "WHERE stl.snippetId = ?");
+        tagQuery.addBindValue(s.id);
+
+        if (!tagQuery.exec()) {
+            qWarning() << "Failed to load tags: " << tagQuery.lastError();
+            return result;
+        }
+
+        while (tagQuery.next()) {
+            s.tagNames.push_back(tagQuery.value(0).toString());
+        }
     }
 
     return result;

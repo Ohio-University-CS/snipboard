@@ -69,16 +69,6 @@ Page {
             snippetService.updateSnippet(root.editDialogId, trimmedName, root.editDialogDescription.trim(), (root.editDialogLanguage && root.editDialogLanguage.length) ? root.editDialogLanguage : "txt", trimmedContent, 0     // folderId for now
             , root.editDialogFavorite);
 
-            //update tags
-            // for (let i = 0; i < root.tagsToAdd.length; i++) {
-            //     console.log("updating (add tag) snippet(" + root.editDialogId + ")  --" + root.tagsToAdd[i]); //logging tag to console
-            //     snippetService.addTagToSnippet(root.editDialogId, root.tagsToAdd[i]);
-            // }
-            // for (let i = 0; i < root.tagsToRemove.length; i++) {
-            //     console.log("updating (remove tag) snippet(" + root.editDialogId + ")  --" + root.tagsToAdd[i]); //logging tag to console
-            //     snippetService.removeTagFromSnippet(root.editDialogId, root.tagsToRemove[i]);
-            // }
-
             const oldTags = root.originalTags;
             const newTags = root.editDialogTags;
 
@@ -93,6 +83,11 @@ Page {
                     snippetService.removeTagFromSnippet(root.editDialogId, originalTags[i])
                 }
             }
+
+            snippetService.reload();
+            if (root.showAllSnippets) { snippetService.loadAll(); }
+            else { snippetService.loadAnyTags(root.checkedTags); }
+            sort_rect.applyCurrentSort();
         }
 
         contentItem: RowLayout {
@@ -582,6 +577,11 @@ Page {
 
                                 onClicked: {
                                     snippetService.toggleFavorite(model.id);
+
+                                    snippetService.reload();
+                                    if (root.showAllSnippets) { snippetService.loadAll(); }
+                                    else { snippetService.loadAnyTags(root.checkedTags); }
+                                    sort_rect.applyCurrentSort(); //reapplies that previous sorting method
                                 }
                             }
                         }
