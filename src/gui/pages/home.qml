@@ -371,7 +371,7 @@ Page {
                 Layout.alignment: Qt.AlignHCenter
                 clip: true
                 cellWidth: 320
-                cellHeight: 180
+                cellHeight: 215
                 model: snippetService.snippets
 
                 property int columns: Math.floor(width / cellWidth)
@@ -459,7 +459,7 @@ Page {
                             Layout.fillWidth: true
                             Layout.preferredHeight: 30
 
-                            text: model.tagNames && model.tagNames.length > 0 ? "Tags: " + model.tagNames.join(", ") : "NO TAGS FOUND"
+                            text: model.tagNames && model.tagNames.length > 0 ? "Tags: " + model.tagNames.join(", ") : ""
 
                             color: "#222"
                             font.pixelSize: 9
