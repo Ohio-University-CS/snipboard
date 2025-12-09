@@ -26,8 +26,7 @@ Page {
     property string editDialogLanguage: ""
     property string editDialogContent: ""
     property var editDialogTags: []
-    property var tagsToAdd: []                // tags the user checked
-    property var tagsToRemove: []              //tags user unchecked
+    property var originalTags: []
     property bool editDialogFavorite: false
 
     //Properties of delete tag
@@ -50,8 +49,8 @@ Page {
 
         onOpened: {
             editTagGrid.forceLayout();
-            editTagGrid.model = null;
-            editTagGrid.model = tagService.tags;
+            //editTagGrid.model = null;
+            //editTagGrid.model = tagService.tags;
         }
 
 
@@ -71,11 +70,28 @@ Page {
             , root.editDialogFavorite);
 
             //update tags
-            for (let i = 0; i < root.tagsToAdd.length; i++) {
-                snippetService.addTagToSnippet(root.editDialogId, root.tagsToAdd[i]);
+            // for (let i = 0; i < root.tagsToAdd.length; i++) {
+            //     console.log("updating (add tag) snippet(" + root.editDialogId + ")  --" + root.tagsToAdd[i]); //logging tag to console
+            //     snippetService.addTagToSnippet(root.editDialogId, root.tagsToAdd[i]);
+            // }
+            // for (let i = 0; i < root.tagsToRemove.length; i++) {
+            //     console.log("updating (remove tag) snippet(" + root.editDialogId + ")  --" + root.tagsToAdd[i]); //logging tag to console
+            //     snippetService.removeTagFromSnippet(root.editDialogId, root.tagsToRemove[i]);
+            // }
+
+            const oldTags = root.originalTags;
+            const newTags = root.editDialogTags;
+
+            for (let i = 0; i < newTags.length; i++) {
+                if (!originalTags.includes(newTags[i])) {
+                    snippetService.addTagToSnippet(root.editDialogId, newTags[i])
+                }
             }
-            for (let i = 0; i < root.tagsToRemove.length; i++) {
-                snippetService.removeTagFromSnippet(root.editDialogId, root.tagsToRemove[i]);
+
+            for (let i = 0; i < originalTags.length; i++) {
+                if (!newTags.includes(originalTags[i])) {
+                    snippetService.removeTagFromSnippet(root.editDialogId, originalTags[i])
+                }
             }
         }
 
@@ -83,7 +99,7 @@ Page {
             spacing: 30
 
             Item {
-                    width: 10
+                    width: 8
             }
         
             ColumnLayout {
@@ -103,6 +119,7 @@ Page {
                     text: root.editDialogDescription
                     onTextChanged: root.editDialogDescription = text
                 }
+
 
                 // Keep ComboBox in sync with current language
                 Basic.ComboBox {
@@ -211,40 +228,20 @@ Page {
                                 id: editTagSelected
                                 Layout.preferredWidth: 11
                                 Layout.preferredHeight: 11
-                                checked: root.editDialogTags.includes(model.name)
                                 padding: 0
 
-                                onCheckedChanged: {
-                                    //updates selectedTag list when checked/unchecked
-                                    // if (checked) {
-                                    //     if (!root.editDialogTags.includes(model.name))
-                                    //         root.editDialogTags.push(model.name)
-                                    // } else {
-                                    //     const i = root.editDialogTags.indexOf(model.name)
-                                    //     if (i !== -1) root.editDialogTags.splice(i, 1)
-                                    // }
+                                //property bool isChecked: root.editDialogTags.includes(model.name)
+                                checked: { root.editDialogTags.includes(model.name) }
 
+                                onCheckedChanged: {
                                     if (checked) {
                                         if (!root.editDialogTags.includes(model.name))
                                             root.editDialogTags.push(model.name)
-
-                                        if (!root.tagsToAdd.includes(model.name))
-                                            root.tagsToAdd.push(model.name)
-
-                                        const idx = root.tagsToRemove.indexOf(model.name)
-                                        if (idx !== -1) root.tagsToRemove.splice(idx, 1)
-
                                     } else {
                                         const idx = root.editDialogTags.indexOf(model.name)
-                                        if (idx !== -1) root.editDialogTags.splice(idx, 1)
-
-                                        if (!root.tagsToRemove.includes(model.name))
-                                            root.tagsToRemove.push(model.name)
-
-                                        const id2 = root.tagsToAdd.indexOf(model.name)
-                                        if (id2 !== -1) root.tagsToAdd.splice(id2, 1)
+                                        if (idx !== -1)
+                                            root.editDialogTags.splice(idx, 1)
                                     }
-
                                 }
                             }
                         }
@@ -549,15 +546,16 @@ Page {
                                     root.editDialogContent = model.data;
                                     root.editDialogFavorite = model.favorite;
                                     root.editDialogTags = [];
-                                    root.tagsToAdd = [];
-                                    root.tagsToRemove = [];
+                                    root.originalTags = [];
 
                                     if (model.tagNames && model.tagNames.length > 0) {
                                         for (let i = 0; i < model.tagNames.length; i++) {
                                             root.editDialogTags.push(model.tagNames[i]);
+                                            root.originalTags.push(model.tagNames[i]);
                                         }
                                     }
 
+                                    root.editDialogTags = root.editDialogTags.slice();
                                     editDialog.open();
                                 }
                             }
@@ -993,7 +991,7 @@ Page {
                     Text {
                         text: "Reload"
                         anchors.centerIn: parent
-                        font.pixelSize: 10     // <-- CHANGE TEXT SIZE HERE
+                        font.pixelSize: 10    
                         color: "#222"
                         elide: Text.ElideRight
                     }
@@ -1013,8 +1011,8 @@ Page {
         y: 18
         width: 642
         height: 79
-        radius: 12          // <- round the corners
-        clip: true          // keeps children clipped to the rounded shape
+        radius: 12     
+        clip: true         
         color: "#cfcfcf"
 
         FocusScope {
@@ -1042,9 +1040,7 @@ Page {
                 font.pointSize: 30
                 textFormat: TextEdit.PlainText
                 cursorVisible: activeFocus   // shows only when focused
-                // Optional styling to look like a field
                 padding: 8
-                // ... your existing props ...
                 onTextChanged: debounceSearch.restart()
 
                 // Enter = search now, Esc = clear
@@ -1138,8 +1134,8 @@ Page {
             // shows only an "x"
             Accessible.name: "Clear search"
             padding: 6
-            background: null                 // <- no background at all
-            focusPolicy: Qt.NoFocus          // avoid focus ring if any
+            background: null             
+            focusPolicy: Qt.NoFocus   
             contentItem: Text {
                 text: "✕"
                 font.pixelSize: 18
@@ -1171,7 +1167,7 @@ Page {
         id: sort_rect
         x: 541
         y: search_rect.y + search_rect.height + 8
-        width: 240  // Increased width to fit both dropdowns
+        width: 240 
         height: 45
         radius: 8
         color: "#cfcfcf"
@@ -1290,7 +1286,6 @@ Page {
                 fCode = "";
                 selectedTags = [];
 
-                tagGrid.model = [];
                 tagGrid.model = tagService.tags;
 
                 titleField.forceActiveFocus();
@@ -1313,6 +1308,7 @@ Page {
                 );
 
                 for (let i = 0; i < selectedTags.length; i++) {
+                    //console.log("creating snippet(" + root.editDialogId + ")  --" + root.tagsToAdd[i]); //logging tag to console
                     snippetService.addTagToSnippet(newId, selectedTags[i]);
                 }
             }
@@ -1321,7 +1317,7 @@ Page {
                 spacing: 30
 
                 Item {
-                    width: 10
+                    width: 8
                 }
 
                 ColumnLayout {
