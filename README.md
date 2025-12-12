@@ -1,56 +1,94 @@
-## SnipBoard
+# SnipBoard
 
-```
-   _____         _         ____                          _ 
-  / ____|       (_)       |  _ \                        | |
- | (___   _ __   _  _ __  | |_) |  ___    __ _  _ __  __| |
-  \___ \ | '_ \ | || '_ \ |  _ <  / _ \  / _` || '_//  _` |
-  ____) || | | || || |_) || |_) || (_) || (_| || |  | (_| |
- |_____/ |_| |_||_|| .__/ |____/  \___/  \__,_||_|   \__,_|
-                   | |
-                   |_|                         
-```
+## Project Description
+SnipBoard is a fast, organized, and searchable desktop tool for storing and retrieving personal code snippets.  
+Its purpose is to help developers stay focused, reuse their best code, and eliminate the time wasted digging through old projects, screenshots, and notes for small pieces of reusable logic.
+SnipBoard has a [VSCode extension](https://github.com/Ohio-University-CS/snipboard-extension) that works with our application.
 
-SnipBoard provides a way to let you store code snippets. SnipBoard has strong search support and sorting featues such as tags and folders. Refer to the Notion.
+## Demo Videos
+<!-- Add links to demo videos here -->
 
-##
+## Features
+- Fast, flexible search (name, description, tags, language)
+- Tag-based snippet organization
+- Favorites system for quick access
+- Native VSCode extension for in-editor snippet insertion
+- Local, offline storage using SQLite
+- Cross-platform desktop app built with Qt
+- C++ backend for speed and reliability
 
-This project is a work in progress and is being made as a semester long project for CS 3560: Software Engineering Tools and Practices
+## Installation
+<!-- Fill in exact installation instructions here -->
+- Install Qt (version 6.10.0)
+  - If on Windows, ensure install is the same as
+    ```
+    C:/Qt/6.10.0/
+    ```
+- Install required dependencies:  
+  - C++ compiler  (g++)
+  - CMake / Qt Creator  
+  - SQLite (bundled)
 
+## How to Run
+**macOS**
+1. Install Qt  
+2. Create a `sign.sh` file and add:
+    ```bash
+    codesign --remove-signature ./build/SnipBoard.app
+    codesign --force --deep --sign - ./build/SnipBoard.app
 
+    QT_PATH=$(brew --prefix qt)
+    export QML_IMPORT_PATH="$QT_PATH/share/qt/qml"
+    export DYLD_FRAMEWORK_PATH=./build/SnipBoard.app/Contents/Frameworks
 
-4. How to Run
-   * Have QT installed *
-     
-   MAC:
-      0. brew install qt (if you haven't already)
-      1. Create a file "sign.sh". Add the following commands to this .sh file
-            "codesign --remove-signature ./build/SnipBoard.app
-            codesign --force --deep --sign - ./build/SnipBoard.app
-   
-            QT_PATH=$(brew --prefix qt)
-            export QML_IMPORT_PATH="$QT_PATH/share/qt/qml"
-            export DYLD_FRAMEWORK_PATH=./build/SnipBoard.app/Contents/Frameworks
-   
-            ./build/SnipBoard.app/Contents/MacOS/SnipBoard"
-      2. Click build (may take a minute or two...)
-      3. Enter "./sign.sh" in terminal to run
-         
-   WINDOWS:
-      1. Click build
-      2. Click run/launch button
-  
-6. 
+    ./build/SnipBoard.app/Contents/MacOS/SnipBoard
+    ```
+3. Build the project
+4. If first time building, run
+    ```bash
+    sqlite3 ./snipboard/snipboard.db < ./db/snipboard.sql
+    ```
+5. Run `./sign.sh` in the terminal
 
-### Attributions:
+**Windows**
+1. Click *Build*
+2. If first time building, run 
+    ```ps
+    sqlite3 .\build\snipboard.db --init .\db\snipboard.sql
+    ```
+3. Click *Run/Launch*
 
-1) Star Icon - <a href="https://www.flaticon.com/free-icons/star" title="star icons">Star icons created by Pixel perfect - Flaticon</a>
-2) Search Icon - <a href="https://www.flaticon.com/free-icons/magnifying-glass" title="magnifying glass icons">Magnifying glass icons created by Royyan Wijaya - Flaticon</a>
-3) Setting Icon - <a href="https://www.flaticon.com/free-icons/settings" title="settings icons">Settings icons created by Ilham Fitrotul Hayat - Flaticon</a>
-4) Folder Icon - <a href="https://www.flaticon.com/free-icons/folder" title="folder icons">Folder icons created by dmitri13 - Flaticon</a>
-5) Home Icon - <a href="https://www.flaticon.com/free-icons/home-button" title="home button icons">Home button icons created by Freepik - Flaticon</a>
-6) Gold Star Icon - <a href="https://www.flaticon.com/free-icons/star" title="star icons">Star icons created by Pixel perfect - Flaticon</a>
+## Usage Examples
+<!-- Add screenshots or snippet examples here -->
+- Searching for a snippet  
+- Adding a new snippet  
+- Tagging and organizing  
+- Using the VSCode extension  
 
+## Known Issues
+-  Some settings are not yet fully implemented
+-  Editing Snippets in certain sorting methods may not keep sorted order
+-  When building for the first time, database migrations are not performed
 
+## Future Work
+- Enterprise version with shared team snippet libraries  
+- Smart snippet generation (auto-detect reusable patterns in codebases)  
+- Integrations for JetBrains, Visual Studio, NeoVim  
+- Cloud sync + teams dashboard  
+- Enhanced search ranking  
+- More snippet metadata + improved import/export  
 
+## Contributors
+-  Kyle Carey: Backend + VSCode Extension
+-  Davis Lewis: Backend (Database + Repositories)
+-  Lucas Filla: Frontend
+-  Jack Hensley: Frontend
+-  Grant Schafer: Color Scheme
 
+## Attributions
+1. Star Icon — Pixel perfect ([Flaticon](https://www.flaticon.com/free-icons/star))  
+2. Search Icon — Royyan Wijaya ([Flaticon](https://www.flaticon.com/free-icons/magnifying-glass))  
+3. Settings Icon — Ilham Fitrotul Hayat ([Flaticon](https://www.flaticon.com/free-icons/settings))  
+4. Folder Icon — dmitri13 ([Flaticon](https://www.flaticon.com/free-icons/folder))  
+5. Home Icon — Freepik ([Flaticon](https://www.flaticon.com/free-icons/home-button))  
+6. Gold Star Icon — Pixel perfect ([Flaticon](https://www.flaticon.com/free-icons/star))
