@@ -6,15 +6,12 @@ Its purpose is to help developers stay focused, reuse their best code, and elimi
 SnipBoard has a [VSCode extension](https://github.com/Ohio-University-CS/snipboard-extension) that works with our application.
 
 ## Demo Videos
-<div style="display: flex; gap: 10px; justify-content: center;">
-  <div style="flex: 1; text-align: center;">
-    <h3>SnipBoard App</h3>
-    <img src="static/app-demo.gif" width="600" alt="App Demo">
-  </div>
-  <div style="flex: 1; text-align: center;">
-    <h3>VSCode Extension</h3>
-    <img src="static/extension-demo.gif" width="600" alt="Extension Demo">
-  </div>
+<div style="text-align: center;">
+  <h3>SnipBoard App</h3>
+  <img src="static/app-demo.gif" width="600" alt="App Demo">
+  
+  <h3>VSCode Extension</h3>
+  <img src="static/extension-demo.gif" width="600" alt="Extension Demo">
 </div>  
 
 ## Features
