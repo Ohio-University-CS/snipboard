@@ -6,7 +6,11 @@ Its purpose is to help developers stay focused, reuse their best code, and elimi
 SnipBoard has a [VSCode extension](https://github.com/Ohio-University-CS/snipboard-extension) that works with our application.
 
 ## Demo Videos
-<!-- Add links to demo videos here -->
+**SnipBoard App Demo**
+![App Demo](static/app-demo.gif)
+
+**VSCode Extension Demo**
+![Extension Demo](static/extension-demo.gif)  
 
 ## Features
 - Fast, flexible search (name, description, tags, language)
